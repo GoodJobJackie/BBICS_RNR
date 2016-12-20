@@ -1,0 +1,73 @@
+VERSION 5.00
+Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} DescriptionBox 
+   Caption         =   "Please verify program description:"
+   ClientHeight    =   3315
+   ClientLeft      =   120
+   ClientTop       =   465
+   ClientWidth     =   7200
+   OleObjectBlob   =   "DescriptionBox.frx":0000
+   StartUpPosition =   1  'CenterOwner
+End
+Attribute VB_Name = "DescriptionBox"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Private Sub CommandButton1_Click()
+
+    ProgramName = DescriptionBox.programNameBox.Value
+    ProgramDescription = DescriptionBox.programDescriptionBox.Value
+    ProgramSD = DescriptionBox.programSDBox.Value
+    
+    For i = 2 To x.Worksheets("Data").Cells(2, 3000).End(xlToLeft).Column
+        If Trim(x.Worksheets("Data").Cells(2, i).Value) = DescriptionBox.currentProgramName.Value Then
+            x.Worksheets("Data").Cells(2, i).Value = DescriptionBox.programNameBox.Value
+        End If
+    Next i
+    
+    Unload Me
+    
+End Sub
+
+Private Sub CommandButton2_Click()
+
+    Unload Me
+    skip = True
+
+End Sub
+
+Private Sub CommandButton3_Click()
+        
+    Dim x As Workbook
+        
+    Set x = Workbooks.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\ProgramDescriptions.xlsx")
+    
+    x.Worksheets("PD").Rows(3).Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
+    x.Worksheets("PD").Cells(3, 1).Value = DescriptionBox.programNameBox.Value
+    x.Worksheets("PD").Cells(3, 2).Value = DescriptionBox.programDescriptionBox.Value
+    x.Worksheets("PD").Cells(3, 3).Value = DescriptionBox.programSDBox.Value
+    
+    DescriptionBox.CommandButton3.Enabled = False
+    
+    Application.DisplayAlerts = False
+    x.Save
+    x.Close
+    Application.DisplayAlerts = True
+            
+End Sub
+
+Private Sub programSuggestion_Change()
+
+    For i = 1 To x.Worksheets("PD").Cells(3000, 1).End(xlUp).Row
+        If DescriptionBox.programSuggestion.Value = Worksheets("PD").Cells(i, 1).Value Then
+            DescriptionBox.programNameBox.Value = Worksheets("PD").Cells(i, 1).Value
+            DescriptionBox.programDescriptionBox.Value = Worksheets("PD").Cells(i, 2).Value
+            DescriptionBox.programSDBox.Value = Worksheets("PD").Cells(i, 3).Value
+        End If
+    Next i
+
+End Sub
+
+Private Sub UserForm_Click()
+
+End Sub

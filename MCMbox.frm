@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} MCMbox 
-   Caption         =   "Verify Program/Skill"
-   ClientHeight    =   2070
+   Caption         =   "Select skill placement"
+   ClientHeight    =   2280
    ClientLeft      =   45
    ClientTop       =   390
    ClientWidth     =   4710
@@ -15,6 +15,10 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Sub buttonSkip_Click()
     skipFlag = True
+    MCMbox.progMast.Value = False
+    MCMbox.progCont.Value = False
+    MCMbox.progMaint.Value = False
+    mCm = ""
     Unload Me
 End Sub
 
@@ -46,15 +50,17 @@ Private Sub NextProgram_Click()
     Unload Me
 End Sub
 
+Private Sub OptionButton1_Click()
+
+End Sub
+
+Private Sub progMaint_Click()
+
+End Sub
+
 Private Sub UserForm_Activate()
     With MCMbox
         .Top = Application.Top + 95
         .Left = Application.Left + 450
     End With
-End Sub
-
-Public Sub UserForm_Initialize()
-    MCMbox.programNameBox.Value = ProgramName
-    MCMbox.skillNameBox.Value = SkillName
-    MCMbox.programNameBox.SetFocus
 End Sub
