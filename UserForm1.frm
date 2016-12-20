@@ -28,7 +28,7 @@ Dim bottomDateRow As Integer
     Unload Me
     sheetName = ActiveSheet.Name
     Worksheets(sheetName).Activate
-    bottomDateRow = Cells(5, 1).End(xlDown).Row
+    bottomDateRow = Cells(5, 1).End(xlDown).row
     reportStart = Trim(ComboBox1.Value)
     reportEnd = Trim(ComboBox2.Value)
 

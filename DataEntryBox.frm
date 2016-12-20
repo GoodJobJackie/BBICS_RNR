@@ -105,7 +105,7 @@ Private Sub buttonNextData_Click()
         End If
     Next i
     
-    For i = 4 To (x.Worksheets("Data").Cells(2000, 1).End(xlUp).Row + 1)
+    For i = 4 To (x.Worksheets("Data").Cells(2000, 1).End(xlUp).row + 1)
         If (x.Worksheets("Data").Cells(i - 1, 1).Value < DateValue(newDate)) And ((x.Worksheets("Data").Cells(i, 1).Value > DateValue(newDate)) Or (x.Worksheets("Data").Cells(i, 1).Value = "")) Then
             x.Worksheets("Data").Cells(i, 1).Activate
             ActiveCell.EntireRow.Insert
@@ -114,7 +114,7 @@ Private Sub buttonNextData_Click()
         End If
     Next i
     
-    For i = 4 To x.Worksheets("Data").Cells(2000, 1).End(xlUp).Row
+    For i = 4 To x.Worksheets("Data").Cells(2000, 1).End(xlUp).row
         If x.Worksheets("Data").Cells(i, 1).Value = DateValue(newDate) Then
             x.Worksheets("Data").Cells(i, programCol).Activate
             x.Worksheets("Data").Cells(i, programCol).Value = DataEntryBox.SessionDate.Value

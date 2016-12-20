@@ -1,11 +1,14 @@
 
-BBICS Client Data Management System v4.0.1
+BBICS Client Data Management System v4.0.2
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
 =========================================================================
 Changelog
 -------------------------------------------------------------------------
+
+2016_12_20	v4.0.2
+*add catch for preexisting sheets
 
 2016_12_14	v4.0.1
 *minor fixes

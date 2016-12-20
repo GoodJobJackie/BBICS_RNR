@@ -39,7 +39,7 @@ Private Sub ProgramLists_Change()
 
     Dim i As Integer
     
-    For i = 1 To x.Worksheets("PD").Cells(3000, 1).End(xlUp).Row
+    For i = 1 To x.Worksheets("PD").Cells(3000, 1).End(xlUp).row
         If ProgramNames.ProgramLists.Value = Worksheets("PD").Cells(i, 1).Value Then
             ProgramNames.NewProgramName.Value = Worksheets("PD").Cells(i, 1).Value
         End If

@@ -58,7 +58,7 @@ End Sub
 
 Private Sub programSuggestion_Change()
 
-    For i = 1 To x.Worksheets("PD").Cells(3000, 1).End(xlUp).Row
+    For i = 1 To x.Worksheets("PD").Cells(3000, 1).End(xlUp).row
         If DescriptionBox.programSuggestion.Value = Worksheets("PD").Cells(i, 1).Value Then
             DescriptionBox.programNameBox.Value = Worksheets("PD").Cells(i, 1).Value
             DescriptionBox.programDescriptionBox.Value = Worksheets("PD").Cells(i, 2).Value
