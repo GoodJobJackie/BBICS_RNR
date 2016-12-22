@@ -98,5 +98,3 @@ Copyright (C) 2016 BBICS All rights reserved.
 
 Known Bugs:
 * empty skill columns in the last position cause crash
-* does not check for preexisting imported sheets
-
