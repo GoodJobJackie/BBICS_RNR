@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserAction 
    Caption         =   "Please select an action."
-   ClientHeight    =   7230
+   ClientHeight    =   8475
    ClientLeft      =   120
    ClientTop       =   465
    ClientWidth     =   5040
@@ -14,6 +14,16 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
+
+Private Sub actionDatabase_Click()
+
+    Dim strFile
+
+    strFile = "C:\Users\jackie\Desktop\BBICS Employee Database.fmp12"
+
+    Shell "cmd /k """ & strFile & """", 0
+
+End Sub
 
 Private Sub ActionDataEntry_Click()
       
@@ -50,6 +60,16 @@ Private Sub actionDebug_Click()
         End Select
     Next
     Application.DisplayAlerts = True
+
+End Sub
+
+Private Sub actionDocuments_Click()
+
+    Dim strFile
+
+    strFile = "C:\Users\jackie\Desktop\Admin Documents.jar"
+
+    Shell "cmd /k """ & strFile & """", 0
 
 End Sub
 

@@ -1,11 +1,14 @@
 
-BBICS Client Data Management System v4.0.2
+BBICS Client Data Management System v4.1
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
 =========================================================================
 Changelog
 -------------------------------------------------------------------------
+
+2016_12_22	v4.1
+*add access to administrative documents/database
 
 2016_12_20	v4.0.2
 *add catch for preexisting sheets
@@ -95,3 +98,5 @@ Copyright (C) 2016 BBICS All rights reserved.
 
 Known Bugs:
 * empty skill columns in the last position cause crash
+* does not check for preexisting imported sheets
+

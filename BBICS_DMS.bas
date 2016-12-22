@@ -37,15 +37,15 @@ Attribute ARestructureAndGenerateReport.VB_ProcData.VB_Invoke_Func = "r\n14"
     dataSheetName = ActiveSheet.Name
     bottomDateRow = Cells(5, 1).End(xlDown).row
     
-    If Range("A1:A3").MergeCells = True Then
-        UserAction.ActionReformat.Enabled = False
-    End If
-    If flagFullRest = True Or Cells(4, 1).Value = "" Then
-        UserAction.ActionRestuctureFull.Enabled = False
-    End If
-    If flagFullService = True Then
-        UserAction.ActionFullService.Enabled = False
-    End If
+    'If Range("A1:A3").MergeCells = True Then
+        'UserAction.ActionReformat.Enabled = False
+    'End If
+    'If flagFullRest = True Or Cells(4, 1).Value = "" Then
+        'UserAction.ActionRestuctureFull.Enabled = False
+    'End If
+    'If flagFullService = True Then
+        'UserAction.ActionFullService.Enabled = False
+    'End If
         
     UserAction.Show
 
