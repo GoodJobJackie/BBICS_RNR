@@ -352,7 +352,8 @@ Sub PopulatePrograms()
     Dim prev2 As Integer
     Dim prev3 As Integer
     Dim prevRow As Integer
-
+    Dim deletedSkill As String
+    
     col = 2
     skillCount = 1
     programRow = 2
@@ -379,6 +380,7 @@ Sub PopulatePrograms()
             Application.DisplayAlerts = True
             Exit For
         End If
+    Next Sheet
     
     Worksheets.Add().Name = programSheet
     
@@ -390,6 +392,20 @@ Sub PopulatePrograms()
     Worksheets("Programs").Columns("A:B").ColumnWidth = 60
     Worksheets("Programs").Columns("C:E").ColumnWidth = 12
     Worksheets(dataSheetName).Activate
+    'Delete empty skill columns
+    For col = 2 To Cells(2, 1000).End(xlToLeft).Column
+        If Cells(2, col) <> "" Then
+            nextHeaderCol = Cells(2, col).End(xlToRight).Column
+            For i = col + 1 To Cells(3, nextHeaderCol).End(xlToLeft).Column
+                If Cells(3, i).End(xlDown) = "" Then
+                    deletedSkill = Cells(3, i).Value
+                    MsgBox ("'" & Cells(2, col).Value & ": " & deletedSkill & "' skill column empty." & vbCrLf& & vbCrLf & "Deleting...")
+                    Columns(i).Delete
+                End If
+            Next i
+        End If
+    Next col
+        
     ' Look for next program
     For col = 2 To 1000
         If Cells(2, col) <> "" Then
@@ -408,9 +424,7 @@ Sub PopulatePrograms()
             End If
             'Cycle through skills
             For i = (col + 1) To nextHeaderCol
-                ' Check for empty skill columns
-                If Cells(3, i).End(xlDown).Value = "" Then GoTo NextIteration
-                
+                                
                 ProgramName = Cells(2, col).Value
                 SkillName = Cells(3, i).Value
                 Range(Cells(3, i).End(xlDown), Cells(1000, i).End(xlUp)).Select
@@ -477,7 +491,6 @@ Sub PopulatePrograms()
                     programRow = programRow + 1
                     Cells(2, col).Value = ProgramName
                 End If
-NextIteration:
             Next i
         End If
     Next col
