@@ -1,11 +1,14 @@
 
-BBICS Client Data Management System v4.1
+BBICS Client Data Management System v4.1.1
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
 =========================================================================
 Changelog
 -------------------------------------------------------------------------
+
+2016_12_23  v4.1.1
+*fix empty skill column crash
 
 2016_12_22	v4.1
 *add access to administrative documents/database
@@ -97,4 +100,3 @@ Copyright (C) 2016 BBICS All rights reserved.
 ----------------------------------------------------------
 
 Known Bugs:
-* empty skill columns in the last position cause crash
