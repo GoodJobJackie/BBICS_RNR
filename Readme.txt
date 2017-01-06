@@ -1,11 +1,17 @@
 
-BBICS Client Data Management System v4.1.1
+BBICS Client Data Management System v4.1.2
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
 =========================================================================
 Changelog
 -------------------------------------------------------------------------
+
+2017_01_06  v4.1.2
+*add ability to enter multiple same-date scores
+*add ability to scroll while entering data
+*fix worksheets column crash
+*add catch for invalid session date/score entry
 
 2016_12_23  v4.1.1
 *fix empty skill column crash
