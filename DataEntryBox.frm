@@ -4,7 +4,7 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} DataEntryBox
    ClientHeight    =   3645
    ClientLeft      =   120
    ClientTop       =   465
-   ClientWidth     =   7455
+   ClientWidth     =   8535
    OleObjectBlob   =   "DataEntryBox.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -106,7 +106,7 @@ Private Sub buttonNextData_Click()
     Next i
     
     For i = 4 To (x.Worksheets("Data").Cells(2000, 1).End(xlUp).row + 1)
-        If (x.Worksheets("Data").Cells(i - 1, 1).Value < DateValue(newDate)) And ((x.Worksheets("Data").Cells(i, 1).Value > DateValue(newDate)) Or (x.Worksheets("Data").Cells(i, 1).Value = "")) Then
+        If ((x.Worksheets("Data").Cells(i - 1, 1).Value < DateValue(newDate)) Or (x.Worksheets("Data").Cells(i - 1, 1).Value = DateValue(newDate))) And ((x.Worksheets("Data").Cells(i, 1).Value > DateValue(newDate)) Or (x.Worksheets("Data").Cells(i, 1).Value = "")) Then
             x.Worksheets("Data").Cells(i, 1).Activate
             ActiveCell.EntireRow.Insert
             x.Worksheets("Data").Cells(i, 1).Value = DataEntryBox.SessionDate.Value
@@ -114,11 +114,12 @@ Private Sub buttonNextData_Click()
         End If
     Next i
     
-    For i = 4 To x.Worksheets("Data").Cells(2000, 1).End(xlUp).row
+    For i = x.Worksheets("Data").Cells(2000, 1).End(xlUp).row To 4 Step -1
         If x.Worksheets("Data").Cells(i, 1).Value = DateValue(newDate) Then
             x.Worksheets("Data").Cells(i, programCol).Activate
             x.Worksheets("Data").Cells(i, programCol).Value = DataEntryBox.SessionDate.Value
             x.Worksheets("Data").Cells(i, skillCol).Value = DataEntryBox.Score.Value
+            Exit For
         End If
     Next i
     
@@ -175,18 +176,46 @@ Private Sub ProgramList_Change()
 
 End Sub
 
+Private Sub ScollDown_Click()
+
+    ActiveWindow.SmallScroll Down:=5
+
+End Sub
+
 Private Sub Score_Change()
+
+    If DataEntryBox.Score.Value < 0 Or DataEntryBox.Score.Value > 100 Then
+        DataEntryBox.buttonNextData.Enabled = False
+        Beep
+    Else
+        DataEntryBox.buttonNextData.Enabled = True
+    End If
+
+End Sub
+
+
+
+Private Sub ScrollUp_Click()
+
+    ActiveWindow.SmallScroll Down:=-5
 
 End Sub
 
 Private Sub SessionDate_Change()
 
+    If IsDate(DataEntryBox.SessionDate.Value) Then DataEntryBox.buttonNextData.Enabled = True
+
+End Sub
+
+Private Sub SessionDate_Exit(ByVal Cancel As MSForms.ReturnBoolean)
+
     If IsDate(DataEntryBox.SessionDate.Value) Then
         DataEntryBox.buttonNextData.Enabled = True
     Else
         DataEntryBox.buttonNextData.Enabled = False
+        Beep
     End If
-
+    
 End Sub
 
 Private Sub Skill_Change()

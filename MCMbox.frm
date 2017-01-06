@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} MCMbox 
    Caption         =   "Select skill placement"
-   ClientHeight    =   2280
+   ClientHeight    =   2340
    ClientLeft      =   45
    ClientTop       =   390
-   ClientWidth     =   4710
+   ClientWidth     =   5460
    OleObjectBlob   =   "MCMbox.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -56,6 +56,18 @@ End Sub
 
 Private Sub progMaint_Click()
 
+End Sub
+
+Private Sub ScrollDown_Click()
+
+    ActiveWindow.SmallScroll Down:=5
+
+End Sub
+
+Private Sub ScrollUp_Click()
+
+    ActiveWindow.SmallScroll Down:=-5
+    
 End Sub
 
 Private Sub UserForm_Activate()

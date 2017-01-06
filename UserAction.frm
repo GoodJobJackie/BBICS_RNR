@@ -21,7 +21,7 @@ Private Sub actionDatabase_Click()
 
     strFile = "C:\Users\jackie\Desktop\BBICS Employee Database.fmp12"
 
-    Shell "cmd /k """ & strFile & """", 0
+    Shell "cmd /c """ & strFile & """", 0
 
 End Sub
 
@@ -69,7 +69,7 @@ Private Sub actionDocuments_Click()
 
     strFile = "C:\Users\jackie\Desktop\Admin Documents.jar"
 
-    Shell "cmd /k """ & strFile & """", 0
+    Shell "cmd /c """ & strFile & """", 0
 
 End Sub
 
@@ -134,10 +134,26 @@ Private Sub ActionReformat_Click()
     MasterListFormat
     FormatProgramDates
     FindLastDate
+    
+    For i = 2 To Cells(2, 2000).End(xlToLeft).Column
+        If Cells(2, i).Value = "Worksheets" Then
+            With Cells(2, i)
+                .Value = ""
+                .Interior.Color = -4142
+            End With
+            With Cells(1, i)
+                .Value = "Worksheets"
+                .Interior.Color = RGB(255, 255, 0)
+                .Font.Bold = True
+            End With
+        End If
+    Next i
+    
     Cells(4, 2).Select
     ActiveWindow.FreezePanes = False
     ActiveWindow.FreezePanes = True
-    UserAction.ActionFullService.Enabled = False
+    'UserAction.ActionFullService.Enabled = False
+    Cells(2000, 1).End(xlUp).Offset(1, 0).Value = Date
 
 End Sub
 
@@ -161,7 +177,7 @@ Private Sub ActionRestuctureFull_Click()
     Unload Me
     MoveData
     UserAction.ActionRestuctureFull.Enabled = False
-    UserAction.ActionFullService.Enabled = False
+    'UserAction.ActionFullService.Enabled = False
     UserAction.ActionRestructureSingle.Enabled = False
     
 End Sub

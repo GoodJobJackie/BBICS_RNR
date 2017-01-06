@@ -399,7 +399,7 @@ Sub PopulatePrograms()
             For i = col + 1 To Cells(3, nextHeaderCol).End(xlToLeft).Column
                 If Cells(3, i).End(xlDown) = "" Then
                     deletedSkill = Cells(3, i).Value
-                    MsgBox ("'" & Cells(2, col).Value & ": " & deletedSkill & "' skill column empty." & vbCrLf& & vbCrLf & "Deleting...")
+                    MsgBox ("'" & Cells(2, col).Value & ": " & deletedSkill & "' skill column empty." & vbCrLf & vbCrLf & "Deleting...")
                     Columns(i).Delete
                 End If
             Next i
@@ -445,7 +445,6 @@ Sub PopulatePrograms()
                 Cells(1000, i).End(xlUp).Select
                 skillEnd = Selection.End(xlToLeft).Value
                 If Cells(4, nextHeaderCol).Value = "" Then
-                    
                     lastSkillRow = Cells(1000, nextHeaderCol).End(xlUp).row
                     lastSkillEnd = Cells(lastSkillRow, col).Value
                 Else
@@ -776,6 +775,7 @@ Sub ImportSkillsPrograms()
     
     Application.DisplayAlerts = False
        
+    'Check for existing worksheets, if so, delete them
     For Each Sheet In Worksheets
         If Sheet.Name = "CI" Then
             Worksheets("CI").Delete
@@ -790,6 +790,7 @@ Sub ImportSkillsPrograms()
     Worksheets.Add().Name = "SDL"
     Worksheets.Add().Name = "PD"
       
+    'Import information as new worksheets
     Set z = ActiveWorkbook
     Set w = Workbooks.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\FMP_DataExport.xlsx")
     Set x = Workbooks.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\SkillDeficitList.xlsx")
@@ -1129,6 +1130,7 @@ Sub PopulateReport()
     TutorHrs
     'SaveReport
     
+    'Cleanup
     Application.DisplayAlerts = False
     Worksheets("PD").Delete
     Worksheets("SDL").Delete
@@ -1154,6 +1156,7 @@ Sub ProgramDescriptionsList()
         End If
     Next Sheet
     
+    'Create list of current programs
     Worksheets.Add().Name = "Current"
     Worksheets("Data").Activate
     dataSheetName = ActiveSheet.Name
@@ -1242,6 +1245,7 @@ Sub BxData()
     bxColStart = (Cells(2, 2).End(xlToRight).Column) + 2
     bxColEnd = Cells(2, bxColStart).End(xlToRight).Column
     
+    'Store bx values in dictionary
     For i = bxColStart To bxColEnd
         If Cells(bxRow, i).Value = 0 Then
         Else
@@ -1254,6 +1258,7 @@ Sub BxData()
         Exit Sub
     End If
     
+    'Sort in descending quantities
     ReDim Arr(0 To BxDict.Count - 1, 0 To 1)
     
     For i = 0 To BxDict.Count - 1
@@ -1288,6 +1293,7 @@ End Sub
 
 Sub RenamePrograms()
    
+   'Cycle through programs with option to rename
    prevProgramName = 2
    
     For renameI = 2 To 1000
@@ -1322,6 +1328,7 @@ Sub TutorHrs()
     Dim tutorHrDate As String
     Dim monthCount As Integer
     
+    'Populate report with tutor hour data
     Worksheets("Tutor Hr Data").Activate
     reportStart = Format(reportStart, "MMM yyyy")
     For i = 3 To Cells(3, 1).End(xlDown).row
