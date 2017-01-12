@@ -1,11 +1,15 @@
 
-BBICS Client Data Management System v4.1.2
+BBICS Client Data Management System v4.2.0
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
 =========================================================================
 Changelog
 -------------------------------------------------------------------------
+
+2017_01_12  v4.2.0
+*data entry adds asthetic space when creating new program
+*add ability to cycle through and change program names
 
 2017_01_06  v4.1.2
 *add ability to enter multiple same-date scores
