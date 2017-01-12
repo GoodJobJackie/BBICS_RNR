@@ -36,16 +36,6 @@ Attribute ARestructureAndGenerateReport.VB_ProcData.VB_Invoke_Func = "r\n14"
     
     dataSheetName = ActiveSheet.Name
     bottomDateRow = Cells(5, 1).End(xlDown).row
-    
-    'If Range("A1:A3").MergeCells = True Then
-        'UserAction.ActionReformat.Enabled = False
-    'End If
-    'If flagFullRest = True Or Cells(4, 1).Value = "" Then
-        'UserAction.ActionRestuctureFull.Enabled = False
-    'End If
-    'If flagFullService = True Then
-        'UserAction.ActionFullService.Enabled = False
-    'End If
         
     UserAction.Show
 
@@ -259,7 +249,7 @@ Sub MoveData()
         Else
             If Cells(4, col).Value = "" Then
                 Cells(2, col).Cut
-                Cells(1, col).Paste
+                Cells(1, col).PasteSpecial
             End If
             ' Assign header cell to variable
             headerCell = Cells(2, col)
@@ -1141,7 +1131,6 @@ Sub PopulateReport()
     
     objWord.Application.Activate
     objWord.Application.WindowState = wdWindowStateMaximize
-    'objWord.ActiveDocument.SaveAs fileName:="C:\Users\jackie\Documents\Client Files\Progress Reports\"
 
 End Sub
 
@@ -1294,32 +1283,39 @@ End Sub
 Sub RenamePrograms()
    
    'Cycle through programs with option to rename
-   prevProgramName = 2
    
-    For renameI = 2 To 1000
-        If Cells(2, renameI).Value = "" Then
-            ' Do nothing
-        Else
-            Cells(2, renameI).Activate
-            ProgramName = Trim(Cells(2, renameI).Value)
-            ProgramNames.currentProgramName.Value = ProgramName
-            ProgramNames.NewProgramName.Value = ProgramName
-            With ProgramNames.ProgramLists
-                For j = 2 To Worksheets("PD").Cells(1000, 1).End(xlUp).row
-                    .AddItem Worksheets("PD").Cells(j, 1).Value
-                Next j
-            End With
-            ProgramNames.NewProgramName.SetFocus
-                With ProgramNames.NewProgramName
-                    .SelStart = 0
-                    .SelLength = Len(.Text)
-                End With
-            ProgramNames.Show
-            Cells(2, renameI).Value = ProgramName
-            prevProgramName = renameI
-        End If
-    Next renameI
-
+   renameI = 2
+   
+    With RenameBox.programAll
+        For j = 2 To Worksheets("PD").Cells(1000, 1).End(xlUp).row
+        .AddItem Worksheets("PD").Cells(j, 1).Value
+        Next j
+    End With
+    
+    With RenameBox.programCurrent
+        For j = 2 To Worksheets("Data").Cells(2, 2000).End(xlToLeft).Column
+            If Worksheets("Data").Cells(2, j).Value = "" Then
+                'Do nothing
+            Else
+                .AddItem Worksheets("Data").Cells(2, j).Value
+            End If
+        Next j
+    End With
+   
+    RenameBox.programChange = Worksheets("Data").Cells(2, renameI).Value
+    RenameBox.programCurrent = Worksheets("Data").Cells(2, renameI).Value
+    RenameBox.programExisting = Worksheets("Data").Cells(2, renameI).Value
+   
+    RenameBox.programChange.SetFocus
+        With RenameBox.programChange
+            .SelStart = 0
+            .SelLength = Len(.Text)
+        End With
+              
+    Worksheets("Data").Cells(2, renameI).Activate
+    RenameBox.btnPrev.Enabled = False
+    RenameBox.Show
+    
 End Sub
 
 Sub TutorHrs()

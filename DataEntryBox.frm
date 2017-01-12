@@ -41,6 +41,7 @@ Private Sub AddProgram_Click()
     Selection.NumberFormat = "mm/dd/yyyy"
 
     x.Worksheets("Data").Cells(2, col).Value = DataEntryBox.Program.Value
+    x.Worksheets("Data").Cells(3, col).Value = " "
     DataEntryBox.ProgramList = DataEntryBox.Program.Value
     DataEntryBox.AddProgram.Enabled = False
     DataEntryBox.Skill.SetFocus
@@ -106,11 +107,17 @@ Private Sub buttonNextData_Click()
     Next i
     
     For i = 4 To (x.Worksheets("Data").Cells(2000, 1).End(xlUp).row + 1)
-        If ((x.Worksheets("Data").Cells(i - 1, 1).Value < DateValue(newDate)) Or (x.Worksheets("Data").Cells(i - 1, 1).Value = DateValue(newDate))) And ((x.Worksheets("Data").Cells(i, 1).Value > DateValue(newDate)) Or (x.Worksheets("Data").Cells(i, 1).Value = "")) Then
-            x.Worksheets("Data").Cells(i, 1).Activate
-            ActiveCell.EntireRow.Insert
-            x.Worksheets("Data").Cells(i, 1).Value = DataEntryBox.SessionDate.Value
-            Exit For
+        If (x.Worksheets("Data").Cells(i - 1, 1).Value < DateValue(newDate) Or _
+            x.Worksheets("Data").Cells(i - 1, 1).Value = DateValue(newDate)) _
+            And (x.Worksheets("Data").Cells(i, 1).Value > DateValue(newDate) Or x.Worksheets("Data").Cells(i, 1).Value = "") Then
+            If x.Worksheets("Data").Cells(i - 1, 1).Value = DateValue(newDate) And x.Worksheets("Data").Cells(i - 1, programCol).Value = "" Then
+                'Do nothing
+            Else
+                x.Worksheets("Data").Cells(i, 1).Activate
+                ActiveCell.EntireRow.Insert
+                x.Worksheets("Data").Cells(i, 1).Value = DataEntryBox.SessionDate.Value
+                Exit For
+            End If
         End If
     Next i
     
