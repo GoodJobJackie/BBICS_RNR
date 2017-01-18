@@ -92,6 +92,8 @@ Private Sub buttonNextData_Click()
     Dim newDate As String
     Dim Score As Integer
     
+    On Error GoTo ErrorHandling
+    
     newDate = DataEntryBox.SessionDate.Value
     Score = DataEntryBox.Score.Value
     
@@ -133,6 +135,9 @@ Private Sub buttonNextData_Click()
     DataEntryBox.SessionDate = ""
     DataEntryBox.Score = ""
     DataEntryBox.SessionDate.SetFocus
+    
+ErrorHandling:
+    ErrHandling
                 
 End Sub
 

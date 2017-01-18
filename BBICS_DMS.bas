@@ -38,7 +38,7 @@ Attribute ARestructureAndGenerateReport.VB_ProcData.VB_Invoke_Func = "r\n14"
     bottomDateRow = Cells(5, 1).End(xlDown).row
         
     UserAction.Show
-
+    
 End Sub
 
 Sub NewRestructuring()
@@ -86,31 +86,6 @@ Sub NewRestructuring()
     ImportSkillsPrograms
     ' Dialog box confirming completion
     MsgBox "Task complete in " & minutesElapsed, vbInformation + vbSystemModal + vbOKOnly, "Success"
-End Sub
-
-Sub RequestDates()
-
-    reportStart = ""
-    reportEnd = ""
-    
-    Do While Not IsDate(reportStart)
-        reportStart = InputBox("Please input next report start date - m/d/yyyy")
-        If IsDate(reportStart) Then
-            reportStart = Format(CDate(reportStart), "m/d/yyyy")
-        Else
-            MsgBox "Please enter valid date."
-        End If
-    Loop
-    
-    Do While Not IsDate(reportEnd)
-        reportEnd = InputBox("Please input next report end date - m/d/yyyy")
-        If IsDate(reportEnd) Then
-            reportEnd = Format(CDate(reportEnd), "m/d/yyyy")
-        Else
-            MsgBox "Please enter valid date."
-        End If
-    Loop
-    
 End Sub
 
 Sub EmptyBCheck()
@@ -243,6 +218,8 @@ End Sub
 
 Sub MoveData()
 
+    On Error GoTo ErrorHandling
+    
     ' Find next program chunk
     For col = 2 To 1000
         If Cells(2, col).Value = "" Then
@@ -309,6 +286,9 @@ Sub MoveData()
         End If
     Next col
     
+ErrorHandling:
+    ErrHandling
+    
 End Sub
 
 Sub SelectChunk()
@@ -343,6 +323,8 @@ Sub PopulatePrograms()
     Dim prev3 As Integer
     Dim prevRow As Integer
     Dim deletedSkill As String
+    
+    On Error GoTo ErrorHandling
     
     col = 2
     skillCount = 1
@@ -389,13 +371,20 @@ Sub PopulatePrograms()
             For i = col + 1 To Cells(3, nextHeaderCol).End(xlToLeft).Column
                 If Cells(3, i).End(xlDown) = "" Then
                     deletedSkill = Cells(3, i).Value
-                    MsgBox ("'" & Cells(2, col).Value & ": " & deletedSkill & "' skill column empty." & vbCrLf & vbCrLf & "Deleting...")
+                    MsgBox ("'" & Cells(2, col).Value & ": " & deletedSkill & "' skill column(" & col & ") empty." & vbCrLf & vbCrLf & "Deleting...")
                     Columns(i).Delete
                 End If
             Next i
         End If
     Next col
-        
+    'Delete extra empty columns
+    For col = 3 To Cells(2, 1000).End(xlToLeft).Column
+        If Cells(1, col).End(xlDown).Value = "" And Cells(1, col - 1).End(xlDown).Value = "" Then
+            MsgBox ("Extra empty column(" & col & ")...deleting.")
+            Columns(col).Delete
+        End If
+    Next col
+
     ' Look for next program
     For col = 2 To 1000
         If Cells(2, col) <> "" Then
@@ -505,6 +494,9 @@ Sub PopulatePrograms()
     Next i
     Rows(startDateRow & ":" & endDateRow).Select
     Selection.Interior.Color = -4142
+    
+ErrorHandling:
+    ErrHandling
     
 End Sub
 
@@ -816,6 +808,8 @@ Sub PopulateReport()
     Dim bx As Variant
     Dim bxCount As Integer
     Dim bxString As String
+    
+    On Error GoTo ErrorHandling
 
     'Create Word object and open PRT template.
     Set objWord = CreateObject("Word.Application")
@@ -1132,6 +1126,9 @@ Sub PopulateReport()
     objWord.Application.Activate
     objWord.Application.WindowState = wdWindowStateMaximize
 
+ErrorHandling:
+    ErrHandling
+
 End Sub
 
 Sub ProgramDescriptionsList()
@@ -1398,5 +1395,11 @@ Sub DataEntryPrograms()
        
     DataEntryBox.Show
 
+End Sub
+
+Sub ErrHandling()
+
+    If err.Number <> 0 Then ErrorBox.Show
+    
 End Sub
 

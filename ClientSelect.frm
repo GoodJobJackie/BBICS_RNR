@@ -17,11 +17,11 @@ Option Explicit
 
 Private Sub FileSelect_Click()
 
-    Dim filePath As String
+    Dim filepath As String
 
-    filePath = ClientSelect.FileList.Value
+    filepath = ClientSelect.FileList.Value
     
-    Set x = Workbooks.Open(filePath)
+    Set x = Workbooks.Open(filepath)
     ActiveWindow.WindowState = xlMaximized
     x.Worksheets("Data").Activate
     
