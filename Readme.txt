@@ -1,11 +1,16 @@
 
-BBICS Client Data Management System v4.2.0
+BBICS Client Data Management System v4.3
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
 =========================================================================
 Changelog
 -------------------------------------------------------------------------
+
+2017_01_18  v.4.3
+*added error handling during report generation/data entry
+*added new client workbook creation automation
+*fixed crash due to extra empty columns
 
 2017_01_12  v4.2.0
 *data entry adds asthetic space when creating new program
