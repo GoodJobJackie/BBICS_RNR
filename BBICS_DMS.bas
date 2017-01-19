@@ -814,8 +814,7 @@ Sub PopulateReport()
     'Create Word object and open PRT template.
     Set objWord = CreateObject("Word.Application")
     Set objDoc = objWord.Documents.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\PRT.docx")
-    objWord.Visible = True
-    
+        
     'Find/Replace sections with data.
     With objDoc
         For Each s In .Sections
@@ -1112,7 +1111,6 @@ Sub PopulateReport()
     End With
     
     TutorHrs
-    'SaveReport
     
     'Cleanup
     Application.DisplayAlerts = False
@@ -1123,6 +1121,7 @@ Sub PopulateReport()
     Worksheets("Current").Delete
     Application.DisplayAlerts = True
     
+    objWord.Visible = True
     objWord.Application.Activate
     objWord.Application.WindowState = wdWindowStateMaximize
 
@@ -1239,7 +1238,7 @@ Sub BxData()
         End If
     Next i
     
-    If Not BxDict Is Nothing Then
+    If BxDict Is Nothing Then
         MsgBox ("Behavior volumes null set.")
         Exit Sub
     End If

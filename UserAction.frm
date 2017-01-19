@@ -13,8 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
 Private Sub actionDatabase_Click()
 
     Dim strFile
@@ -26,7 +24,7 @@ Private Sub actionDatabase_Click()
 End Sub
 
 Private Sub ActionDataEntry_Click()
-      
+
     Set objFSO = CreateObject("Scripting.FileSystemObject")
     Set objFolder = objFSO.GetFolder("C:\Users\jackie\Documents\Client Files\Data\Formatted")
     
@@ -73,24 +71,8 @@ Private Sub actionDocuments_Click()
 
 End Sub
 
-Private Sub actionFixNames_Click()
-    
-    Unload Me
-    ProgramDescriptionsList
-    
-End Sub
-
-Private Sub ActionFullService_Click()
-
-    Unload Me
-    NewRestructuring
-    UserAction.ActionFullService.Enabled = False
-    UserAction.ActionRestructureSingle.Enabled = False
-
-End Sub
-
 Private Sub ActionImportSP_Click()
-    
+
     Unload Me
     ImportSkillsPrograms
     
@@ -99,29 +81,10 @@ End Sub
 Private Sub actionIPG_Click()
 
     Unload Me
- 
     ImportSkillsPrograms
     PopulatePrograms
     CreateProgramLists
     PopulateReport
-
-End Sub
-
-Private Sub ActionPopulate_Click()
-    
-    Unload Me
-    PopulatePrograms
-    CreateProgramLists
-    
-End Sub
-
-Private Sub ActionProgramList_Click()
-
-    Unload Me
-    PopulatePrograms
-    Cells(1, 1).Select
-    ActiveWindow.Zoom = 90
-    CreateProgramLists
 
 End Sub
 
@@ -283,16 +246,8 @@ Private Sub ActionReformat_Click()
     Cells(4, 2).Select
     ActiveWindow.FreezePanes = False
     ActiveWindow.FreezePanes = True
-    'UserAction.ActionFullService.Enabled = False
     Cells(2000, 1).End(xlUp).Offset(1, 0).Value = Date
 
-End Sub
-
-Private Sub ActionReport_Click()
-
-    Unload Me
-    PopulateReport
-    
 End Sub
 
 Private Sub ActionRestructureSingle_Click()
@@ -308,13 +263,12 @@ Private Sub ActionRestuctureFull_Click()
     Unload Me
     MoveData
     UserAction.ActionRestuctureFull.Enabled = False
-    'UserAction.ActionFullService.Enabled = False
     UserAction.ActionRestructureSingle.Enabled = False
     
 End Sub
 
 Private Sub CommandButton1_Click()
-       
+
       On Error GoTo ErrorHandling
       
       Call err.Raise(1342, "UserAction button", "User submitted message")
@@ -327,10 +281,6 @@ End Sub
 Private Sub CommandButton2_Click()
 
     Unload Me
-
-End Sub
-
-Private Sub UserForm_Click()
 
 End Sub
 
@@ -356,8 +306,4 @@ Private Sub VerifyProgramNames_Click()
     Next
     Application.DisplayAlerts = True
     
-End Sub
-
-Private Sub version_Click()
-
 End Sub

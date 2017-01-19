@@ -36,7 +36,9 @@ Private Sub btnSubmit_Click()
     End If
     
     errorText = Now & vbCrLf & "Error Number: " & err.Number & vbCrLf & "Error Description: " & err.Description _
-        & vbCrLf & currentFile & vbCrLf & "User Description: " & ErrorBox.txtUserDescription.Value
+        & vbCrLf & currentFile & vbCrLf & "   Program: " & DataEntryBox.ProgramList.Value & vbCrLf & "   Skill: " & DataEntryBox.SkillList.Value _
+        & vbCrLf & "   SessionDate: " & DataEntryBox.SessionDate.Value & vbCrLf _
+        & "   SessionScore: " & DataEntryBox.Score.Value & vbCrLf & "User Description: " & ErrorBox.txtUserDescription.Value
     
     Open filepath For Output As #1
     
