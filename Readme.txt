@@ -1,11 +1,14 @@
 
-BBICS Client Data Management System v4.4
+BBICS Client Data Management System v4.4.1
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
 =========================================================================
 Changelog
 -------------------------------------------------------------------------
+
+2017_01_23  v4.4.1
+*minor fix to date/score editing
 
 2017_01_23  v4.4
 *added edit for date/score pairings
@@ -121,4 +124,3 @@ Copyright (C) 2016 BBICS All rights reserved.
 ----------------------------------------------------------
 
 Known Bugs:
-*When editing a date to a previous time, the current date/score pairing does not delete.
