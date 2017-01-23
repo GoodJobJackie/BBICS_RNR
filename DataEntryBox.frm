@@ -81,6 +81,8 @@ Private Sub btnDelete_Click()
     Dim i, j, programCol, skillCol, arraySize As Integer
     Dim row As Variant
     
+    On Error GoTo ErrorHandling
+    
     For i = 2 To x.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
         If x.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
@@ -118,6 +120,9 @@ Private Sub btnDelete_Click()
     
     If rowsIndex > 0 Then rowsIndex = rowsIndex - 1
     If rowsIndex < 0 Then rowsIndex = 0
+    
+ErrorHandling:
+    ErrHandling
 
 End Sub
 
@@ -126,6 +131,9 @@ Private Sub btnEdit_Click()
     Dim i, j, programCol, skillCol, arraySize As Integer
     Dim row As Variant
     
+    On Error GoTo ErrorHandling
+    
+    'Get listing for program and skill columns
     For i = 2 To x.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
         If x.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
@@ -137,14 +145,18 @@ Private Sub btnEdit_Click()
         End If
     Next i
     
+    'Delete current entry
     x.Worksheets("Data").Cells(editRow, programCol) = ""
     x.Worksheets("Data").Cells(editRow, skillCol) = ""
     
+    'Copy from edit section to new data section
     DataEntryBox.SessionDate = DataEntryBox.txtEditDate
     DataEntryBox.Score = DataEntryBox.txtEditScore
     
+    'Add the data as new
     buttonNextData_Click
     
+    'Set the array size
     If DataEntryBox.SkillList <> "<Please select program first>" Then
         arraySize = 0
         For i = 4 To x.Worksheets("Data").Cells(4, 1).End(xlDown).row
@@ -152,6 +164,7 @@ Private Sub btnEdit_Click()
         Next i
     End If
               
+    'Redefine the array
     If arraySize > 0 Then arraySize = arraySize - 1
     ReDim dateRows(arraySize)
     
@@ -166,14 +179,24 @@ Private Sub btnEdit_Click()
         Next i
     End If
     
+    'Keep the index from dropping below 0
     If rowsIndex > 0 Then rowsIndex = rowsIndex - 1
     If rowsIndex < 0 Then rowsIndex = 0
+    
+    'Cleanup
+    DataEntryBox.txtEditDate = ""
+    DataEntryBox.txtEditScore = ""
+    
+ErrorHandling:
+    ErrHandling
 
 End Sub
 
 Private Sub btnEditDown_Click()
 
     Dim i, j, programCol, skillCol As Integer
+    
+    On Error GoTo ErrorHandling
     
     For i = 2 To x.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
         If x.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
@@ -198,6 +221,11 @@ Private Sub btnEditDown_Click()
     DataEntryBox.txtEditScore = x.Worksheets("Data").Cells(editRow, skillCol).Value
     
     Union(x.Worksheets("Data").Cells(editRow, programCol), x.Worksheets("Data").Cells(editRow, skillCol)).Activate
+    
+    current = DataEntryBox.txtEditDate.Value
+
+ErrorHandling:
+    ErrHandling
 
 End Sub
 
@@ -206,6 +234,8 @@ Private Sub btnEditUp_Click()
     Dim i, j, programCol, skillCol As Integer
     Dim row As Variant
     Dim txt As String
+    
+    On Error GoTo ErrorHandling
     
     For i = 2 To x.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
         If x.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
@@ -232,6 +262,11 @@ Private Sub btnEditUp_Click()
     DataEntryBox.txtEditScore = x.Worksheets("Data").Cells(editRow, skillCol).Value
     
     Union(x.Worksheets("Data").Cells(editRow, programCol), x.Worksheets("Data").Cells(editRow, skillCol)).Activate
+    
+    current = DataEntryBox.txtEditDate.Value
+    
+ErrorHandling:
+    ErrHandling
 
 End Sub
 
@@ -379,7 +414,6 @@ Private Sub Score_Change()
 
     If DataEntryBox.Score.Value < 0 Or DataEntryBox.Score.Value > 100 Then
         DataEntryBox.buttonNextData.Enabled = False
-        Beep
     Else
         DataEntryBox.buttonNextData.Enabled = True
     End If
@@ -406,7 +440,6 @@ Private Sub SessionDate_Exit(ByVal Cancel As MSForms.ReturnBoolean)
         DataEntryBox.buttonNextData.Enabled = True
     Else
         DataEntryBox.buttonNextData.Enabled = False
-        Beep
     End If
     
 End Sub
@@ -474,7 +507,23 @@ Private Sub SkillList_Change()
         DataEntryBox.btnDelete.Enabled = True
         DataEntryBox.btnEdit.Enabled = True
     End If
-              
+                     
+End Sub
+
+Private Sub txtEditDate_Change()
+
+    If IsDate(DataEntryBox.txtEditDate.Value) Then
+        DataEntryBox.btnDelete.Enabled = True
+        DataEntryBox.btnEdit.Enabled = True
+    Else
+        DataEntryBox.btnDelete.Enabled = False
+        DataEntryBox.btnEdit.Enabled = False
+    End If
+
+End Sub
+
+Private Sub txtEditScore_Change()
+
 End Sub
 
 Private Sub UserForm_Click()

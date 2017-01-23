@@ -26,7 +26,7 @@ Public x As Workbook
 Public editRow, topEditRow, bottomEditRow As Integer
 Public dateRows() As Integer
 Public rowsIndex As Integer
-
+Public current As Date
 
 Dim dataSheetName As String
 Dim objWord
