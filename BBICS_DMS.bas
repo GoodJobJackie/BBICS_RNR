@@ -23,6 +23,9 @@ Public objFSO As Object
 Public objFolder As Object
 Public objFile As Object
 Public x As Workbook
+Public editRow, topEditRow, bottomEditRow As Integer
+Public dateRows() As Integer
+Public rowsIndex As Integer
 
 
 Dim dataSheetName As String
@@ -1217,7 +1220,7 @@ Sub BxData()
     Dim Arr() As Variant
     Dim Temp1 As Variant
     Dim Temp2 As Variant
-    Dim Txt As String
+    Dim txt As String
     Dim i As Long
     Dim j As Long
     
@@ -1271,7 +1274,7 @@ Sub BxData()
     Next i
     
     For i = 0 To BxDict.Count - 1
-        Txt = Txt & BxDict.Keys(i) & vbTab & BxDict.Items(i) & vbCrLf
+        txt = txt & BxDict.Keys(i) & vbTab & BxDict.Items(i) & vbCrLf
     Next i
     
 End Sub
@@ -1382,15 +1385,18 @@ Sub DataEntryPrograms()
     DataEntryBox.AddProgram.Enabled = False
     DataEntryBox.AddSkill.Enabled = False
     DataEntryBox.buttonNextData.Enabled = False
+    DataEntryBox.btnEditUp.Enabled = False
+    DataEntryBox.btnEditDown.Enabled = False
+    DataEntryBox.btnDelete.Enabled = False
+    DataEntryBox.btnEdit.Enabled = False
     
         
-        For col = 2 To Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
-            If Worksheets("Data").Cells(2, col).Value = "" Then
-            Else
-                DataEntryBox.ProgramList.AddItem Cells(2, col).Value
-            End If
-        Next col
-       
+    For col = 2 To Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+        If Worksheets("Data").Cells(2, col).Value = "" Then
+        Else
+            DataEntryBox.ProgramList.AddItem Cells(2, col).Value
+        End If
+    Next col
        
     DataEntryBox.Show
 

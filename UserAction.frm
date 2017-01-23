@@ -284,6 +284,10 @@ Private Sub CommandButton2_Click()
 
 End Sub
 
+Private Sub UserForm_Click()
+
+End Sub
+
 Private Sub VerifyProgramNames_Click()
 
     Unload Me
