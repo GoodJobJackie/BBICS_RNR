@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserAction 
    Caption         =   "Please select an action."
-   ClientHeight    =   8475
+   ClientHeight    =   9345
    ClientLeft      =   120
    ClientTop       =   465
    ClientWidth     =   5040
@@ -265,6 +265,27 @@ Private Sub ActionRestuctureFull_Click()
     UserAction.ActionRestuctureFull.Enabled = False
     UserAction.ActionRestructureSingle.Enabled = False
     
+End Sub
+
+Private Sub btnArchive_Click()
+
+    Dim filepath As String
+    Dim i As Integer
+
+    filepath = "C:\Users\jackie\Documents\Client File Archive LIst.xlsx"
+    
+    Set y = Workbooks.Open(filepath)
+    ActiveWindow.WindowState = xlMinimized
+    
+    For i = 2 To y.Worksheets("Client File Archive").Cells(2, 4).End(xlDown).row
+        With ArchiveBox.selectClient
+            .AddItem y.Worksheets("Client File Archive").Cells(i, 4).Value
+        End With
+    Next i
+    
+    Unload Me
+    ArchiveBox.Show
+
 End Sub
 
 Private Sub CommandButton1_Click()

@@ -22,7 +22,7 @@ Public BxDict As New Scripting.Dictionary
 Public objFSO As Object
 Public objFolder As Object
 Public objFile As Object
-Public x As Workbook
+Public x, y As Workbook
 Public editRow, topEditRow, bottomEditRow As Integer
 Public dateRows() As Integer
 Public rowsIndex As Integer

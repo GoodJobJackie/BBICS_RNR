@@ -118,7 +118,9 @@ Private Sub btnDelete_Click()
         Next i
     End If
     
+    'Reposition the edit position
     If rowsIndex > 0 Then rowsIndex = rowsIndex - 1
+    'Keep the index from dropping below 0
     If rowsIndex < 0 Then rowsIndex = 0
     
 ErrorHandling:
@@ -179,11 +181,12 @@ Private Sub btnEdit_Click()
         Next i
     End If
     
-    'Keep the index from dropping below 0
+    'Reposition the current edit position
     If rowsIndex > 0 Then rowsIndex = rowsIndex - 1
+    'Keep the index from dropping below 0
     If rowsIndex < 0 Then rowsIndex = 0
     
-    'Cleanup
+    'Empty edit text boxes
     DataEntryBox.txtEditDate = ""
     DataEntryBox.txtEditScore = ""
     
@@ -401,6 +404,11 @@ Private Sub ProgramList_Change()
     If DataEntryBox.Program.Value = "Select preexisting program..." Then
         DataEntryBox.Program = ""
     End If
+    
+        DataEntryBox.btnEditUp.Enabled = False
+        DataEntryBox.btnEditDown.Enabled = False
+        DataEntryBox.btnDelete.Enabled = False
+        DataEntryBox.btnEdit.Enabled = False
           
 End Sub
 
