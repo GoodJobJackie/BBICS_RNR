@@ -1,11 +1,14 @@
 
-BBICS Client Data Management System v4.5
+BBICS Client Data Management System v4.5.1
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
 =========================================================================
 Changelog
 -------------------------------------------------------------------------
+
+2017_02_01  v4.5.1
+*minor fixes
 
 2017_01_25  v.4.5
 *added access to client file archive list
