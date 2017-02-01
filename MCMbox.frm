@@ -60,13 +60,13 @@ End Sub
 
 Private Sub ScrollDown_Click()
 
-    ActiveWindow.SmallScroll Down:=5
+    ActiveWindow.SmallScroll Down:=10
 
 End Sub
 
 Private Sub ScrollUp_Click()
 
-    ActiveWindow.SmallScroll Down:=-5
+    ActiveWindow.SmallScroll Down:=-10
     
 End Sub
 

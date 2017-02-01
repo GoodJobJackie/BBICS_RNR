@@ -383,7 +383,7 @@ Sub PopulatePrograms()
     'Delete extra empty columns
     For col = 3 To Cells(2, 1000).End(xlToLeft).Column
         If Cells(1, col).End(xlDown).Value = "" And Cells(1, col - 1).End(xlDown).Value = "" Then
-            MsgBox ("Extra empty column(" & col & ")...deleting.")
+            MsgBox ("Extra empty column(" & col & ")" & vbCrLf & "...Deleting.")
             Columns(col).Delete
         End If
     Next col
@@ -476,7 +476,7 @@ Sub PopulatePrograms()
         End If
     Next col
     
-    ' Reset report period borders to black/white
+    ' Reset report period borders to black/white/transparent
      For i = 4 To bottomDateRow
         If reportStart = Trim(Cells(i, 1).Value) Then
             Rows(i).Select
@@ -662,21 +662,6 @@ Sub CreateProgramLists()
         Cells(1, 8).Value = Cells(1, 8).Value & "."
     End If
 
-End Sub
-
-Sub SaveReport()
-
-    Dim saveAsFilename As String
-    
-    saveAsFilename = Worksheets("Data").Cells(1, 1).Value & " - " & _
-        Worksheets("CI").Cells(2, 4).Value & " Progress Report [" & _
-        Format(reportStart, "yyyy") & "_" & Format(reportStart, "mm") & " - " & _
-        Format(reportEnd, "yyyy") & "_" & Format(reportEnd, "mm") & "]"
-    answer = MsgBox("Save report as: " & saveAsFilename, vbYesNo + vbQuestion)
-    If answer = vbYes Then
-        objDoc.SaveAs ("C:\Users\jackie\Documents\Client Files\Progress Reports\" & saveAsFilename)
-    End If
-    
 End Sub
 
 Sub SingleRestructure()
@@ -1249,11 +1234,13 @@ Sub BxData()
     'Sort in descending quantities
     ReDim Arr(0 To BxDict.Count - 1, 0 To 1)
     
+    'Store bx data in temporary array
     For i = 0 To BxDict.Count - 1
         Arr(i, 0) = BxDict.Keys(i)
         Arr(i, 1) = BxDict.Items(i)
     Next i
     
+    'Sort temp array
     For i = LBound(Arr, 1) To UBound(Arr, 1) - 1
         For j = i + 1 To UBound(Arr, 1)
             If Arr(i, 1) > Arr(j, 1) Then
@@ -1267,6 +1254,7 @@ Sub BxData()
         Next j
     Next i
     
+    '
     BxDict.RemoveAll
     
     For i = LBound(Arr, 1) To UBound(Arr, 1)

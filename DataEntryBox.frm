@@ -469,8 +469,13 @@ Private Sub SkillList_Change()
 
     Dim i, j, arraySize, programCol, skillCol As Integer
     Dim row As Variant
+    
+    On Error GoTo ErrHandling
 
     DataEntryBox.Skill.Value = DataEntryBox.SkillList.Value
+    
+    'Check for empty programs
+    If x.Worksheets("Data").Cells(2, 1).End(xlToRight).Value = "" Then Exit Sub
     
     For i = 2 To x.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
         If x.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
@@ -515,6 +520,9 @@ Private Sub SkillList_Change()
         DataEntryBox.btnDelete.Enabled = True
         DataEntryBox.btnEdit.Enabled = True
     End If
+    
+ErrHandling:
+    ErrorHandling
                      
 End Sub
 

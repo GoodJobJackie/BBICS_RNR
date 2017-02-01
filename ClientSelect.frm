@@ -27,7 +27,7 @@ Private Sub FileSelect_Click()
     
     Unload Me
     
-    MsgBox ("Remember to save after making any changes.")
+    'MsgBox ("Remember to save after making any changes.")
    
     DataSelect.Show
 
