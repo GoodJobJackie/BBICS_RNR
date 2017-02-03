@@ -1,32 +1,14 @@
 Attribute VB_Name = "BBICS_DMS"
+Public Const version As String = "v4.5.1"
 
-Public reportStart As Date
-Public reportEnd As Date
-Public ProgramName As String
-Public ProgramDescription As String
-Public ProgramSD As String
-Public SkillName As String
-Public mCm As String
-Public skipFlag
-Public reportStartRow
-Public reportEndRow
-Public flagFullRest
-Public flagFullService
-Public startDateRow As Integer
-Public endDateRow As Integer
-Public programCount As Integer
-Public skip As Boolean
-Public renameI As Integer
-Public prevProgramName As Integer
+Public reportStart, reportEnd, current As Date
+Public ProgramName, ProgramDescription, ProgramSD, SkillName, mCm As String
+Public startDateRow, endDateRow, programCount, prevProgramName, renameI, editRow, topEditRow, bottomEditRow, rowsIndex, reportStartRow, reportEndRow As Integer
+Public skip, skipFlag As Boolean
 Public BxDict As New Scripting.Dictionary
-Public objFSO As Object
-Public objFolder As Object
-Public objFile As Object
-Public x, y As Workbook
-Public editRow, topEditRow, bottomEditRow As Integer
+Public objFSO, objFolder, objFile As Object
+Public X, Y As Workbook
 Public dateRows() As Integer
-Public rowsIndex As Integer
-Public current As Date
 
 Dim dataSheetName As String
 Dim objWord
@@ -39,6 +21,8 @@ Attribute ARestructureAndGenerateReport.VB_ProcData.VB_Invoke_Func = "r\n14"
     
     dataSheetName = ActiveSheet.Name
     bottomDateRow = Cells(5, 1).End(xlDown).row
+    
+    UserAction.version.Caption = version
         
     UserAction.Show
     
@@ -738,8 +722,8 @@ Sub ImportSkillsPrograms()
 
     Dim z As Workbook
     Dim w As Workbook
-    Dim x As Workbook
-    Dim y As Workbook
+    Dim X As Workbook
+    Dim Y As Workbook
     Dim k As Integer
     Dim sht As Worksheet
     
@@ -763,22 +747,22 @@ Sub ImportSkillsPrograms()
     'Import information as new worksheets
     Set z = ActiveWorkbook
     Set w = Workbooks.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\FMP_DataExport.xlsx")
-    Set x = Workbooks.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\SkillDeficitList.xlsx")
-    Set y = Workbooks.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\ProgramDescriptions.xlsx")
+    Set X = Workbooks.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\SkillDeficitList.xlsx")
+    Set Y = Workbooks.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\ProgramDescriptions.xlsx")
        
     w.Sheets("CI").Range("A1:M2").Copy
     z.Sheets("CI").Range("A1:M2").PasteSpecial
     w.Close
     z.Sheets("CI").Columns("A:M").AutoFit
     
-    x.Sheets("SDL").Range("A1:B112").Copy
+    X.Sheets("SDL").Range("A1:B112").Copy
     z.Sheets("SDL").Range("A1:B112").PasteSpecial
-    x.Close
+    X.Close
     
     k = Worksheets("PD").Cells(1000, 1).End(xlUp).row
-    y.Sheets("PD").Range("A1:C" & k).Copy
+    Y.Sheets("PD").Range("A1:C" & k).Copy
     z.Sheets("PD").Range("A1:C" & k).PasteSpecial
-    y.Close
+    Y.Close
     
     Worksheets("Data").Activate
 
@@ -1177,7 +1161,7 @@ Sub ProgramMatch()
             DescriptionBox.programNameBox.Value = ProgramName
             DescriptionBox.programDescriptionBox = "The client will "
             DescriptionBox.programSDBox.Value = "The SD will vary depending on the instructions in the workbook, the client’s IEP, and the interventionist."
-            For j = 2 To x.Worksheets("Data").Cells(2, 3000).End(xlToLeft).Column
+            For j = 2 To X.Worksheets("Data").Cells(2, 3000).End(xlToLeft).Column
                 If Worksheets("Data").Cells(2, j).Value = ProgramName Then
                     Worksheets("Data").Cells(2, j).Activate
                 End If

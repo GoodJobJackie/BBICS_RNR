@@ -24,8 +24,8 @@ Private Sub AddProgram_Click()
     Dim col As Integer
     
     DataEntryBox.ProgramList.AddItem DataEntryBox.Program
-    col = x.Worksheets("Data").Cells(3, 1000).End(xlToLeft).Column + 2
-    x.Worksheets("Data").Columns(col).Select
+    col = X.Worksheets("Data").Cells(3, 1000).End(xlToLeft).Column + 2
+    X.Worksheets("Data").Columns(col).Select
     Selection.Borders(xlDiagonalUp).LineStyle = xlNone
     With Selection.Borders(xlEdgeLeft)
         .LineStyle = xlContinuous
@@ -40,8 +40,8 @@ Private Sub AddProgram_Click()
     Selection.Borders(xlInsideHorizontal).LineStyle = xlNone
     Selection.NumberFormat = "mm/dd/yyyy"
 
-    x.Worksheets("Data").Cells(2, col).Value = DataEntryBox.Program.Value
-    x.Worksheets("Data").Cells(3, col).Value = " "
+    X.Worksheets("Data").Cells(2, col).Value = DataEntryBox.Program.Value
+    X.Worksheets("Data").Cells(3, col).Value = " "
     DataEntryBox.ProgramList = DataEntryBox.Program.Value
     DataEntryBox.AddProgram.Enabled = False
     DataEntryBox.Skill.SetFocus
@@ -55,17 +55,17 @@ Private Sub AddSkill_Click()
     
     DataEntryBox.SkillList.AddItem DataEntryBox.Skill.Value
     DataEntryBox.SkillList = DataEntryBox.Skill.Value
-    For i = 2 To x.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
-        If x.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
+    For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+        If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             col = i + 1
-            If x.Worksheets("Data").Cells(3, col).Value = "" Then
-                x.Worksheets("Data").Cells(3, col).Value = DataEntryBox.SkillList
-            ElseIf x.Worksheets("Data").Cells(3, col + 1).Value = "" Then
-                x.Worksheets("Data").Cells(3, col).Activate
+            If X.Worksheets("Data").Cells(3, col).Value = "" Then
+                X.Worksheets("Data").Cells(3, col).Value = DataEntryBox.SkillList
+            ElseIf X.Worksheets("Data").Cells(3, col + 1).Value = "" Then
+                X.Worksheets("Data").Cells(3, col).Activate
                 ActiveCell.EntireColumn.Offset(0, 1).Insert
                 ActiveCell.Offset(0, 1).Value = DataEntryBox.SkillList
             Else
-                x.Worksheets("Data").Cells(3, col).End(xlToRight).Activate
+                X.Worksheets("Data").Cells(3, col).End(xlToRight).Activate
                 ActiveCell.EntireColumn.Offset(0, 1).Insert
                 ActiveCell.Offset(0, 1).Value = DataEntryBox.SkillList
             End If
@@ -83,24 +83,24 @@ Private Sub btnDelete_Click()
     
     On Error GoTo ErrorHandling
     
-    For i = 2 To x.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
-        If x.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
+    For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+        If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
-            For j = programCol To x.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
-                If x.Worksheets("Data").Cells(3, j).Value = DataEntryBox.SkillList.Value Then
+            For j = programCol To X.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
+                If X.Worksheets("Data").Cells(3, j).Value = DataEntryBox.SkillList.Value Then
                     skillCol = j
                 End If
             Next j
         End If
     Next i
  
-    x.Worksheets("Data").Cells(editRow, programCol) = ""
-    x.Worksheets("Data").Cells(editRow, skillCol) = ""
+    X.Worksheets("Data").Cells(editRow, programCol) = ""
+    X.Worksheets("Data").Cells(editRow, skillCol) = ""
     
     If DataEntryBox.SkillList <> "<Please select program first>" Then
         arraySize = 0
-        For i = 4 To x.Worksheets("Data").Cells(4, 1).End(xlDown).row
-            If x.Worksheets("Data").Cells(i, skillCol).Value <> "" Then arraySize = arraySize + 1
+        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
+            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then arraySize = arraySize + 1
         Next i
     End If
               
@@ -110,9 +110,9 @@ Private Sub btnDelete_Click()
     j = 0
     
     If arraySize <> 0 Then
-        For i = 4 To x.Worksheets("Data").Cells(4, 1).End(xlDown).row
-            If x.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
-                dateRows(j) = x.Worksheets("Data").Cells(i, skillCol).row
+        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
+            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
+                dateRows(j) = X.Worksheets("Data").Cells(i, skillCol).row
                 j = j + 1
             End If
         Next i
@@ -136,11 +136,11 @@ Private Sub btnEdit_Click()
     On Error GoTo ErrorHandling
     
     'Get listing for program and skill columns
-    For i = 2 To x.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
-        If x.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
+    For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+        If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
-            For j = programCol To x.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
-                If x.Worksheets("Data").Cells(3, j).Value = DataEntryBox.SkillList.Value Then
+            For j = programCol To X.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
+                If X.Worksheets("Data").Cells(3, j).Value = DataEntryBox.SkillList.Value Then
                     skillCol = j
                 End If
             Next j
@@ -148,8 +148,8 @@ Private Sub btnEdit_Click()
     Next i
     
     'Delete current entry
-    x.Worksheets("Data").Cells(editRow, programCol) = ""
-    x.Worksheets("Data").Cells(editRow, skillCol) = ""
+    X.Worksheets("Data").Cells(editRow, programCol) = ""
+    X.Worksheets("Data").Cells(editRow, skillCol) = ""
     
     'Copy from edit section to new data section
     DataEntryBox.SessionDate = DataEntryBox.txtEditDate
@@ -161,8 +161,8 @@ Private Sub btnEdit_Click()
     'Set the array size
     If DataEntryBox.SkillList <> "<Please select program first>" Then
         arraySize = 0
-        For i = 4 To x.Worksheets("Data").Cells(4, 1).End(xlDown).row
-            If x.Worksheets("Data").Cells(i, skillCol).Value <> "" Then arraySize = arraySize + 1
+        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
+            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then arraySize = arraySize + 1
         Next i
     End If
               
@@ -173,9 +173,9 @@ Private Sub btnEdit_Click()
     j = 0
     
     If arraySize <> 0 Then
-        For i = 4 To x.Worksheets("Data").Cells(4, 1).End(xlDown).row
-            If x.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
-                dateRows(j) = x.Worksheets("Data").Cells(i, skillCol).row
+        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
+            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
+                dateRows(j) = X.Worksheets("Data").Cells(i, skillCol).row
                 j = j + 1
             End If
         Next i
@@ -201,11 +201,11 @@ Private Sub btnEditDown_Click()
     
     On Error GoTo ErrorHandling
     
-    For i = 2 To x.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
-        If x.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
+    For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+        If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
-            For j = programCol To x.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
-                If x.Worksheets("Data").Cells(3, j).Value = DataEntryBox.SkillList.Value Then
+            For j = programCol To X.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
+                If X.Worksheets("Data").Cells(3, j).Value = DataEntryBox.SkillList.Value Then
                     skillCol = j
                 End If
             Next j
@@ -220,10 +220,10 @@ Private Sub btnEditDown_Click()
         editRow = dateRows(rowsIndex)
     End If
     
-    DataEntryBox.txtEditDate = x.Worksheets("Data").Cells(editRow, programCol).Value
-    DataEntryBox.txtEditScore = x.Worksheets("Data").Cells(editRow, skillCol).Value
+    DataEntryBox.txtEditDate = X.Worksheets("Data").Cells(editRow, programCol).Value
+    DataEntryBox.txtEditScore = X.Worksheets("Data").Cells(editRow, skillCol).Value
     
-    Union(x.Worksheets("Data").Cells(editRow, programCol), x.Worksheets("Data").Cells(editRow, skillCol)).Activate
+    Union(X.Worksheets("Data").Cells(editRow, programCol), X.Worksheets("Data").Cells(editRow, skillCol)).Activate
     
     current = DataEntryBox.txtEditDate.Value
 
@@ -240,11 +240,11 @@ Private Sub btnEditUp_Click()
     
     On Error GoTo ErrorHandling
     
-    For i = 2 To x.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
-        If x.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
+    For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+        If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
-            For j = programCol To x.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
-                If x.Worksheets("Data").Cells(3, j).Value = DataEntryBox.SkillList.Value Then
+            For j = programCol To X.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
+                If X.Worksheets("Data").Cells(3, j).Value = DataEntryBox.SkillList.Value Then
                     skillCol = j
                 End If
             Next j
@@ -261,10 +261,10 @@ Private Sub btnEditUp_Click()
         editRow = dateRows(rowsIndex)
     End If
     
-    DataEntryBox.txtEditDate = x.Worksheets("Data").Cells(editRow, programCol).Value
-    DataEntryBox.txtEditScore = x.Worksheets("Data").Cells(editRow, skillCol).Value
+    DataEntryBox.txtEditDate = X.Worksheets("Data").Cells(editRow, programCol).Value
+    DataEntryBox.txtEditScore = X.Worksheets("Data").Cells(editRow, skillCol).Value
     
-    Union(x.Worksheets("Data").Cells(editRow, programCol), x.Worksheets("Data").Cells(editRow, skillCol)).Activate
+    Union(X.Worksheets("Data").Cells(editRow, programCol), X.Worksheets("Data").Cells(editRow, skillCol)).Activate
     
     current = DataEntryBox.txtEditDate.Value
     
@@ -291,45 +291,45 @@ Private Sub buttonNextData_Click()
     newDate = DataEntryBox.SessionDate.Value
     Score = DataEntryBox.Score.Value
     
-    For i = 2 To x.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
-        If x.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
+    For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+        If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
-            For j = programCol To x.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
-                If x.Worksheets("Data").Cells(3, j).Value = DataEntryBox.SkillList.Value Then
+            For j = programCol To X.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
+                If X.Worksheets("Data").Cells(3, j).Value = DataEntryBox.SkillList.Value Then
                     skillCol = j
                 End If
             Next j
         End If
     Next i
     
-    For i = 4 To (x.Worksheets("Data").Cells(2000, 1).End(xlUp).row + 1)
-        If (x.Worksheets("Data").Cells(i - 1, 1).Value < DateValue(newDate) Or _
-            x.Worksheets("Data").Cells(i - 1, 1).Value = DateValue(newDate)) _
-            And (x.Worksheets("Data").Cells(i, 1).Value > DateValue(newDate) Or x.Worksheets("Data").Cells(i, 1).Value = "") Then
-            If x.Worksheets("Data").Cells(i - 1, 1).Value = DateValue(newDate) And x.Worksheets("Data").Cells(i - 1, programCol).Value = "" Then
+    For i = 4 To (X.Worksheets("Data").Cells(2000, 1).End(xlUp).row + 1)
+        If (X.Worksheets("Data").Cells(i - 1, 1).Value < DateValue(newDate) Or _
+            X.Worksheets("Data").Cells(i - 1, 1).Value = DateValue(newDate)) _
+            And (X.Worksheets("Data").Cells(i, 1).Value > DateValue(newDate) Or X.Worksheets("Data").Cells(i, 1).Value = "") Then
+            If X.Worksheets("Data").Cells(i - 1, 1).Value = DateValue(newDate) And X.Worksheets("Data").Cells(i - 1, programCol).Value = "" Then
                 'Do nothing
             Else
-                x.Worksheets("Data").Cells(i, 1).Activate
+                X.Worksheets("Data").Cells(i, 1).Activate
                 ActiveCell.EntireRow.Insert
-                x.Worksheets("Data").Cells(i, 1).Value = DataEntryBox.SessionDate.Value
+                X.Worksheets("Data").Cells(i, 1).Value = DataEntryBox.SessionDate.Value
                 Exit For
             End If
         End If
     Next i
     
-    For i = x.Worksheets("Data").Cells(2000, 1).End(xlUp).row To 4 Step -1
-        If x.Worksheets("Data").Cells(i, 1).Value = DateValue(newDate) Then
-            x.Worksheets("Data").Cells(i, programCol).Activate
-            x.Worksheets("Data").Cells(i, programCol).Value = DataEntryBox.SessionDate.Value
-            x.Worksheets("Data").Cells(i, skillCol).Value = DataEntryBox.Score.Value
+    For i = X.Worksheets("Data").Cells(2000, 1).End(xlUp).row To 4 Step -1
+        If X.Worksheets("Data").Cells(i, 1).Value = DateValue(newDate) Then
+            X.Worksheets("Data").Cells(i, programCol).Activate
+            X.Worksheets("Data").Cells(i, programCol).Value = DataEntryBox.SessionDate.Value
+            X.Worksheets("Data").Cells(i, skillCol).Value = DataEntryBox.Score.Value
             Exit For
         End If
     Next i
     
     If DataEntryBox.SkillList <> "<Please select program first>" Then
         arraySize = 0
-        For i = 4 To x.Worksheets("Data").Cells(4, 1).End(xlDown).row
-            If x.Worksheets("Data").Cells(i, skillCol).Value <> "" Then arraySize = arraySize + 1
+        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
+            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then arraySize = arraySize + 1
         Next i
     End If
               
@@ -339,9 +339,9 @@ Private Sub buttonNextData_Click()
     j = 0
     
     If arraySize <> 0 Then
-        For i = 4 To x.Worksheets("Data").Cells(4, 1).End(xlDown).row
-            If x.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
-                dateRows(j) = x.Worksheets("Data").Cells(i, skillCol).row
+        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
+            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
+                dateRows(j) = X.Worksheets("Data").Cells(i, skillCol).row
                 j = j + 1
             End If
         Next i
@@ -365,8 +365,8 @@ Private Sub Program_Change()
     Dim i As Integer
 
     DataEntryBox.AddProgram.Enabled = True
-    For i = 2 To x.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
-        If DataEntryBox.Program.Value = x.Worksheets("Data").Cells(2, i).Value Then
+    For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+        If DataEntryBox.Program.Value = X.Worksheets("Data").Cells(2, i).Value Then
             DataEntryBox.AddProgram.Enabled = False
         End If
     Next i
@@ -385,19 +385,19 @@ Private Sub ProgramList_Change()
     DataEntryBox.SkillList.Enabled = True
     DataEntryBox.SkillList = "Please select skill..."
 
-    For i = 2 To x.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
-        If x.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
+    For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+        If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
-            x.Worksheets("Data").Cells(2, i).Activate
+            X.Worksheets("Data").Cells(2, i).Activate
             Exit For
         End If
     Next i
     
-    skillCol = x.Worksheets("Data").Cells(2, programCol).End(xlToRight).Column
+    skillCol = X.Worksheets("Data").Cells(2, programCol).End(xlToRight).Column
     
     
-    For i = programCol + 1 To x.Worksheets("Data").Cells(3, skillCol).End(xlToLeft).Column
-        DataEntryBox.SkillList.AddItem x.Worksheets("Data").Cells(3, i).Value
+    For i = programCol + 1 To X.Worksheets("Data").Cells(3, skillCol).End(xlToLeft).Column
+        DataEntryBox.SkillList.AddItem X.Worksheets("Data").Cells(3, i).Value
     Next i
     
     DataEntryBox.Program.Value = DataEntryBox.ProgramList.Value
@@ -470,18 +470,18 @@ Private Sub SkillList_Change()
     Dim i, j, arraySize, programCol, skillCol As Integer
     Dim row As Variant
     
-    On Error GoTo ErrHandling
+    On Error GoTo ErrorHandling
 
     DataEntryBox.Skill.Value = DataEntryBox.SkillList.Value
     
     'Check for empty programs
-    If x.Worksheets("Data").Cells(2, 1).End(xlToRight).Value = "" Then Exit Sub
+    If X.Worksheets("Data").Cells(2, 1).End(xlToRight).Value = "" Then Exit Sub
     
-    For i = 2 To x.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
-        If x.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
+    For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+        If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
-            For j = programCol To x.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
-                If x.Worksheets("Data").Cells(3, j).Value = DataEntryBox.SkillList.Value Then
+            For j = programCol To X.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
+                If X.Worksheets("Data").Cells(3, j).Value = DataEntryBox.SkillList.Value Then
                     skillCol = j
                 End If
             Next j
@@ -491,8 +491,8 @@ Private Sub SkillList_Change()
     
     If DataEntryBox.SkillList <> "<Please select program first>" Then
         arraySize = 0
-        For i = 4 To x.Worksheets("Data").Cells(4, 1).End(xlDown).row
-            If x.Worksheets("Data").Cells(i, skillCol).Value <> "" Then arraySize = arraySize + 1
+        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
+            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then arraySize = arraySize + 1
         Next i
     End If
               
@@ -502,9 +502,9 @@ Private Sub SkillList_Change()
     j = 0
     
     If arraySize <> 0 Then
-        For i = 4 To x.Worksheets("Data").Cells(4, 1).End(xlDown).row
-            If x.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
-                dateRows(j) = x.Worksheets("Data").Cells(i, skillCol).row
+        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
+            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
+                dateRows(j) = X.Worksheets("Data").Cells(i, skillCol).row
                 j = j + 1
             End If
         Next i
@@ -521,8 +521,8 @@ Private Sub SkillList_Change()
         DataEntryBox.btnEdit.Enabled = True
     End If
     
-ErrHandling:
-    ErrorHandling
+ErrorHandling:
+    ErrHandling
                      
 End Sub
 

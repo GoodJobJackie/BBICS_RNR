@@ -216,6 +216,8 @@ Private Sub actionNewClient_Click()
         
     ActiveWorkbook.SaveAs (fileName)
     ActiveWorkbook.Close
+    
+    MsgBox ("Data workbook for " & UCase(client) & " created.")
 
 End Sub
 
@@ -274,12 +276,12 @@ Private Sub btnArchive_Click()
 
     filepath = "C:\Users\jackie\Documents\Client File Archive LIst.xlsx"
     
-    Set y = Workbooks.Open(filepath)
+    Set Y = Workbooks.Open(filepath)
     ActiveWindow.WindowState = xlMinimized
     
-    For i = 2 To y.Worksheets("Client File Archive").Cells(2, 4).End(xlDown).row
+    For i = 2 To Y.Worksheets("Client File Archive").Cells(2, 4).End(xlDown).row
         With ArchiveBox.selectClient
-            .AddItem y.Worksheets("Client File Archive").Cells(i, 4).Value
+            .AddItem Y.Worksheets("Client File Archive").Cells(i, 4).Value
         End With
     Next i
     
@@ -331,4 +333,12 @@ Private Sub VerifyProgramNames_Click()
     Next
     Application.DisplayAlerts = True
     
+End Sub
+
+Private Sub version_Click()
+
+AboutBox.version.Caption = version
+    
+    AboutBox.Show
+
 End Sub

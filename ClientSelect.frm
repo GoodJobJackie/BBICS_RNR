@@ -21,9 +21,9 @@ Private Sub FileSelect_Click()
 
     filepath = ClientSelect.FileList.Value
     
-    Set x = Workbooks.Open(filepath)
+    Set X = Workbooks.Open(filepath)
     ActiveWindow.WindowState = xlMaximized
-    x.Worksheets("Data").Activate
+    X.Worksheets("Data").Activate
     
     Unload Me
     

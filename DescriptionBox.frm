@@ -19,9 +19,9 @@ Private Sub CommandButton1_Click()
     ProgramDescription = DescriptionBox.programDescriptionBox.Value
     ProgramSD = DescriptionBox.programSDBox.Value
     
-    For i = 2 To x.Worksheets("Data").Cells(2, 3000).End(xlToLeft).Column
-        If Trim(x.Worksheets("Data").Cells(2, i).Value) = DescriptionBox.currentProgramName.Value Then
-            x.Worksheets("Data").Cells(2, i).Value = DescriptionBox.programNameBox.Value
+    For i = 2 To X.Worksheets("Data").Cells(2, 3000).End(xlToLeft).Column
+        If Trim(X.Worksheets("Data").Cells(2, i).Value) = DescriptionBox.currentProgramName.Value Then
+            X.Worksheets("Data").Cells(2, i).Value = DescriptionBox.programNameBox.Value
         End If
     Next i
     
@@ -38,27 +38,27 @@ End Sub
 
 Private Sub CommandButton3_Click()
         
-    Dim x As Workbook
+    Dim X As Workbook
         
-    Set x = Workbooks.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\ProgramDescriptions.xlsx")
+    Set X = Workbooks.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\ProgramDescriptions.xlsx")
     
-    x.Worksheets("PD").Rows(3).Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
-    x.Worksheets("PD").Cells(3, 1).Value = DescriptionBox.programNameBox.Value
-    x.Worksheets("PD").Cells(3, 2).Value = DescriptionBox.programDescriptionBox.Value
-    x.Worksheets("PD").Cells(3, 3).Value = DescriptionBox.programSDBox.Value
+    X.Worksheets("PD").Rows(3).Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
+    X.Worksheets("PD").Cells(3, 1).Value = DescriptionBox.programNameBox.Value
+    X.Worksheets("PD").Cells(3, 2).Value = DescriptionBox.programDescriptionBox.Value
+    X.Worksheets("PD").Cells(3, 3).Value = DescriptionBox.programSDBox.Value
     
     DescriptionBox.CommandButton3.Enabled = False
     
     Application.DisplayAlerts = False
-    x.Save
-    x.Close
+    X.Save
+    X.Close
     Application.DisplayAlerts = True
             
 End Sub
 
 Private Sub programSuggestion_Change()
 
-    For i = 1 To x.Worksheets("PD").Cells(3000, 1).End(xlUp).row
+    For i = 1 To X.Worksheets("PD").Cells(3000, 1).End(xlUp).row
         If DescriptionBox.programSuggestion.Value = Worksheets("PD").Cells(i, 1).Value Then
             DescriptionBox.programNameBox.Value = Worksheets("PD").Cells(i, 1).Value
             DescriptionBox.programDescriptionBox.Value = Worksheets("PD").Cells(i, 2).Value

@@ -30,7 +30,7 @@ Private Sub btnSubmit_Click()
     filepath = "C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\Err\" & Format(Now, "yyyy_mm_dd-hh_mm_ss") & ".txt"
     
     If ThisWorkbook.Name = "PERSONAL.XLSB" Then
-        currentFile = x.FullName
+        currentFile = X.FullName
     Else
         currentFile = ThisWorkbook.FullName
     End If

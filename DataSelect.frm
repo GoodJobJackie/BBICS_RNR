@@ -24,14 +24,14 @@ End Sub
 
 Private Sub CommandButton2_Click()
 
-    x.Worksheets("Bx Data").Activate
+    X.Worksheets("Bx Data").Activate
     Unload Me
 
 End Sub
 
 Private Sub CommandButton3_Click()
 
-    x.Worksheets("Tutor Hr Data").Activate
+    X.Worksheets("Tutor Hr Data").Activate
     Unload Me
 
 End Sub
@@ -42,9 +42,9 @@ Private Sub DataSelectDone_Click()
 
     Unload Me
     
-    fileName = x.Worksheets("Data").Cells(1, 1).Value + " - " + Format(x.Worksheets("Data").Cells(1000, 1).End(xlUp).Value, "YYYY") _
-        + "_" + Format(x.Worksheets("Data").Cells(1000, 1).End(xlUp).Value, "MM") _
-        + "_" + Format(x.Worksheets("Data").Cells(1000, 1).End(xlUp).Value, "DD")
+    fileName = X.Worksheets("Data").Cells(1, 1).Value + " - " + Format(X.Worksheets("Data").Cells(1000, 1).End(xlUp).Value, "YYYY") _
+        + "_" + Format(X.Worksheets("Data").Cells(1000, 1).End(xlUp).Value, "MM") _
+        + "_" + Format(X.Worksheets("Data").Cells(1000, 1).End(xlUp).Value, "DD")
     
     'Application.GetSaveAsFilename ("C:\Users\jackie\Documents\Client Files\Data\Formatted\" + fileName)
     

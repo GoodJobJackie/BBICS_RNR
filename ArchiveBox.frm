@@ -21,28 +21,28 @@ Private Sub btnAdd_Click()
     Dim found As Boolean
     
     found = False
-    For i = 2 To y.Worksheets("Client File Archive").Cells(2, 1).End(xlDown).row
-        If y.Worksheets("Client File Archive").Cells(i, 1).Value = UCase(ArchiveBox.txtInitials.Value) Then found = True
+    For i = 2 To Y.Worksheets("Client File Archive").Cells(2, 1).End(xlDown).row
+        If Y.Worksheets("Client File Archive").Cells(i, 1).Value = UCase(ArchiveBox.txtInitials.Value) Then found = True
     Next i
     
-    row = y.Worksheets("Client File Archive").Cells(2, 4).End(xlDown).row + 1
-    If found = False Then y.Worksheets("Client File Archive").Cells(row, 4) = UCase(ArchiveBox.txtInitials.Value)
+    row = Y.Worksheets("Client File Archive").Cells(2, 4).End(xlDown).row + 1
+    If found = False Then Y.Worksheets("Client File Archive").Cells(row, 4) = UCase(ArchiveBox.txtInitials.Value)
     
-    row = y.Worksheets("Client File Archive").Cells(2, 1).End(xlDown).row + 1
-    y.Worksheets("Client File Archive").Cells(row, 1) = UCase(ArchiveBox.txtInitials)
-    y.Worksheets("Client File Archive").Cells(row, 2) = CInt(ArchiveBox.txtBox)
+    row = Y.Worksheets("Client File Archive").Cells(2, 1).End(xlDown).row + 1
+    Y.Worksheets("Client File Archive").Cells(row, 1) = UCase(ArchiveBox.txtInitials)
+    Y.Worksheets("Client File Archive").Cells(row, 2) = CInt(ArchiveBox.txtBox)
     
     ArchiveBox.txtInitials = ""
     ArchiveBox.txtBox = ""
     
-    y.Save
+    Y.Save
 
 End Sub
 
 Private Sub btnDone_Click()
 
     Unload Me
-    y.Close
+    Y.Close
     UserAction.Show
 
 End Sub
@@ -57,18 +57,22 @@ Private Sub selectClient_Change()
     Dim boxes As String
     
     j = 0
-    For i = 2 To y.Worksheets("Client File Archive").Cells(2, 1).End(xlDown).row
-        If y.Worksheets("Client File Archive").Cells(i, 1).Value = ArchiveBox.selectClient.Value Then
+    For i = 2 To Y.Worksheets("Client File Archive").Cells(2, 1).End(xlDown).row
+        If Y.Worksheets("Client File Archive").Cells(i, 1).Value = ArchiveBox.selectClient.Value Then
             If j = 0 Then
-                boxes = y.Worksheets("Client File Archive").Cells(i, 2).Value
+                boxes = Y.Worksheets("Client File Archive").Cells(i, 2).Value
                 j = j + 1
             Else
-                boxes = boxes & ", " & y.Worksheets("Client File Archive").Cells(i, 2).Value
+                boxes = boxes & ", " & Y.Worksheets("Client File Archive").Cells(i, 2).Value
                 j = j + 1
             End If
         End If
     Next i
     
     ArchiveBox.boxes = boxes
+
+End Sub
+
+Private Sub UserForm_Click()
 
 End Sub
