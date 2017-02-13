@@ -13,10 +13,23 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Private Sub actionCloseWorkbook_Click()
+
+    'Close current client workbook
+    X.Close
+    Set X = Nothing
+    
+        UserAction.ActionDataEntry.Enabled = True
+        UserAction.actionSaveWorkbook.Enabled = False
+        UserAction.actionCloseWorkbook.Enabled = False
+
+End Sub
+
 Private Sub actionDatabase_Click()
 
     Dim strFile
 
+    'Open BBICS database
     strFile = "C:\Users\jackie\Desktop\BBICS Employee Database.fmp12"
 
     Shell "cmd /c """ & strFile & """", 0
@@ -28,6 +41,7 @@ Private Sub ActionDataEntry_Click()
     Set objFSO = CreateObject("Scripting.FileSystemObject")
     Set objFolder = objFSO.GetFolder("C:\Users\jackie\Documents\Client Files\Data\Formatted")
     
+    'Populate client file list and open dialog box
     ClientSelect.FileList = "Select File..."
     
     For Each objFile In objFolder.Files
@@ -65,6 +79,7 @@ Private Sub actionDocuments_Click()
 
     Dim strFile
 
+    'Open administrative documents menu
     strFile = "C:\Users\jackie\Desktop\Admin Documents.jar"
 
     Shell "cmd /c """ & strFile & """", 0
@@ -91,10 +106,11 @@ End Sub
 Private Sub actionNewClient_Click()
 
     Dim client As String
-    Dim fileName As String
+    Dim FileName As String
     
+    'Create and format a new client workbook
     client = InputBox("Please enter new client initials:", "New Client")
-    fileName = "C:\Users\jackie\Documents\Client Files\Data\Formatted\" & UCase(client) & " - 0000_00_00.xlsx"
+    FileName = "C:\Users\jackie\Documents\Client Files\Data\Formatted\" & UCase(client) & " - 0000_00_00.xlsx"
     
     Workbooks.Add
     ActiveSheet.Name = "Tutor Hr Data"
@@ -111,6 +127,11 @@ Private Sub actionNewClient_Click()
     Cells(4, 2).Select
     ActiveWindow.FreezePanes = False
     ActiveWindow.FreezePanes = True
+    ActiveWindow.Zoom = 90
+    Worksheets("Data").Rows(2).Select
+    With Selection
+        .Font.Bold = True
+    End With
     
     Worksheets("Bx Data").Activate
     Cells.Select
@@ -214,7 +235,7 @@ Private Sub actionNewClient_Click()
     
     Worksheets("Data").Activate
         
-    ActiveWorkbook.SaveAs (fileName)
+    ActiveWorkbook.SaveAs (FileName)
     ActiveWorkbook.Close
     
     MsgBox ("Data workbook for " & UCase(client) & " created.")
@@ -223,6 +244,7 @@ End Sub
 
 Private Sub ActionReformat_Click()
 
+    'Reformat and old style workbook
     Unload Me
     ActiveWindow.Zoom = 90
     CreateHeader
@@ -254,6 +276,7 @@ End Sub
 
 Private Sub ActionRestructureSingle_Click()
 
+    'Restructure a single program block
     Unload Me
     SingleRestructure
     UserAction.ActionFullService.Enabled = False
@@ -262,6 +285,7 @@ End Sub
 
 Private Sub ActionRestuctureFull_Click()
 
+    'Restructure all program blocks
     Unload Me
     MoveData
     UserAction.ActionRestuctureFull.Enabled = False
@@ -269,11 +293,19 @@ Private Sub ActionRestuctureFull_Click()
     
 End Sub
 
+Private Sub actionSaveWorkbook_Click()
+
+    'Save as dialog box with suggested file name
+    GetSaveAsFileName
+
+End Sub
+
 Private Sub btnArchive_Click()
 
     Dim filepath As String
     Dim i As Integer
 
+    'Access client file archive information
     filepath = "C:\Users\jackie\Documents\Client File Archive LIst.xlsx"
     
     Set Y = Workbooks.Open(filepath)
@@ -286,6 +318,7 @@ Private Sub btnArchive_Click()
     Next i
     
     Unload Me
+    ArchiveBox.btnAdd.Enabled = False
     ArchiveBox.Show
 
 End Sub
@@ -294,6 +327,7 @@ Private Sub CommandButton1_Click()
 
       On Error GoTo ErrorHandling
       
+      'User submitted error message
       Call err.Raise(1342, "UserAction button", "User submitted message")
       
 ErrorHandling:
@@ -307,9 +341,13 @@ Private Sub CommandButton2_Click()
 
 End Sub
 
-Private Sub UserForm_Click()
+Private Sub CommandButton6_Click()
+
+    X.Activate
+    X.Worksheets("Data").Activate
 
 End Sub
+
 
 Private Sub VerifyProgramNames_Click()
 

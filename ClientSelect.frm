@@ -18,17 +18,32 @@ Option Explicit
 Private Sub FileSelect_Click()
 
     Dim filepath As String
+    
+    On Error Resume Next
 
     filepath = ClientSelect.FileList.Value
-    
+       
     Set X = Workbooks.Open(filepath)
     ActiveWindow.WindowState = xlMaximized
+    X.Activate
     X.Worksheets("Data").Activate
     
     Unload Me
     
     'MsgBox ("Remember to save after making any changes.")
-   
+    
+    UserAction.version.Caption = version
+    
+    If X Is Nothing Then
+        UserAction.ActionDataEntry.Enabled = True
+        UserAction.actionSaveWorkbook.Enabled = False
+        UserAction.actionCloseWorkbook.Enabled = False
+    Else
+        UserAction.ActionDataEntry.Enabled = False
+        UserAction.actionSaveWorkbook.Enabled = True
+        UserAction.actionCloseWorkbook.Enabled = True
+    End If
+
     DataSelect.Show
 
 End Sub

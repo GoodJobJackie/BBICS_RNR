@@ -1,5 +1,5 @@
 
-BBICS Client Data Management System v4.5.1
+BBICS Client Data Management System v4.6.2
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
@@ -7,8 +7,20 @@ goodjobjacqueline@gmail.com
 Changelog
 -------------------------------------------------------------------------
 
+2017_02_13	v.4.6.2
+*minor fixes
+
+2017_02_10	v.4.6.1
+*minor bug fixes
+
+2017_02_10	v.4.6
+*add save/close workbook button to menu
+
+2017_02_06	v.4.5.2
+*minor bug fixes
+
 2017_02_01  v4.5.1
-*added about dialog box
+*add about dialog box
 *minor fixes
 
 2017_01_25  v.4.5
@@ -127,7 +139,7 @@ Added:
 Successful restructuring
 
 ----------------------------------------------------------
-Copyright (C) 2016 BBICS All rights reserved.
+Copyright (C) 2016 Beug Behavioral Intervention & Consulting Services. All rights reserved.
 ----------------------------------------------------------
 
 Known Bugs:

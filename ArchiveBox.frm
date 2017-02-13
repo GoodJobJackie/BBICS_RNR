@@ -34,6 +34,7 @@ Private Sub btnAdd_Click()
     
     ArchiveBox.txtInitials = ""
     ArchiveBox.txtBox = ""
+    ArchiveBox.btnAdd.Enabled = False
     
     Y.Save
 
@@ -70,6 +71,20 @@ Private Sub selectClient_Change()
     Next i
     
     ArchiveBox.boxes = boxes
+
+End Sub
+
+Private Sub txtBox_Change()
+
+    If ArchiveBox.txtInitials.Value <> "" And ArchiveBox.txtBox.Value <> "" Then ArchiveBox.btnAdd.Enabled = True
+    If ArchiveBox.txtInitials.Value = "" Or ArchiveBox.txtBox.Value = "" Then ArchiveBox.btnAdd.Enabled = False
+
+End Sub
+
+Private Sub txtInitials_Change()
+
+    If ArchiveBox.txtInitials.Value <> "" And ArchiveBox.txtBox.Value <> "" Then ArchiveBox.btnAdd.Enabled = True
+    If ArchiveBox.txtInitials.Value = "" Or ArchiveBox.txtBox.Value = "" Then ArchiveBox.btnAdd.Enabled = False
 
 End Sub
 

@@ -30,3 +30,17 @@ Private Sub CommandButton1_Click()
     Unload Me
 
 End Sub
+
+Private Sub Label3_Click()
+
+InitGuessBox
+    GuessBox.guessText.Caption = guessText
+    GuessBox.Show
+    
+    With GuessBox.txtGuess
+        .SelStart = 0
+        .SelLength = Len(.Text)
+        .SetFocus
+    End With
+
+End Sub

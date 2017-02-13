@@ -15,14 +15,11 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
-Private Sub TextBox3_Change()
-
-End Sub
-
 Private Sub AddProgram_Click()
 
     Dim col As Integer
     
+    'Add and format new program columns
     DataEntryBox.ProgramList.AddItem DataEntryBox.Program
     col = X.Worksheets("Data").Cells(3, 1000).End(xlToLeft).Column + 2
     X.Worksheets("Data").Columns(col).Select
@@ -53,6 +50,7 @@ Private Sub AddSkill_Click()
     Dim i As Integer
     Dim col As Integer
     
+    'Add and format new skill column
     DataEntryBox.SkillList.AddItem DataEntryBox.Skill.Value
     DataEntryBox.SkillList = DataEntryBox.Skill.Value
     For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
@@ -83,6 +81,7 @@ Private Sub btnDelete_Click()
     
     On Error GoTo ErrorHandling
     
+    'Find program/skill and store column values
     For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
         If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
@@ -94,9 +93,11 @@ Private Sub btnDelete_Click()
         End If
     Next i
  
+    'Empty current date/score
     X.Worksheets("Data").Cells(editRow, programCol) = ""
     X.Worksheets("Data").Cells(editRow, skillCol) = ""
     
+    'Check for unselected program
     If DataEntryBox.SkillList <> "<Please select program first>" Then
         arraySize = 0
         For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
@@ -104,6 +105,7 @@ Private Sub btnDelete_Click()
         Next i
     End If
               
+    'Redefine array size
     If arraySize > 0 Then arraySize = arraySize - 1
     ReDim dateRows(arraySize)
     
@@ -201,6 +203,7 @@ Private Sub btnEditDown_Click()
     
     On Error GoTo ErrorHandling
     
+    'Find program/skill and store column values
     For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
         If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
@@ -212,6 +215,7 @@ Private Sub btnEditDown_Click()
         End If
     Next i
     
+    'Move down the array
     If editRow = dateRows(UBound(dateRows)) Then
         rowsIndex = 0
         editRow = dateRows(rowsIndex)
@@ -220,9 +224,11 @@ Private Sub btnEditDown_Click()
         editRow = dateRows(rowsIndex)
     End If
     
+    'Fill text boxes with data
     DataEntryBox.txtEditDate = X.Worksheets("Data").Cells(editRow, programCol).Value
     DataEntryBox.txtEditScore = X.Worksheets("Data").Cells(editRow, skillCol).Value
     
+    'Highlight selected data
     Union(X.Worksheets("Data").Cells(editRow, programCol), X.Worksheets("Data").Cells(editRow, skillCol)).Activate
     
     current = DataEntryBox.txtEditDate.Value
@@ -240,6 +246,7 @@ Private Sub btnEditUp_Click()
     
     On Error GoTo ErrorHandling
     
+    'Find program/skill and store column values
     For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
         If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
@@ -250,7 +257,8 @@ Private Sub btnEditUp_Click()
             Next j
         End If
     Next i
-      
+            
+    'Move up the array
     If editRow = dateRows(0) Then
         rowsIndex = UBound(dateRows)
         If rowsIndex < 0 Then rowsIndex = 0
@@ -261,9 +269,11 @@ Private Sub btnEditUp_Click()
         editRow = dateRows(rowsIndex)
     End If
     
+    'Fill text boxes with data
     DataEntryBox.txtEditDate = X.Worksheets("Data").Cells(editRow, programCol).Value
     DataEntryBox.txtEditScore = X.Worksheets("Data").Cells(editRow, skillCol).Value
     
+    'Highlight selected data
     Union(X.Worksheets("Data").Cells(editRow, programCol), X.Worksheets("Data").Cells(editRow, skillCol)).Activate
     
     current = DataEntryBox.txtEditDate.Value
@@ -291,6 +301,7 @@ Private Sub buttonNextData_Click()
     newDate = DataEntryBox.SessionDate.Value
     Score = DataEntryBox.Score.Value
     
+    'Find program and skill/store column values
     For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
         If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
@@ -302,6 +313,7 @@ Private Sub buttonNextData_Click()
         End If
     Next i
     
+    'Find/Insert date of new data
     For i = 4 To (X.Worksheets("Data").Cells(2000, 1).End(xlUp).row + 1)
         If (X.Worksheets("Data").Cells(i - 1, 1).Value < DateValue(newDate) Or _
             X.Worksheets("Data").Cells(i - 1, 1).Value = DateValue(newDate)) _
@@ -317,6 +329,7 @@ Private Sub buttonNextData_Click()
         End If
     Next i
     
+    'Insert new data
     For i = X.Worksheets("Data").Cells(2000, 1).End(xlUp).row To 4 Step -1
         If X.Worksheets("Data").Cells(i, 1).Value = DateValue(newDate) Then
             X.Worksheets("Data").Cells(i, programCol).Activate
@@ -326,6 +339,7 @@ Private Sub buttonNextData_Click()
         End If
     Next i
     
+    'Check for unselected program
     If DataEntryBox.SkillList <> "<Please select program first>" Then
         arraySize = 0
         For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
@@ -333,6 +347,7 @@ Private Sub buttonNextData_Click()
         Next i
     End If
               
+    'Redefine array size
     If arraySize > 0 Then arraySize = arraySize - 1
     ReDim dateRows(arraySize)
     
@@ -347,6 +362,7 @@ Private Sub buttonNextData_Click()
         Next i
     End If
     
+    'Empty text boxes
     DataEntryBox.SessionDate = ""
     DataEntryBox.Score = ""
     DataEntryBox.SessionDate.SetFocus
@@ -543,5 +559,5 @@ Private Sub txtEditScore_Change()
 End Sub
 
 Private Sub UserForm_Click()
-
+    
 End Sub

@@ -27,21 +27,25 @@ Private Sub btnSubmit_Click()
     Dim errorText As String
     Dim currentFile As String
     
+    'Build the filepath/name
     filepath = "C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\Err\" & Format(Now, "yyyy_mm_dd-hh_mm_ss") & ".txt"
     
+    'Check if the error occurred with a workbook open
     If ThisWorkbook.Name = "PERSONAL.XLSB" Then
         currentFile = X.FullName
     Else
         currentFile = ThisWorkbook.FullName
     End If
     
-    errorText = Now & vbCrLf & "Error Number: " & err.Number & vbCrLf & "Error Description: " & err.Description _
+    'Build the text output for the error report
+    errorText = Now & vbCrLf & "Error Number: " & err.number & vbCrLf & "Error Description: " & err.Description _
         & vbCrLf & currentFile & vbCrLf & "   Program: " & DataEntryBox.ProgramList.Value & vbCrLf & "   Skill: " & DataEntryBox.SkillList.Value _
         & vbCrLf & "   SessionDate: " & DataEntryBox.SessionDate.Value & vbCrLf _
         & "   SessionScore: " & DataEntryBox.Score.Value & vbCrLf & "User Description: " & ErrorBox.txtUserDescription.Value
     
+    'Open/write/close error report text file
     Open filepath For Output As #1
-    
+        
     Write #1, errorText
     
     Close #1

@@ -1,9 +1,10 @@
 Attribute VB_Name = "BBICS_DMS"
-Public Const version As String = "v4.5.1"
+Public Const version As String = "v4.6.2"
 
 Public reportStart, reportEnd, current As Date
-Public ProgramName, ProgramDescription, ProgramSD, SkillName, mCm As String
-Public startDateRow, endDateRow, programCount, prevProgramName, renameI, editRow, topEditRow, bottomEditRow, rowsIndex, reportStartRow, reportEndRow As Integer
+Public ProgramName, ProgramDescription, ProgramSD, SkillName, mCm, guessText As String
+Public startDateRow, endDateRow, programCount, prevProgramName, renameI, editRow, topEditRow, _
+    bottomEditRow, rowsIndex, reportStartRow, reportEndRow, number, guess, lower, upper, guesses, bestGuesses As Integer
 Public skip, skipFlag As Boolean
 Public BxDict As New Scripting.Dictionary
 Public objFSO, objFolder, objFile As Object
@@ -19,10 +20,22 @@ Attribute ARestructureAndGenerateReport.VB_ProcData.VB_Invoke_Func = "r\n14"
 
     Dim bottomDate
     
+    On Error Resume Next
+    
     dataSheetName = ActiveSheet.Name
     bottomDateRow = Cells(5, 1).End(xlDown).row
     
     UserAction.version.Caption = version
+    
+    If X Is Nothing Then
+        UserAction.ActionDataEntry.Enabled = True
+        UserAction.actionSaveWorkbook.Enabled = False
+        UserAction.actionCloseWorkbook.Enabled = False
+    Else
+        UserAction.ActionDataEntry.Enabled = False
+        UserAction.actionSaveWorkbook.Enabled = True
+        UserAction.actionCloseWorkbook.Enabled = True
+    End If
         
     UserAction.Show
     
@@ -418,11 +431,12 @@ Sub PopulatePrograms()
                 End If
                 
                 ' Check for skill within report dates
-                If skillEnd < reportStart And reportStart - lastSkillEnd < 182 Then
+                'MsgBox ("reportStart: " & reportStart & vbCrLf & "reportEnd: " & reportEnd & vbCrLf & "skillStart: " & skillStart & vbCrLf & "lastSkillEnd: " & lastSkillEnd)
+                If DateValue(skillEnd) < DateValue(reportStart) And DateValue(reportStart) - DateValue(lastSkillEnd) < 182 Then
                 ' Do nothing
-                ElseIf skillStart > reportEnd Then
+                ElseIf DateValue(skillStart) > DateValue(reportEnd) Then
                 ' Also do nothing
-                ElseIf reportStart - lastSkillEnd > 182 Then
+                ElseIf DateValue(reportStart) - DateValue(lastSkillEnd) > 182 Then
                 ' Check for new maintenance program and add to maintenance list if not already done
                     If Cells(2, headerCol).Font.Color = RGB(166, 166, 166) Then
                         'Do nothing
@@ -722,7 +736,7 @@ Sub ImportSkillsPrograms()
 
     Dim z As Workbook
     Dim w As Workbook
-    Dim X As Workbook
+    Dim v As Workbook
     Dim Y As Workbook
     Dim k As Integer
     Dim sht As Worksheet
@@ -747,7 +761,7 @@ Sub ImportSkillsPrograms()
     'Import information as new worksheets
     Set z = ActiveWorkbook
     Set w = Workbooks.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\FMP_DataExport.xlsx")
-    Set X = Workbooks.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\SkillDeficitList.xlsx")
+    Set v = Workbooks.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\SkillDeficitList.xlsx")
     Set Y = Workbooks.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\ProgramDescriptions.xlsx")
        
     w.Sheets("CI").Range("A1:M2").Copy
@@ -755,16 +769,16 @@ Sub ImportSkillsPrograms()
     w.Close
     z.Sheets("CI").Columns("A:M").AutoFit
     
-    X.Sheets("SDL").Range("A1:B112").Copy
+    v.Sheets("SDL").Range("A1:B112").Copy
     z.Sheets("SDL").Range("A1:B112").PasteSpecial
-    X.Close
+    v.Close
     
     k = Worksheets("PD").Cells(1000, 1).End(xlUp).row
     Y.Sheets("PD").Range("A1:C" & k).Copy
     z.Sheets("PD").Range("A1:C" & k).PasteSpecial
     Y.Close
     
-    Worksheets("Data").Activate
+    X.Worksheets("Data").Activate
 
     Application.DisplayAlerts = True
 
@@ -1215,7 +1229,6 @@ Sub BxData()
         Exit Sub
     End If
     
-    'Sort in descending quantities
     ReDim Arr(0 To BxDict.Count - 1, 0 To 1)
     
     'Store bx data in temporary array
@@ -1238,13 +1251,15 @@ Sub BxData()
         Next j
     Next i
     
-    '
+    'Remove the contents of the dictionary collection.
     BxDict.RemoveAll
     
+    'Add the items back into the dictionary collection.
     For i = LBound(Arr, 1) To UBound(Arr, 1)
         BxDict.Add Key:=Arr(i, 0), Item:=Arr(i, 1)
     Next i
     
+    'Build the text for behavior data.
     For i = 0 To BxDict.Count - 1
         txt = txt & BxDict.Keys(i) & vbTab & BxDict.Items(i) & vbCrLf
     Next i
@@ -1343,6 +1358,18 @@ Sub TutorHrs()
                 End If
                 j = j + 1
             Next i
+        Case Is = "Final"
+            monthCount = tutorHrRow + 11
+            j = 2
+            For i = tutorHrRow To monthCount
+                objTable.Cell(j, 1).Range.Text = Format(Cells(i, 1).Value, "MMMM yyyy")
+                objTable.Cell(j, 2).Range.Text = Cells(i, 2).Value
+                If i = monthCount Then
+                Else
+                    objTable.Rows.Add
+                End If
+                j = j + 1
+            Next i
         End Select
 
 End Sub
@@ -1362,6 +1389,8 @@ Sub DataEntryPrograms()
     DataEntryBox.btnDelete.Enabled = False
     DataEntryBox.btnEdit.Enabled = False
     
+    X.Activate
+    X.Worksheets("Data").Activate
         
     For col = 2 To Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
         If Worksheets("Data").Cells(2, col).Value = "" Then
@@ -1376,7 +1405,61 @@ End Sub
 
 Sub ErrHandling()
 
-    If err.Number <> 0 Then ErrorBox.Show
+    If err.number <> 0 Then
+        Beep
+        ErrorBox.Show
+    End If
     
+End Sub
+
+Sub InitGuessBox()
+
+    Randomize
+    number = Int((99 - 2 + 1) * Rnd() + 2)
+    guesses = 0
+    guess = 0
+    bestGuesses = 100
+    guessText = "Guesses: " & guesses
+    lower = 0
+    upper = 100
+    GuessBox.lower.Caption = lower
+    GuessBox.upper.Caption = upper
+    
+    GuessBox.btnGuess.Caption = "Guess!"
+    
+    'MsgBox (number)
+
+End Sub
+
+Sub GetSaveAsFileName()
+
+    Dim FileName As Variant
+    Dim Filt As String, Title As String, Name As String
+    Dim FilterIndex As Long, Response As Long
+    
+    Name = X.Worksheets("Data").Cells(1, 1).Value & " - " & Format(X.Worksheets("Data").Cells(4, 1).End(xlDown).Value, "YYYY_MM_DD") & ".xlsx"
+    '   Set to Specified Path\Folder
+        ChDir "C:\Users\jackie\Documents\Client Files\Data\Formatted"
+    '   Set File Filter
+        Filt = "Excel Files (*.xlsx), *.xlsx"
+    '   Set *.* to Default
+        FilterIndex = 5
+    '   Set Dialogue Box Caption
+        Title = "Please select a file name"
+    '   Get FileName
+        FileName = Application.GetSaveAsFileName(InitialFileName:=Name, FileFilter:=Filt, _
+            FilterIndex:=FilterIndex, Title:=Title)
+    '   Exit if Dialogue box cancelled
+        If FileName = False Then
+            'Response = MsgBox("No File was selected", vbOKOnly & vbCritical, "Selection Error")
+            Exit Sub
+        End If
+    '   Display Full Path & File Name
+        Response = MsgBox("Saving as: " & Name, vbInformation, "Proceed")
+    '   Save & Close Workbook
+        With ActiveWorkbook
+            .SaveAs FileName
+        End With
+            
 End Sub
 

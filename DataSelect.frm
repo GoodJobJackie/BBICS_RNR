@@ -18,6 +18,8 @@ Option Explicit
 Private Sub CommandButton1_Click()
 
     Unload Me
+    X.Activate
+    X.Worksheets("Data").Activate
     DataEntryPrograms
 
 End Sub
@@ -38,11 +40,11 @@ End Sub
 
 Private Sub DataSelectDone_Click()
 
-    Dim fileName As String
+    Dim FileName As String
 
     Unload Me
     
-    fileName = X.Worksheets("Data").Cells(1, 1).Value + " - " + Format(X.Worksheets("Data").Cells(1000, 1).End(xlUp).Value, "YYYY") _
+    FileName = X.Worksheets("Data").Cells(1, 1).Value + " - " + Format(X.Worksheets("Data").Cells(1000, 1).End(xlUp).Value, "YYYY") _
         + "_" + Format(X.Worksheets("Data").Cells(1000, 1).End(xlUp).Value, "MM") _
         + "_" + Format(X.Worksheets("Data").Cells(1000, 1).End(xlUp).Value, "DD")
     
