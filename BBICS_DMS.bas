@@ -1,5 +1,5 @@
 Attribute VB_Name = "BBICS_DMS"
-Public Const version As String = "v4.6.2"
+Public Const version As String = "v4.6.3"
 
 Public reportStart, reportEnd, current As Date
 Public ProgramName, ProgramDescription, ProgramSD, SkillName, mCm, guessText As String
@@ -795,7 +795,7 @@ Sub PopulateReport()
     Dim bxCount As Integer
     Dim bxString As String
     
-    On Error GoTo ErrorHandling
+    'On Error GoTo ErrorHandling
 
     'Create Word object and open PRT template.
     Set objWord = CreateObject("Word.Application")
@@ -1209,7 +1209,7 @@ Sub BxData()
     
     Worksheets("Bx Data").Activate
     For i = 3 To Cells(4, 1).End(xlDown).row
-        If Cells(i, 1).Value = reportStart Then
+        If DateValue(Cells(i, 1).Value) = DateValue(reportStart) Then
             bxRow = i
         End If
     Next i
@@ -1314,7 +1314,7 @@ Sub TutorHrs()
     Worksheets("Tutor Hr Data").Activate
     reportStart = Format(reportStart, "MMM yyyy")
     For i = 3 To Cells(3, 1).End(xlDown).row
-        If Cells(i, 1).Value = reportStart Then
+        If Format(Cells(i, 1).Value, "MMM yyyy") = Format(reportStart, "MMM yyyy") Then
             tutorHrRow = i
         End If
     Next i
