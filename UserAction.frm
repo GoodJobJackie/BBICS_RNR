@@ -27,7 +27,7 @@ End Sub
 
 Private Sub actionDatabase_Click()
 
-    Dim strFile
+    Dim strFile As String
 
     'Open BBICS database
     strFile = "C:\Users\jackie\Desktop\BBICS Employee Database.fmp12"
@@ -77,7 +77,7 @@ End Sub
 
 Private Sub actionDocuments_Click()
 
-    Dim strFile
+    Dim strFile As String
 
     'Open administrative documents menu
     strFile = "C:\Users\jackie\Desktop\Admin Documents.jar"

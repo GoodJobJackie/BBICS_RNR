@@ -22,8 +22,7 @@ End Sub
 Private Sub CommandButton1_Click()
 Dim sheetName
 
-Dim i As Integer
-Dim bottomDateRow As Integer
+Dim i, bottomDateRow As Integer
 
     Unload Me
     sheetName = ActiveSheet.Name

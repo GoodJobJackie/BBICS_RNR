@@ -23,9 +23,7 @@ End Sub
 
 Private Sub btnSubmit_Click()
 
-    Dim filepath As String
-    Dim errorText As String
-    Dim currentFile As String
+    Dim filepath, errorText, currentFile As String
     
     'Build the filepath/name
     filepath = "C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\Err\" & Format(Now, "yyyy_mm_dd-hh_mm_ss") & ".txt"

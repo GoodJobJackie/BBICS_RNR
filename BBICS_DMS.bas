@@ -18,7 +18,7 @@ Dim objDoc
 Sub ARestructureAndGenerateReport()
 Attribute ARestructureAndGenerateReport.VB_ProcData.VB_Invoke_Func = "r\n14"
 
-    Dim bottomDate
+    Dim bottomDateRow
     
     On Error Resume Next
     
@@ -47,8 +47,7 @@ Sub NewRestructuring()
 '
 ' Keyboard Shortcut: Ctrl+w
 '
-    Dim headerCol As Long
-    Dim nextHeaderCol As Long
+    Dim headerCol, nextHeaderCol As Long
     Dim headerCell As Range
     Dim startTime As Double
     Dim minutesElapsed As String
@@ -307,22 +306,9 @@ End Sub
 
 Sub PopulatePrograms()
 
-    Dim programRow
-    Dim skillCount
-    Dim skillStart As Date
-    Dim skillEnd As Date
-    Dim skillDate
-    Dim skillStartRow
-    Dim skillEndRow
-    Dim lastSkillEnd As Date
-    Dim lastSkillRow As Integer
-    Dim programSheet As String
-    Dim bottomDateRow
-    Dim prev1 As Integer
-    Dim prev2 As Integer
-    Dim prev3 As Integer
-    Dim prevRow As Integer
-    Dim deletedSkill As String
+    Dim programRow, skillCount, skillStartRow, skillEndRow, lastSkillRow, bottomDateRow, prev1, prev2, prev3, prevRow As Integer
+    Dim skillStart, skillEnd, skillDate, lastSkillEnd As Date
+    Dim programSheet, deletedSkill As String
     
     On Error GoTo ErrorHandling
     
@@ -603,10 +589,7 @@ End Sub
 
 Sub CreateProgramLists()
 
-    Dim bottomProgramRow
-    Dim countMast
-    Dim countCont
-    Dim countMaint
+    Dim bottomProgramRow, countMast, countCont, countMaint As Integer
     
     countMast = 1
     countCont = 1
@@ -671,7 +654,7 @@ Attribute SingleRestructure.VB_ProcData.VB_Invoke_Func = "e\n14"
 '
 ' Keyboard Shortcut: Ctrl+r
 '
-Dim col
+Dim col As Integer
 
 col = ActiveCell.Column
 
@@ -736,10 +719,7 @@ End Sub
 
 Sub ImportSkillsPrograms()
 
-    Dim z As Workbook
-    Dim w As Workbook
-    Dim v As Workbook
-    Dim Y As Workbook
+    Dim z, w, v, Y As Workbook
     Dim k As Integer
     Dim sht As Worksheet
     
@@ -788,14 +768,11 @@ End Sub
 
 Sub PopulateReport()
 
-    Dim chunks As Integer
-    Dim chunk As String
+    Dim chunks, bxCount, currentBottomRow As Integer
+    Dim chunk, bxString As String
     Dim objRange
-    Dim currentBottomRow As Integer
     Dim s As Object
     Dim bx As Variant
-    Dim bxCount As Integer
-    Dim bxString As String
     
     On Error GoTo ErrorHandling
 
@@ -1198,16 +1175,12 @@ End Sub
 
 Sub BxData()
 
-    Dim bxRow As Integer
-    Dim bxColStart As Integer
-    Dim bxColEnd As Integer
+    Dim bxRow, bxColStart, bxColEnd As Integer
     
     Dim Arr() As Variant
-    Dim Temp1 As Variant
-    Dim Temp2 As Variant
+    Dim Temp1, Temp2 As Variant
     Dim txt As String
-    Dim i As Long
-    Dim j As Long
+    Dim i, j As Long
     
     Worksheets("Bx Data").Activate
     For i = 3 To Cells(4, 1).End(xlDown).row
@@ -1308,9 +1281,8 @@ End Sub
 
 Sub TutorHrs()
 
-    Dim tutorHrRow As Integer
+    Dim tutorHrRow, monthCount As Integer
     Dim tutorHrDate As String
-    Dim monthCount As Integer
     
     'Populate report with tutor hour data
     Worksheets("Tutor Hr Data").Activate

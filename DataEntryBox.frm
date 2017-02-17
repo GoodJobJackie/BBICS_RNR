@@ -47,8 +47,7 @@ End Sub
 
 Private Sub AddSkill_Click()
 
-    Dim i As Integer
-    Dim col As Integer
+    Dim i, col As Integer
     
     'Add and format new skill column
     DataEntryBox.SkillList.AddItem DataEntryBox.Skill.Value
@@ -292,7 +291,7 @@ End Sub
 
 Private Sub buttonNextData_Click()
 
-    Dim i, j, programCol, skillCol, Score, arraySize
+    Dim i, j, programCol, skillCol, Score, arraySize As Integer
     Dim newDate As String
     Dim row As Variant
     
@@ -390,9 +389,7 @@ End Sub
 
 Private Sub ProgramList_Change()
 
-    Dim programCol As Integer
-    Dim i As Integer
-    Dim skillCol As Integer
+    Dim programCol, i, skillCol As Integer
     
     programCol = 1
     
