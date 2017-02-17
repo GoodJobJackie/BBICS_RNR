@@ -44,3 +44,7 @@ InitGuessBox
     End With
 
 End Sub
+
+Private Sub UserForm_Click()
+
+End Sub

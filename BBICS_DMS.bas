@@ -1,5 +1,5 @@
 Attribute VB_Name = "BBICS_DMS"
-Public Const version As String = "v4.6.3"
+Public Const version As String = "v4.6.4"
 
 Public reportStart, reportEnd, current As Date
 Public ProgramName, ProgramDescription, ProgramSD, SkillName, mCm, guessText As String
@@ -364,6 +364,7 @@ Sub PopulatePrograms()
     Worksheets("Programs").Columns("A:B").ColumnWidth = 60
     Worksheets("Programs").Columns("C:E").ColumnWidth = 12
     Worksheets(dataSheetName).Activate
+    
     'Delete empty skill columns
     For col = 2 To Cells(2, 1000).End(xlToLeft).Column
         If Cells(2, col) <> "" Then
@@ -377,6 +378,7 @@ Sub PopulatePrograms()
             Next i
         End If
     Next col
+    
     'Delete extra empty columns
     For col = 3 To Cells(2, 1000).End(xlToLeft).Column
         If Cells(1, col).End(xlDown).Value = "" And Cells(1, col - 1).End(xlDown).Value = "" Then
@@ -795,7 +797,7 @@ Sub PopulateReport()
     Dim bxCount As Integer
     Dim bxString As String
     
-    'On Error GoTo ErrorHandling
+    On Error GoTo ErrorHandling
 
     'Create Word object and open PRT template.
     Set objWord = CreateObject("Word.Application")
@@ -1462,4 +1464,5 @@ Sub GetSaveAsFileName()
         End With
             
 End Sub
+
 

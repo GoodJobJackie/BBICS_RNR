@@ -315,10 +315,9 @@ Private Sub buttonNextData_Click()
     
     'Find/Insert date of new data
     For i = 4 To (X.Worksheets("Data").Cells(2000, 1).End(xlUp).row + 1)
-        If (X.Worksheets("Data").Cells(i - 1, 1).Value < DateValue(newDate) Or _
-            X.Worksheets("Data").Cells(i - 1, 1).Value = DateValue(newDate)) _
+        If (X.Worksheets("Data").Cells(i - 1, 1).Value < DateValue(newDate) Or X.Worksheets("Data").Cells(i - 1, 1).Value = DateValue(newDate)) _
             And (X.Worksheets("Data").Cells(i, 1).Value > DateValue(newDate) Or X.Worksheets("Data").Cells(i, 1).Value = "") Then
-            If X.Worksheets("Data").Cells(i - 1, 1).Value = DateValue(newDate) And X.Worksheets("Data").Cells(i - 1, programCol).Value = "" Then
+            If X.Worksheets("Data").Cells(i - 1, 1).Value = DateValue(newDate) And X.Worksheets("Data").Cells(i - 1, skillCol).Value = "" Then
                 'Do nothing
             Else
                 X.Worksheets("Data").Cells(i, 1).Activate

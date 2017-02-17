@@ -1,5 +1,5 @@
 
-BBICS Client Data Management System v4.6.3
+BBICS Client Data Management System v4.6.4
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
@@ -7,8 +7,11 @@ goodjobjacqueline@gmail.com
 Changelog
 -------------------------------------------------------------------------
 
+2017_02_17	v4.6.4
+*minor fixes
+
 2017_02_15	v4.6.3
-*fixed crash during tutor hour lookup
+*fix crash during tutor hour lookup
 
 2017_02_13	v.4.6.2
 *minor fixes

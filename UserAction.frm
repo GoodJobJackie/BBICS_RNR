@@ -120,7 +120,6 @@ Private Sub actionNewClient_Click()
     Worksheets("Data").Activate
     CreateHeader
     MasterListFormat
-    ActiveWindow.Zoom = 90
     Worksheets("Data").Cells(1, 1) = UCase(client)
     Worksheets("Data").Cells(4, 1) = DateValue("01/01/2016")
     Worksheets("Data").Cells(5, 1) = Format(Now, "mm/dd/yyyy")
@@ -348,6 +347,10 @@ Private Sub CommandButton6_Click()
 
 End Sub
 
+
+Private Sub UserForm_Click()
+
+End Sub
 
 Private Sub VerifyProgramNames_Click()
 
