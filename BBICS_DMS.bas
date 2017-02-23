@@ -1,5 +1,5 @@
 Attribute VB_Name = "BBICS_DMS"
-Public Const version As String = "v4.6.4"
+Public Const version As String = "v4.6.5"
 
 Public reportStart, reportEnd, current As Date
 Public ProgramName, ProgramDescription, ProgramSD, SkillName, mCm, guessText As String
@@ -310,7 +310,7 @@ Sub PopulatePrograms()
     Dim skillStart, skillEnd, skillDate, lastSkillEnd As Date
     Dim programSheet, deletedSkill As String
     
-    On Error GoTo ErrorHandling
+    On Error Resume Next
     
     col = 2
     skillCount = 1
@@ -483,10 +483,10 @@ Sub PopulatePrograms()
     Next i
     Rows(startDateRow & ":" & endDateRow).Select
     Selection.Interior.Color = -4142
-    
+       
 ErrorHandling:
     ErrHandling
-    
+       
 End Sub
 
 Public Sub UserForm_Initialize()

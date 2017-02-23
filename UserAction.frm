@@ -305,7 +305,7 @@ Private Sub btnArchive_Click()
     Dim i As Integer
 
     'Access client file archive information
-    filepath = "C:\Users\jackie\Documents\Client File Archive LIst.xlsx"
+    filepath = "C:\Users\jackie\Documents\Client File Archive List.xlsx"
     
     Set Y = Workbooks.Open(filepath)
     ActiveWindow.WindowState = xlMinimized

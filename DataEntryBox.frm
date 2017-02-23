@@ -363,6 +363,8 @@ Private Sub buttonNextData_Click()
     'Empty text boxes
     DataEntryBox.SessionDate = ""
     DataEntryBox.Score = ""
+    DataEntryBox.txtEditDate = ""
+    DataEntryBox.txtEditScore = ""
     DataEntryBox.SessionDate.SetFocus
        
 ErrorHandling:
@@ -421,6 +423,8 @@ Private Sub ProgramList_Change()
         DataEntryBox.btnEditDown.Enabled = False
         DataEntryBox.btnDelete.Enabled = False
         DataEntryBox.btnEdit.Enabled = False
+        
+        Worksheets("Data").Cells(2, programCol).Select
           
 End Sub
 
@@ -533,6 +537,11 @@ Private Sub SkillList_Change()
         DataEntryBox.btnEdit.Enabled = True
     End If
     
+    DataEntryBox.txtEditDate = ""
+    DataEntryBox.txtEditScore = ""
+    DataEntryBox.SessionDate.SetFocus
+    Worksheets("Data").Cells(3, skillCol).Select
+        
 ErrorHandling:
     ErrHandling
                      
