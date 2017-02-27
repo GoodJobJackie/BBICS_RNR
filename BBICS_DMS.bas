@@ -1,5 +1,5 @@
 Attribute VB_Name = "BBICS_DMS"
-Public Const version As String = "v4.6.5"
+Public Const version As String = "v4.6.6"
 
 Public reportStart, reportEnd, current As Date
 Public ProgramName, ProgramDescription, ProgramSD, SkillName, mCm, guessText As String
@@ -500,6 +500,10 @@ Public Sub UserForm_Initialize()
     MCMbox.skillNameBox.Value = Trim(SkillName)
     MCMbox.progMast.Value = True
     MCMbox.NextProgram.SetFocus
+    If Worksheets("CI").Cells(2, 4).Value = "Final" Then
+        MCMbox.progCont.Enabled = False
+        MCMbox.Label4.Enabled = False
+    End If
     
     
     reportDates = Worksheets("CI").Cells(2, 6).Value & " " & Worksheets("CI").Cells(2, 7).Value & _
@@ -924,6 +928,8 @@ Sub PopulateReport()
         .Execute Replace:=wdReplaceAll
     End With
     
+    If Worksheets("CI").Cells(2, 4).Value = "Final" Then GoTo Final
+    
     ' Divide up continued program list into copyable chunks
     With objDoc.Content.Find
         .ClearFormatting
@@ -999,6 +1005,8 @@ Sub PopulateReport()
         .Wrap = wdFindContinue
         .Execute Replace:=wdReplaceAll
     End With
+    
+Final:
     
     ProgramDescriptionsList
     ProgramMatch

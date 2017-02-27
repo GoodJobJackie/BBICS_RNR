@@ -100,6 +100,7 @@ Private Sub actionIPG_Click()
     PopulatePrograms
     CreateProgramLists
     PopulateReport
+    MsgBox ("Report Successfully Generated at: " & Now)
 
 End Sub
 
