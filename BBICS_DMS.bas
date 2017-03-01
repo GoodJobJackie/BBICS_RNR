@@ -1,5 +1,5 @@
 Attribute VB_Name = "BBICS_DMS"
-Public Const version As String = "v4.6.6"
+Public Const version As String = "v4.6.7"
 
 Public reportStart, reportEnd, current As Date
 Public ProgramName, ProgramDescription, ProgramSD, SkillName, mCm, guessText As String
@@ -36,6 +36,8 @@ Attribute ARestructureAndGenerateReport.VB_ProcData.VB_Invoke_Func = "r\n14"
         UserAction.actionSaveWorkbook.Enabled = True
         UserAction.actionCloseWorkbook.Enabled = True
     End If
+    
+    ActiveWindow.WindowState = xlMinimized
         
     UserAction.Show
     
@@ -89,7 +91,7 @@ End Sub
 
 Sub EmptyBCheck()
 
-        For i = 1 To 1000
+        For i = 1 To 10000
             If Cells(i, 2).Value = "" Then
                 If Cells(i, 2).Value = "" Then
                     If i = 1000 Then
@@ -158,7 +160,7 @@ End Sub
 
 Sub FormatProgramDates()
 
-    For i = 1 To 1000
+    For i = 1 To 10000
         If Cells(2, i).Value = "" Then
             Else
             Columns(i).Select
@@ -195,7 +197,7 @@ Sub FormatProgramDates()
 End Sub
 Sub FindLastDate()
 
-    For i = 1 To 1000
+    For i = 1 To 10000
         If Cells(2, i).Value = "" Then
         Else
             For j = 4 To 2000
@@ -220,7 +222,7 @@ Sub MoveData()
     On Error GoTo ErrorHandling
     
     ' Find next program chunk
-    For col = 2 To 1000
+    For col = 2 To 10000
         If Cells(2, col).Value = "" Then
         Else
             If Cells(4, col).Value = "" Then
@@ -352,7 +354,7 @@ Sub PopulatePrograms()
     Worksheets(dataSheetName).Activate
     
     'Delete empty skill columns
-    For col = 2 To Cells(2, 1000).End(xlToLeft).Column
+    For col = 2 To Cells(2, 10000).End(xlToLeft).Column
         If Cells(2, col) <> "" Then
             nextHeaderCol = Cells(2, col).End(xlToRight).Column
             For i = col + 1 To Cells(3, nextHeaderCol).End(xlToLeft).Column
@@ -366,7 +368,7 @@ Sub PopulatePrograms()
     Next col
     
     'Delete extra empty columns
-    For col = 3 To Cells(2, 1000).End(xlToLeft).Column
+    For col = 3 To Cells(2, 10000).End(xlToLeft).Column
         If Cells(1, col).End(xlDown).Value = "" And Cells(1, col - 1).End(xlDown).Value = "" Then
             MsgBox ("Extra empty column(" & col & ")" & vbCrLf & "...Deleting.")
             Columns(col).Delete
@@ -374,7 +376,7 @@ Sub PopulatePrograms()
     Next col
 
     ' Look for next program
-    For col = 2 To 1000
+    For col = 2 To 10000
         If Cells(2, col) <> "" Then
             headerCell = Cells(2, col)
             headerCol = col
@@ -1162,7 +1164,7 @@ Sub ProgramMatch()
             DescriptionBox.programNameBox.Value = ProgramName
             DescriptionBox.programDescriptionBox = "The client will "
             DescriptionBox.programSDBox.Value = "The SD will vary depending on the instructions in the workbook, the client’s IEP, and the interventionist."
-            For j = 2 To X.Worksheets("Data").Cells(2, 3000).End(xlToLeft).Column
+            For j = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
                 If Worksheets("Data").Cells(2, j).Value = ProgramName Then
                     Worksheets("Data").Cells(2, j).Activate
                 End If
@@ -1262,7 +1264,7 @@ Sub RenamePrograms()
     End With
     
     With RenameBox.programCurrent
-        For j = 2 To Worksheets("Data").Cells(2, 2000).End(xlToLeft).Column
+        For j = 2 To Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
             If Worksheets("Data").Cells(2, j).Value = "" Then
                 'Do nothing
             Else
@@ -1374,7 +1376,8 @@ Sub DataEntryPrograms()
     X.Activate
     X.Worksheets("Data").Activate
         
-    For col = 2 To Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+    DataEntryBox.ProgramList.Clear
+    For col = 2 To Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
         If Worksheets("Data").Cells(2, col).Value = "" Then
         Else
             DataEntryBox.ProgramList.AddItem Cells(2, col).Value

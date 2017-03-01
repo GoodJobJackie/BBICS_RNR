@@ -15,6 +15,10 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
+Private Sub FileList_Change()
+
+End Sub
+
 Private Sub FileSelect_Click()
 
     Dim filepath As String
@@ -24,13 +28,13 @@ Private Sub FileSelect_Click()
     filepath = ClientSelect.FileList.Value
        
     Set X = Workbooks.Open(filepath)
-    ActiveWindow.WindowState = xlMaximized
+    
+    MsgBox (X.Name)
     X.Activate
     X.Worksheets("Data").Activate
+    ActiveWindow.WindowState = xlMaximized
     
     Unload Me
-    
-    'MsgBox ("Remember to save after making any changes.")
     
     UserAction.version.Caption = version
     

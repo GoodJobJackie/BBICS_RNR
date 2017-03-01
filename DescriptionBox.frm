@@ -19,7 +19,7 @@ Private Sub CommandButton1_Click()
     ProgramDescription = DescriptionBox.programDescriptionBox.Value
     ProgramSD = DescriptionBox.programSDBox.Value
     
-    For i = 2 To X.Worksheets("Data").Cells(2, 3000).End(xlToLeft).Column
+    For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
         If Trim(X.Worksheets("Data").Cells(2, i).Value) = DescriptionBox.currentProgramName.Value Then
             X.Worksheets("Data").Cells(2, i).Value = DescriptionBox.programNameBox.Value
         End If

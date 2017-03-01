@@ -21,7 +21,7 @@ Private Sub btnChange_Click()
 
     Worksheets("Data").Cells(2, renameI).Value = RenameBox.programChange
     With RenameBox.programCurrent
-        For j = 2 To Worksheets("Data").Cells(2, 2000).End(xlToLeft).Column
+        For j = 2 To Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
             If Worksheets("Data").Cells(2, j).Value = "" Then
                 'Do nothing
             Else
@@ -41,7 +41,7 @@ Private Sub btnChange_Click()
         End With
               
     Worksheets("Data").Cells(2, renameI).Activate
-    If renameI = Worksheets("Data").Cells(2, 2000).End(xlToLeft).Column Then
+    If renameI = Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column Then
         '
     Else
         btnNext_Click
@@ -59,7 +59,7 @@ Private Sub btnNext_Click()
 
 Dim i As Integer
 
-    For i = 2 To Worksheets("Data").Cells(2, 2000).End(xlToLeft).Column
+    For i = 2 To Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
         If Worksheets("Data").Cells(2, i).Value = RenameBox.programExisting.Value Then
             renameI = Worksheets("Data").Cells(2, i).End(xlToRight).Column
             RenameBox.programExisting = Worksheets("Data").Cells(2, renameI).Value
@@ -76,7 +76,7 @@ Dim i As Integer
         RenameBox.btnPrev.Enabled = True
     End If
     
-    If renameI = Worksheets("Data").Cells(2, 2000).End(xlToLeft).Column Then
+    If renameI = Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column Then
         RenameBox.btnNext.Enabled = False
     Else
         RenameBox.btnNext.Enabled = True
@@ -94,7 +94,7 @@ Private Sub btnPrev_Click()
 
 Dim i As Integer
 
-    For i = 2 To Worksheets("Data").Cells(2, 2000).End(xlToLeft).Column
+    For i = 2 To Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
         If Worksheets("Data").Cells(2, i).Value = RenameBox.programExisting.Value Then
             renameI = Worksheets("Data").Cells(2, i).End(xlToLeft).Column
             RenameBox.programExisting = Worksheets("Data").Cells(2, renameI).Value
@@ -111,7 +111,7 @@ Dim i As Integer
         RenameBox.btnPrev.Enabled = True
     End If
     
-    If renameI = Worksheets("Data").Cells(2, 2000).End(xlToLeft).Column Then
+    If renameI = Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column Then
         RenameBox.btnNext.Enabled = False
     Else
         RenameBox.btnNext.Enabled = True
@@ -141,7 +141,7 @@ Private Sub programCurrent_Change()
 
 Dim i As Integer
 
-    For i = 2 To Worksheets("Data").Cells(2, 2000).End(xlToLeft).Column
+    For i = 2 To Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
         If Worksheets("Data").Cells(2, i).Value = RenameBox.programCurrent.Value Then
             renameI = i
             Worksheets("Data").Cells(2, i).Activate
@@ -157,7 +157,7 @@ Dim i As Integer
         RenameBox.btnPrev.Enabled = True
     End If
     
-    If renameI = Worksheets("Data").Cells(2, 2000).End(xlToLeft).Column Then
+    If renameI = Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column Then
         RenameBox.btnNext.Enabled = False
     Else
         RenameBox.btnNext.Enabled = True

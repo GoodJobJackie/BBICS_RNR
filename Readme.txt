@@ -1,11 +1,14 @@
 
-BBICS Client Data Management System v4.6.6
+BBICS Client Data Management System v4.6.7
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
 =========================================================================
 Changelog
 -------------------------------------------------------------------------
+
+2017_03_01	v4.6.7
+*fix error where programs/skills fail to populate after column 1000
 
 2017_02_27	v4.6.6
 *minor fixes

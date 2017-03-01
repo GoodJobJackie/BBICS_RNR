@@ -21,7 +21,7 @@ Private Sub AddProgram_Click()
     
     'Add and format new program columns
     DataEntryBox.ProgramList.AddItem DataEntryBox.Program
-    col = X.Worksheets("Data").Cells(3, 1000).End(xlToLeft).Column + 2
+    col = X.Worksheets("Data").Cells(3, 10000).End(xlToLeft).Column + 2
     X.Worksheets("Data").Columns(col).Select
     Selection.Borders(xlDiagonalUp).LineStyle = xlNone
     With Selection.Borders(xlEdgeLeft)
@@ -39,6 +39,13 @@ Private Sub AddProgram_Click()
 
     X.Worksheets("Data").Cells(2, col).Value = DataEntryBox.Program.Value
     X.Worksheets("Data").Cells(3, col).Value = " "
+    DataEntryBox.ProgramList.Clear
+    For col = 2 To Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
+        If Worksheets("Data").Cells(2, col).Value = "" Then
+        Else
+            DataEntryBox.ProgramList.AddItem Cells(2, col).Value
+        End If
+    Next col
     DataEntryBox.ProgramList = DataEntryBox.Program.Value
     DataEntryBox.AddProgram.Enabled = False
     DataEntryBox.Skill.SetFocus
@@ -52,7 +59,7 @@ Private Sub AddSkill_Click()
     'Add and format new skill column
     DataEntryBox.SkillList.AddItem DataEntryBox.Skill.Value
     DataEntryBox.SkillList = DataEntryBox.Skill.Value
-    For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+    For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
         If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             col = i + 1
             If X.Worksheets("Data").Cells(3, col).Value = "" Then
@@ -81,7 +88,7 @@ Private Sub btnDelete_Click()
     On Error GoTo ErrorHandling
     
     'Find program/skill and store column values
-    For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+    For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
         If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
             For j = programCol To X.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
@@ -137,7 +144,7 @@ Private Sub btnEdit_Click()
     On Error GoTo ErrorHandling
     
     'Get listing for program and skill columns
-    For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+    For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
         If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
             For j = programCol To X.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
@@ -203,7 +210,7 @@ Private Sub btnEditDown_Click()
     On Error GoTo ErrorHandling
     
     'Find program/skill and store column values
-    For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+    For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
         If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
             For j = programCol To X.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
@@ -246,7 +253,7 @@ Private Sub btnEditUp_Click()
     On Error GoTo ErrorHandling
     
     'Find program/skill and store column values
-    For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+    For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
         If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
             For j = programCol To X.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
@@ -301,7 +308,7 @@ Private Sub buttonNextData_Click()
     Score = DataEntryBox.Score.Value
     
     'Find program and skill/store column values
-    For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+    For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
         If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
             For j = programCol To X.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
@@ -372,16 +379,12 @@ ErrorHandling:
                 
 End Sub
 
-Private Sub Frame1_Click()
-
-End Sub
-
 Private Sub Program_Change()
 
     Dim i As Integer
 
     DataEntryBox.AddProgram.Enabled = True
-    For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+    For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
         If DataEntryBox.Program.Value = X.Worksheets("Data").Cells(2, i).Value Then
             DataEntryBox.AddProgram.Enabled = False
         End If
@@ -399,7 +402,7 @@ Private Sub ProgramList_Change()
     DataEntryBox.SkillList.Enabled = True
     DataEntryBox.SkillList = "Please select skill..."
 
-    For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+    For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
         If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
             X.Worksheets("Data").Cells(2, i).Activate
@@ -443,8 +446,6 @@ Private Sub Score_Change()
     End If
 
 End Sub
-
-
 
 Private Sub ScrollUp_Click()
 
@@ -493,7 +494,7 @@ Private Sub SkillList_Change()
     'Check for empty programs
     If X.Worksheets("Data").Cells(2, 1).End(xlToRight).Value = "" Then Exit Sub
     
-    For i = 2 To X.Worksheets("Data").Cells(2, 1000).End(xlToLeft).Column
+    For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
         If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
             For j = programCol To X.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column

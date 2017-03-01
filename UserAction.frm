@@ -338,6 +338,7 @@ End Sub
 Private Sub CommandButton2_Click()
 
     Unload Me
+    Application.Quit
 
 End Sub
 
