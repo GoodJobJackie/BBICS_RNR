@@ -25,19 +25,22 @@ Private Sub FileSelect_Click()
     
     On Error Resume Next
 
+    'Open selected client's workbook
     filepath = ClientSelect.FileList.Value
        
     Set X = Workbooks.Open(filepath)
     
-    MsgBox (X.Name)
+    'Apparently do nothing in Excel 2016...
     X.Activate
     X.Worksheets("Data").Activate
     ActiveWindow.WindowState = xlMaximized
     
+    'Close dialog box and update version number
     Unload Me
     
     UserAction.version.Caption = version
     
+    'Check if opened workbook exists and change save/close buttons accordingly
     If X Is Nothing Then
         UserAction.ActionDataEntry.Enabled = True
         UserAction.actionSaveWorkbook.Enabled = False
@@ -48,6 +51,7 @@ Private Sub FileSelect_Click()
         UserAction.actionCloseWorkbook.Enabled = True
     End If
 
+    'Open the data select dialog box
     DataSelect.Show
 
 End Sub

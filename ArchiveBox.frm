@@ -20,22 +20,27 @@ Private Sub btnAdd_Click()
     Dim i, row As Integer
     Dim found As Boolean
     
+    'Decide whether client exists already
     found = False
     For i = 2 To Y.Worksheets("Client File Archive").Cells(2, 1).End(xlDown).row
         If Y.Worksheets("Client File Archive").Cells(i, 1).Value = UCase(ArchiveBox.txtInitials.Value) Then found = True
     Next i
     
+    'If new client, add to list
     row = Y.Worksheets("Client File Archive").Cells(2, 4).End(xlDown).row + 1
     If found = False Then Y.Worksheets("Client File Archive").Cells(row, 4) = UCase(ArchiveBox.txtInitials.Value)
     
+    'Add client/box to list
     row = Y.Worksheets("Client File Archive").Cells(2, 1).End(xlDown).row + 1
     Y.Worksheets("Client File Archive").Cells(row, 1) = UCase(ArchiveBox.txtInitials)
     Y.Worksheets("Client File Archive").Cells(row, 2) = CInt(ArchiveBox.txtBox)
     
+    'Reset text boxes
     ArchiveBox.txtInitials = ""
     ArchiveBox.txtBox = ""
     ArchiveBox.btnAdd.Enabled = False
     
+    'Save master list
     Y.Save
 
 End Sub
@@ -57,6 +62,7 @@ Private Sub selectClient_Change()
     Dim i, j As Integer
     Dim boxes As String
     
+    'Locate which boxes the selected client are in and store as a variable
     j = 0
     For i = 2 To Y.Worksheets("Client File Archive").Cells(2, 1).End(xlDown).row
         If Y.Worksheets("Client File Archive").Cells(i, 1).Value = ArchiveBox.selectClient.Value Then
@@ -70,6 +76,7 @@ Private Sub selectClient_Change()
         End If
     Next i
     
+    'Display boxes
     ArchiveBox.boxes = boxes
 
 End Sub

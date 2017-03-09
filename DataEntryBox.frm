@@ -17,7 +17,7 @@ Option Explicit
 
 Private Sub AddProgram_Click()
 
-    Dim col As Integer
+    Dim col, i, programCol As Integer
     
     'Add and format new program columns
     DataEntryBox.ProgramList.AddItem DataEntryBox.Program
@@ -36,9 +36,10 @@ Private Sub AddProgram_Click()
     Selection.Borders(xlInsideVertical).LineStyle = xlNone
     Selection.Borders(xlInsideHorizontal).LineStyle = xlNone
     Selection.NumberFormat = "mm/dd/yyyy"
-
+  
     X.Worksheets("Data").Cells(2, col).Value = DataEntryBox.Program.Value
     X.Worksheets("Data").Cells(3, col).Value = " "
+       
     DataEntryBox.ProgramList.Clear
     For col = 2 To Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
         If Worksheets("Data").Cells(2, col).Value = "" Then
@@ -46,15 +47,29 @@ Private Sub AddProgram_Click()
             DataEntryBox.ProgramList.AddItem Cells(2, col).Value
         End If
     Next col
+    
     DataEntryBox.ProgramList = DataEntryBox.Program.Value
-    DataEntryBox.AddProgram.Enabled = False
+    DataEntryBox.Program = ""
+    'DataEntryBox.AddProgram.Enabled = False
     DataEntryBox.Skill.SetFocus
+    
+    'Assign program column to variable and highlight
+    For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
+        If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
+            programCol = i
+            X.Worksheets("Data").Cells(2, i).Activate
+            Exit For
+        End If
+    Next i
+    
+    X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Activate
+    DataEntryBox.ProgramList = X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Value
     
 End Sub
 
 Private Sub AddSkill_Click()
 
-    Dim i, col As Integer
+    Dim i, j, col, programCol, skillCol As Integer
     
     'Add and format new skill column
     DataEntryBox.SkillList.AddItem DataEntryBox.Skill.Value
@@ -63,19 +78,38 @@ Private Sub AddSkill_Click()
         If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             col = i + 1
             If X.Worksheets("Data").Cells(3, col).Value = "" Then
-                X.Worksheets("Data").Cells(3, col).Value = DataEntryBox.SkillList
+                X.Worksheets("Data").Cells(3, col).Value = DataEntryBox.SkillList.Value
             ElseIf X.Worksheets("Data").Cells(3, col + 1).Value = "" Then
                 X.Worksheets("Data").Cells(3, col).Activate
                 ActiveCell.EntireColumn.Offset(0, 1).Insert
-                ActiveCell.Offset(0, 1).Value = DataEntryBox.SkillList
+                ActiveCell.Offset(0, 1).Value = DataEntryBox.SkillList.Value
             Else
                 X.Worksheets("Data").Cells(3, col).End(xlToRight).Activate
                 ActiveCell.EntireColumn.Offset(0, 1).Insert
-                ActiveCell.Offset(0, 1).Value = DataEntryBox.SkillList
+                ActiveCell.Offset(0, 1).Value = DataEntryBox.SkillList.Value
             End If
         End If
     Next i
     
+    'Find program and skill/store column values
+    For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
+        If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
+            programCol = i
+            For j = programCol To X.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
+                If X.Worksheets("Data").Cells(3, j).Value = DataEntryBox.SkillList.Value Then
+                    skillCol = j
+                End If
+            Next j
+        End If
+    Next i
+    
+    If X.Worksheets("Data").Cells(3, skillCol + 1).Value = "" Then
+        X.Worksheets("Data").Cells(3, skillCol).Activate
+    Else
+        X.Worksheets("Data").Cells(3, skillCol).End(xlToRight).Activate
+    End If
+    
+    DataEntryBox.Skill = ""
     DataEntryBox.SessionDate.SetFocus
 
 End Sub
@@ -117,6 +151,7 @@ Private Sub btnDelete_Click()
     
     j = 0
     
+    'Fill array with date rows
     If arraySize <> 0 Then
         For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
             If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
@@ -180,6 +215,7 @@ Private Sub btnEdit_Click()
     
     j = 0
     
+    'Fill up the array with date rows
     If arraySize <> 0 Then
         For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
             If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
@@ -302,10 +338,32 @@ Private Sub buttonNextData_Click()
     Dim newDate As String
     Dim row As Variant
     
-    On Error GoTo ErrorHandling
+    'On Error GoTo ErrorHandling
     
     newDate = DataEntryBox.SessionDate.Value
     Score = DataEntryBox.Score.Value
+  
+    If IsDate(DataEntryBox.SessionDate) = False Then
+        MsgBox "Please enter valid date.", vbCritical
+        With DataEntryBox.SessionDate
+            .SetFocus
+            .SelStart = 0
+            .SelLength = Len(.Text)
+        End With
+        GoTo DateError
+    End If
+    
+    If IsDate(DataEntryBox.SessionDate.Value) Then
+        If DateValue(DataEntryBox.SessionDate.Value) > Now + 30 Then
+            MsgBox "Please enter valid date.", vbCritical
+            With DataEntryBox.SessionDate
+                .SetFocus
+                .SelStart = 0
+                .SelLength = Len(.Text)
+            End With
+            GoTo DateError
+        End If
+    End If
     
     'Find program and skill/store column values
     For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
@@ -358,6 +416,7 @@ Private Sub buttonNextData_Click()
     
     j = 0
     
+    'Fill array with date rows
     If arraySize <> 0 Then
         For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
             If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
@@ -373,6 +432,8 @@ Private Sub buttonNextData_Click()
     DataEntryBox.txtEditDate = ""
     DataEntryBox.txtEditScore = ""
     DataEntryBox.SessionDate.SetFocus
+    
+DateError:
        
 ErrorHandling:
     ErrHandling
@@ -402,6 +463,7 @@ Private Sub ProgramList_Change()
     DataEntryBox.SkillList.Enabled = True
     DataEntryBox.SkillList = "Please select skill..."
 
+    'Assign program column to variable and highlight
     For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
         If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
@@ -410,24 +472,25 @@ Private Sub ProgramList_Change()
         End If
     Next i
     
+    'Fill skill list
     skillCol = X.Worksheets("Data").Cells(2, programCol).End(xlToRight).Column
-    
-    
     For i = programCol + 1 To X.Worksheets("Data").Cells(3, skillCol).End(xlToLeft).Column
         DataEntryBox.SkillList.AddItem X.Worksheets("Data").Cells(3, i).Value
     Next i
     
+    'Enter selected program into program box
     DataEntryBox.Program.Value = DataEntryBox.ProgramList.Value
     If DataEntryBox.Program.Value = "Select preexisting program..." Then
         DataEntryBox.Program = ""
     End If
     
-        DataEntryBox.btnEditUp.Enabled = False
-        DataEntryBox.btnEditDown.Enabled = False
-        DataEntryBox.btnDelete.Enabled = False
-        DataEntryBox.btnEdit.Enabled = False
-        
-        Worksheets("Data").Cells(2, programCol).Select
+    'Reset edit panel
+    DataEntryBox.btnEditUp.Enabled = False
+    DataEntryBox.btnEditDown.Enabled = False
+    DataEntryBox.btnDelete.Enabled = False
+    DataEntryBox.btnEdit.Enabled = False
+    
+    Worksheets("Data").Cells(2, programCol).Select
           
 End Sub
 
@@ -494,6 +557,7 @@ Private Sub SkillList_Change()
     'Check for empty programs
     If X.Worksheets("Data").Cells(2, 1).End(xlToRight).Value = "" Then Exit Sub
     
+    'Locate and assign program/skill columns to variables
     For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
         If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
             programCol = i
@@ -506,6 +570,7 @@ Private Sub SkillList_Change()
         If skillCol = 0 Then skillCol = 3
     Next i
     
+    'Set array size
     If DataEntryBox.SkillList <> "<Please select program first>" Then
         arraySize = 0
         For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
@@ -518,6 +583,7 @@ Private Sub SkillList_Change()
     
     j = 0
     
+    'Fill array with date rows
     If arraySize <> 0 Then
         For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
             If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
@@ -527,9 +593,11 @@ Private Sub SkillList_Change()
         Next i
     End If
     
+    'Set edit panel to first entry
     editRow = dateRows(0)
     rowsIndex = 0
     
+    'Reset edt panel
     If DataEntryBox.SkillList = "Please select skill..." Then
     Else
         DataEntryBox.btnEditUp.Enabled = True
@@ -538,6 +606,7 @@ Private Sub SkillList_Change()
         DataEntryBox.btnEdit.Enabled = True
     End If
     
+    'Clear edit panel and set focus
     DataEntryBox.txtEditDate = ""
     DataEntryBox.txtEditScore = ""
     DataEntryBox.SessionDate.SetFocus

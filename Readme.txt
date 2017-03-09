@@ -1,11 +1,17 @@
 
-BBICS Client Data Management System v4.6.7
+BBICS Client Data Management System v4.6.8
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
 =========================================================================
 Changelog
 -------------------------------------------------------------------------
+
+2017_03_09	v4.6.8
+*fix "counts of..." to reflect bx counts of 1
+*fix add program/skill focus
+*add catch for invalid session dates
+*reduce screen flicker during skill evaluation
 
 2017_03_01	v4.6.7
 *fix error where programs/skills fail to populate after column 1000

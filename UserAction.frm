@@ -337,8 +337,9 @@ End Sub
 
 Private Sub CommandButton2_Click()
 
+    'Close workbook/Excel
     Unload Me
-    Application.Quit
+    'Application.Quit
 
 End Sub
 

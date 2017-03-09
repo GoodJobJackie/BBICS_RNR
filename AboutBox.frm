@@ -19,6 +19,7 @@ Private Sub btnReadme_Click()
 
     Dim strFile
 
+    'Open the readme file
     strFile = "C:\Users\jackie\Documents\BBICS_DMS\Readme.txt"
 
     Shell "cmd /c """ & strFile & """", 0

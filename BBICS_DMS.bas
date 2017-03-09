@@ -1,5 +1,5 @@
 Attribute VB_Name = "BBICS_DMS"
-Public Const version As String = "v4.6.7"
+Public Const version As String = "v4.6.8"
 
 Public reportStart, reportEnd, current As Date
 Public ProgramName, ProgramDescription, ProgramSD, SkillName, mCm, guessText As String
@@ -314,6 +314,8 @@ Sub PopulatePrograms()
     
     On Error Resume Next
     
+    Application.ScreenUpdating = False
+    
     col = 2
     skillCount = 1
     programRow = 2
@@ -421,7 +423,6 @@ Sub PopulatePrograms()
                 End If
                 
                 ' Check for skill within report dates
-                'MsgBox ("reportStart: " & reportStart & vbCrLf & "reportEnd: " & reportEnd & vbCrLf & "skillStart: " & skillStart & vbCrLf & "lastSkillEnd: " & lastSkillEnd)
                 If DateValue(skillEnd) < DateValue(reportStart) And DateValue(reportStart) - DateValue(lastSkillEnd) < 182 Then
                 ' Do nothing
                 ElseIf DateValue(skillStart) > DateValue(reportEnd) Then
@@ -443,8 +444,10 @@ Sub PopulatePrograms()
                     Dim l As Long
                     k = Cells(1000, i).End(xlUp).row
                     l = Cells(4, i).End(xlDown).row
+                    Application.ScreenUpdating = True
                     Range(Cells(l, i), Cells(k, i)).Activate
                     MCMbox.Show
+                    Application.ScreenUpdating = False
                     Worksheets("Programs").Cells(programRow, 1).Value = Trim(ProgramName)
                     Select Case mCm
                         Case Is = "Mastered"
@@ -485,7 +488,9 @@ Sub PopulatePrograms()
     Next i
     Rows(startDateRow & ":" & endDateRow).Select
     Selection.Interior.Color = -4142
-       
+    
+    Application.ScreenUpdating = True
+           
 ErrorHandling:
     ErrHandling
        
@@ -579,10 +584,10 @@ Public Sub UserForm_Initialize()
     End Select
 
     For i = 4 To Worksheets("Data").Cells(4, 1).End(xlDown).row
-        If (Trim(Worksheets("Data").Cells(i, 1).Value) < suggestStart) And (Trim(Worksheets("Data").Cells(i + 1, 1).Value) > suggestStart) Then
+        If (Trim(Worksheets("Data").Cells(i, 1).Value) < DateValue(suggestStart)) And (Trim(Worksheets("Data").Cells(i + 1, 1).Value) > DateValue(suggestStart)) Then
             suggestStart = Trim(Worksheets("Data").Cells(i + 1, 1).Value)
         End If
-        If (Trim(Worksheets("Data").Cells(i, 1).Value) < suggestEnd) And (Trim(Worksheets("Data").Cells(i + 1, 1).Value) > suggestEnd) Then
+        If (Trim(Worksheets("Data").Cells(i, 1).Value) < DateValue(suggestEnd)) And (Trim(Worksheets("Data").Cells(i + 1, 1).Value) > DateValue(suggestEnd)) Then
             suggestEnd = Trim(Worksheets("Data").Cells(i, 1).Value)
         End If
     Next i
@@ -1038,11 +1043,23 @@ Final:
     bxCount = BxDict.Count
     For Each bx In BxDict
         If bxCount = BxDict.Count Then
-            bxString = ", and " & bxCount & ") " & BxDict(bx) & " counts of " & bx & "."
+            If bxCount(bx) = 1 Then
+                bxString = ", and " & bxCount & ") " & BxDict(bx) & " count of " & bx & "."
+            Else
+                bxString = ", and " & bxCount & ") " & BxDict(bx) & " counts of " & bx & "."
+            End If
         ElseIf bxCount = 1 Then
-            bxString = bxCount & ") " & BxDict(bx) & " counts of " & bx & bxString
+            If bxCount(bx) = 1 Then
+                bxString = bxCount & ") " & BxDict(bx) & " count of " & bx & bxString
+            Else
+                bxString = bxCount & ") " & BxDict(bx) & " counts of " & bx & bxString
+            End If
         Else
-            bxString = ", " & bxCount & ") " & BxDict(bx) & " counts of " & bx & bxString
+            If bxCount(bx) = 1 Then
+                bxString = ", " & bxCount & ") " & BxDict(bx) & " count of " & bx & bxString
+            Else
+                bxString = ", " & bxCount & ") " & BxDict(bx) & " counts of " & bx & bxString
+            End If
         End If
         bxCount = bxCount - 1
     Next bx
@@ -1383,7 +1400,7 @@ Sub DataEntryPrograms()
             DataEntryBox.ProgramList.AddItem Cells(2, col).Value
         End If
     Next col
-       
+    
     DataEntryBox.Show
 
 End Sub
