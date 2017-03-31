@@ -17,6 +17,14 @@ Option Explicit
 
 Private Sub ComboBox1_Change()
 
+    If UserForm1.ComboBox1.Value <> "" And UserForm1.ComboBox2.Value <> "" Then UserForm1.CommandButton1.Enabled = True
+
+End Sub
+
+Private Sub ComboBox2_Change()
+
+    If UserForm1.ComboBox1.Value <> "" And UserForm1.ComboBox2.Value <> "" Then UserForm1.CommandButton1.Enabled = True
+
 End Sub
 
 Private Sub CommandButton1_Click()
@@ -39,7 +47,11 @@ Dim i, bottomDateRow As Integer
                 .LineStyle = xlContinuous
             End With
             startDateRow = i
+            Exit For
         End If
+    Next i
+    
+    For i = bottomDateRow To 5 Step -1
         If Trim(Cells(i, 1).Value) = Trim(ComboBox2.Value) Then
             Rows(i).Select
             With Selection.Borders(xlEdgeBottom)
@@ -47,6 +59,7 @@ Dim i, bottomDateRow As Integer
                 .Color = RGB(255, 0, 0)
             End With
             endDateRow = i
+            Exit For
         End If
     Next i
     

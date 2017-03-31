@@ -64,10 +64,22 @@ Private Sub ScrollDown_Click()
 
 End Sub
 
+Private Sub ScrollDownBig_Click()
+
+    ActiveWindow.SmallScroll Down:=25
+
+End Sub
+
 Private Sub ScrollUp_Click()
 
     ActiveWindow.SmallScroll Down:=-10
     
+End Sub
+
+Private Sub ScrollUpBig_Click()
+
+    ActiveWindow.SmallScroll Down:=-25
+
 End Sub
 
 Private Sub UserForm_Activate()

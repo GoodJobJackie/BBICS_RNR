@@ -1,11 +1,19 @@
 
-BBICS Client Data Management System v4.6.8
+BBICS Client Data Management System v4.6.9
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
 =========================================================================
 Changelog
 -------------------------------------------------------------------------
+
+2017_03_31	v4.6.9
+*fix multiple borders for repeated start/end dates
+*now exits existing Word application
+*add further scroll buttons to mcm dialog box
+*disable start/end date suggestions
+*add button disable for no start & end date selected
+*save as confirmation now reflects entered file name
 
 2017_03_09	v4.6.8
 *fix "counts of..." to reflect bx counts of 1

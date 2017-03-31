@@ -17,6 +17,8 @@ Option Explicit
 
 Private Sub AddProgram_Click()
 
+    On Error GoTo ErrorHandling
+    
     Dim col, i, programCol As Integer
     
     'Add and format new program columns
@@ -62,13 +64,19 @@ Private Sub AddProgram_Click()
         End If
     Next i
     
+    'Highlight the newly added program
     X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Activate
     DataEntryBox.ProgramList = X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Value
+    
+ErrorHandling:
+    ErrHandling
     
 End Sub
 
 Private Sub AddSkill_Click()
 
+    On Error GoTo ErrorHandling
+    
     Dim i, j, col, programCol, skillCol As Integer
     
     'Add and format new skill column
@@ -103,6 +111,7 @@ Private Sub AddSkill_Click()
         End If
     Next i
     
+    'Highlight the newly added skill
     If X.Worksheets("Data").Cells(3, skillCol + 1).Value = "" Then
         X.Worksheets("Data").Cells(3, skillCol).Activate
     Else
@@ -111,6 +120,9 @@ Private Sub AddSkill_Click()
     
     DataEntryBox.Skill = ""
     DataEntryBox.SessionDate.SetFocus
+    
+ErrorHandling:
+    ErrHandling
 
 End Sub
 

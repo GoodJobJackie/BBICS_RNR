@@ -1,5 +1,5 @@
 Attribute VB_Name = "BBICS_DMS"
-Public Const version As String = "v4.6.8"
+Public Const version As String = "v4.6.9"
 
 Public reportStart, reportEnd, current As Date
 Public ProgramName, ProgramDescription, ProgramSD, SkillName, mCm, guessText As String
@@ -31,10 +31,12 @@ Attribute ARestructureAndGenerateReport.VB_ProcData.VB_Invoke_Func = "r\n14"
         UserAction.ActionDataEntry.Enabled = True
         UserAction.actionSaveWorkbook.Enabled = False
         UserAction.actionCloseWorkbook.Enabled = False
+        UserAction.actionIPG.Enabled = False
     Else
         UserAction.ActionDataEntry.Enabled = False
         UserAction.actionSaveWorkbook.Enabled = True
         UserAction.actionCloseWorkbook.Enabled = True
+        UserAction.actionIPG.Enabled = True
     End If
     
     ActiveWindow.WindowState = xlMinimized
@@ -583,9 +585,9 @@ Public Sub UserForm_Initialize()
             suggestEnd = "12/31/" & Worksheets("CI").Cells(2, 9).Value
     End Select
 
-    For i = 4 To Worksheets("Data").Cells(4, 1).End(xlDown).row
-        If (Trim(Worksheets("Data").Cells(i, 1).Value) < DateValue(suggestStart)) And (Trim(Worksheets("Data").Cells(i + 1, 1).Value) > DateValue(suggestStart)) Then
-            suggestStart = Trim(Worksheets("Data").Cells(i + 1, 1).Value)
+    For i = 5 To Worksheets("Data").Cells(4, 1).End(xlDown).row
+        If (DateValue(Worksheets("Data").Cells(i, 1).Value) < DateValue(suggestStart)) And ((DateValue(Worksheets("Data").Cells(i + 1, 1).Value) > DateValue(suggestStart)) Or (DateValue(Worksheets("Data").Cells(i + 1, 1).Value) = DateValue(suggestStart))) Then
+            suggestStart = DateValue(Worksheets("Data").Cells(i + 1, 1).Value)
         End If
         If (Trim(Worksheets("Data").Cells(i, 1).Value) < DateValue(suggestEnd)) And (Trim(Worksheets("Data").Cells(i + 1, 1).Value) > DateValue(suggestEnd)) Then
             suggestEnd = Trim(Worksheets("Data").Cells(i, 1).Value)
@@ -594,7 +596,7 @@ Public Sub UserForm_Initialize()
       
     UserForm1.ComboBox1.Value = suggestStart
     UserForm1.ComboBox2.Value = suggestEnd
-      
+         
 End Sub
 
 
@@ -785,11 +787,14 @@ Sub PopulateReport()
     Dim s As Object
     Dim bx As Variant
     
-    On Error GoTo ErrorHandling
+    On Error Resume Next
 
     'Create Word object and open PRT template.
+    MsgBox "Please save and close any Microsoft Word documents at this time.", vbExclamation
+    Word.Application.Quit
     Set objWord = CreateObject("Word.Application")
     Set objDoc = objWord.Documents.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\PRT.docx")
+    objWord.Visible = True
         
     'Find/Replace sections with data.
     With objDoc
@@ -1043,19 +1048,19 @@ Final:
     bxCount = BxDict.Count
     For Each bx In BxDict
         If bxCount = BxDict.Count Then
-            If bxCount(bx) = 1 Then
+            If BxDict(bx) = 1 Then
                 bxString = ", and " & bxCount & ") " & BxDict(bx) & " count of " & bx & "."
             Else
                 bxString = ", and " & bxCount & ") " & BxDict(bx) & " counts of " & bx & "."
             End If
         ElseIf bxCount = 1 Then
-            If bxCount(bx) = 1 Then
+            If BxDict(bx) = 1 Then
                 bxString = bxCount & ") " & BxDict(bx) & " count of " & bx & bxString
             Else
                 bxString = bxCount & ") " & BxDict(bx) & " counts of " & bx & bxString
             End If
         Else
-            If bxCount(bx) = 1 Then
+            If BxDict(bx) = 1 Then
                 bxString = ", " & bxCount & ") " & BxDict(bx) & " count of " & bx & bxString
             Else
                 bxString = ", " & bxCount & ") " & BxDict(bx) & " counts of " & bx & bxString
@@ -1220,9 +1225,8 @@ Sub BxData()
     
     'Store bx values in dictionary
     For i = bxColStart To bxColEnd
-        If Cells(bxRow, i).Value = 0 Then
-        Else
-            BxDict.Add Cells(2, i).Value, Cells(bxRow, i).Value
+        If Cells(bxRow, i).Value <> 0 Then
+            BxDict.Add Trim(Cells(2, i).Value), Cells(bxRow, i).Value
         End If
     Next i
     
@@ -1457,7 +1461,7 @@ Sub GetSaveAsFileName()
             Exit Sub
         End If
     '   Display Full Path & File Name
-        Response = MsgBox("Saving as: " & Name, vbInformation, "Proceed")
+        Response = MsgBox("Saving as: " & FileName, vbInformation, "Proceed")
     '   Save & Close Workbook
         With ActiveWorkbook
             .SaveAs FileName

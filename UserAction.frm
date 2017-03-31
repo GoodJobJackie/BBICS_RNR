@@ -96,6 +96,7 @@ End Sub
 Private Sub actionIPG_Click()
 
     Unload Me
+    UserForm1.CommandButton1.Enabled = False
     ImportSkillsPrograms
     PopulatePrograms
     CreateProgramLists
