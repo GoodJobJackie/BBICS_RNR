@@ -7,7 +7,7 @@ goodjobjacqueline@gmail.com
 Changelog
 -------------------------------------------------------------------------
 
-2017_04_07	v4.6.9
+2017_04_07	v4.6.10
 *format row 3 as text to avoid type errors
 *disable client select button until file is selected
 *color new workbook tabs
