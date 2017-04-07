@@ -1,5 +1,5 @@
 Attribute VB_Name = "BBICS_DMS"
-Public Const version As String = "v4.6.9"
+Public Const version As String = "v4.6.10"
 
 Public reportStart, reportEnd, current As Date
 Public ProgramName, ProgramDescription, ProgramSD, SkillName, mCm, guessText As String
@@ -790,7 +790,7 @@ Sub PopulateReport()
     On Error Resume Next
 
     'Create Word object and open PRT template.
-    MsgBox "Please save and close any Microsoft Word documents at this time.", vbExclamation
+    MsgBox "Please save and close any Microsoft Word documents at this time. Any unsaved changed will be lost.", vbExclamation
     Word.Application.Quit
     Set objWord = CreateObject("Word.Application")
     Set objDoc = objWord.Documents.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\PRT.docx")

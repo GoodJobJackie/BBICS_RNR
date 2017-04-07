@@ -50,6 +50,8 @@ Private Sub ActionDataEntry_Click()
 
     Unload Me
     
+    ClientSelect.FileSelect.Enabled = False
+    
     ClientSelect.Show
     
 End Sub
@@ -110,15 +112,20 @@ Private Sub actionNewClient_Click()
     Dim client As String
     Dim FileName As String
     
-    'Create and format a new client workbook
+    'Get client initials and create file name
     client = InputBox("Please enter new client initials:", "New Client")
     FileName = "C:\Users\jackie\Documents\Client Files\Data\Formatted\" & UCase(client) & " - 0000_00_00.xlsx"
     
+    'Create new workbook and add labeled sheets
     Workbooks.Add
     ActiveSheet.Name = "Tutor Hr Data"
     Worksheets.Add().Name = "Bx Data"
     Worksheets.Add().Name = "Data"
+    Worksheets("Data").Tab.Color = RGB(255, 255, 0)
+    Worksheets("Bx Data").Tab.Color = RGB(0, 176, 80)
+    Worksheets("Tutor Hr Data").Tab.Color = RGB(112, 48, 160)
     
+    'Format Data worksheet
     Worksheets("Data").Activate
     CreateHeader
     MasterListFormat
@@ -133,7 +140,9 @@ Private Sub actionNewClient_Click()
     With Selection
         .Font.Bold = True
     End With
+    Worksheets("Data").Rows(3).NumberFormat = "@"
     
+    'Format Bx Data worksheet
     Worksheets("Bx Data").Activate
     Cells.Select
     Range("BQ21").Activate
@@ -171,6 +180,7 @@ Private Sub actionNewClient_Click()
     ActiveWindow.FreezePanes = False
     ActiveWindow.FreezePanes = True
     
+    'Format Tutor Hr Data worksheet
     Worksheets("Tutor Hr Data").Activate
     Cells.Select
     Range("BQ21").Activate
@@ -217,28 +227,22 @@ Private Sub actionNewClient_Click()
     Selection.Borders(xlInsideVertical).LineStyle = xlNone
     Selection.Borders(xlInsideHorizontal).LineStyle = xlNone
     Selection.NumberFormat = "MMM yyyy"
-    Worksheets("Tutor Hr Data").Cells(3, 1) = "Jan 2017"
-    Worksheets("Tutor Hr Data").Cells(4, 1) = "Feb 2017"
-    Worksheets("Tutor Hr Data").Cells(5, 1) = "Mar 2017"
-    Worksheets("Tutor Hr Data").Cells(6, 1) = "Apr 2017"
-    Worksheets("Tutor Hr Data").Cells(7, 1) = "May 2017"
-    Worksheets("Tutor Hr Data").Cells(8, 1) = "Jun 2017"
-    Worksheets("Tutor Hr Data").Cells(9, 1) = "Jul 2017"
-    Worksheets("Tutor Hr Data").Cells(10, 1) = "Aug 2017"
-    Worksheets("Tutor Hr Data").Cells(11, 1) = "Sep 2017"
-    Worksheets("Tutor Hr Data").Cells(12, 1) = "Oct 2017"
-    Worksheets("Tutor Hr Data").Cells(13, 1) = "Nov 2017"
-    Worksheets("Tutor Hr Data").Cells(14, 1) = "Dec 2017"
+    For i = 3 To 14
+        Worksheets("Tutor Hr Data").Cells(i, 1) = Format(DateAdd("m", i - 3, Now), "MMM yyyy")
+    Next i
     Cells(3, 1).Select
     ActiveWindow.FreezePanes = False
     ActiveWindow.FreezePanes = True
     Worksheets("Tutor Hr Data").Cells(1, 1) = UCase(client)
-    
+       
     Worksheets("Data").Activate
+    Worksheets("Data").Cells(6, 1).Activate
         
+    'Save and close workbook
     ActiveWorkbook.SaveAs (FileName)
     ActiveWorkbook.Close
     
+    'Notify user upon completion
     MsgBox ("Data workbook for " & UCase(client) & " created.")
 
 End Sub
@@ -350,7 +354,6 @@ Private Sub CommandButton6_Click()
     X.Worksheets("Data").Activate
 
 End Sub
-
 
 Private Sub UserForm_Click()
 

@@ -25,18 +25,18 @@ Private Sub AddProgram_Click()
     DataEntryBox.ProgramList.AddItem DataEntryBox.Program
     col = X.Worksheets("Data").Cells(3, 10000).End(xlToLeft).Column + 2
     X.Worksheets("Data").Columns(col).Select
-    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
     With Selection.Borders(xlEdgeLeft)
         .LineStyle = xlContinuous
         .ColorIndex = 0
         .TintAndShade = 0
         .Weight = xlThin
     End With
-    Selection.Borders(xlEdgeTop).LineStyle = xlNone
-    Selection.Borders(xlEdgeBottom).LineStyle = xlNone
-    Selection.Borders(xlEdgeRight).LineStyle = xlNone
-    Selection.Borders(xlInsideVertical).LineStyle = xlNone
-    Selection.Borders(xlInsideHorizontal).LineStyle = xlNone
+    'Selection.Borders(xlDiagonalUp).LineStyle = xlNone
+    'Selection.Borders(xlEdgeTop).LineStyle = xlNone
+    'Selection.Borders(xlEdgeBottom).LineStyle = xlNone
+    'Selection.Borders(xlEdgeRight).LineStyle = xlNone
+    'Selection.Borders(xlInsideVertical).LineStyle = xlNone
+    'Selection.Borders(xlInsideHorizontal).LineStyle = xlNone
     Selection.NumberFormat = "mm/dd/yyyy"
   
     X.Worksheets("Data").Cells(2, col).Value = DataEntryBox.Program.Value

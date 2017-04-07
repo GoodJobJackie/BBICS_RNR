@@ -17,6 +17,8 @@ Option Explicit
 
 Private Sub FileList_Change()
 
+    ClientSelect.FileSelect.Enabled = True
+
 End Sub
 
 Private Sub FileSelect_Click()

@@ -1,11 +1,17 @@
 
-BBICS Client Data Management System v4.6.9
+BBICS Client Data Management System v4.6.10
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
 =========================================================================
 Changelog
 -------------------------------------------------------------------------
+
+2017_04_07	v4.6.9
+*format row 3 as text to avoid type errors
+*disable client select button until file is selected
+*color new workbook tabs
+*replace hardcoded tutor hour dates for new workbooks
 
 2017_03_31	v4.6.9
 *fix multiple borders for repeated start/end dates
