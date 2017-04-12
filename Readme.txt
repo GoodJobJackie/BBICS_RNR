@@ -1,11 +1,16 @@
 
-BBICS Client Data Management System v4.6.10
+BBICS Client Data Management System v4.6.11
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
 =========================================================================
 Changelog
 -------------------------------------------------------------------------
+
+2017_04_12	v4.6.11
+*remove extra sheets on newly created workbooks
+*column deletion dialog now on timer
+*program/skill no longer cleared after adding new program/skill
 
 2017_04_07	v4.6.10
 *format row 3 as text to avoid type errors

@@ -31,12 +31,6 @@ Private Sub AddProgram_Click()
         .TintAndShade = 0
         .Weight = xlThin
     End With
-    'Selection.Borders(xlDiagonalUp).LineStyle = xlNone
-    'Selection.Borders(xlEdgeTop).LineStyle = xlNone
-    'Selection.Borders(xlEdgeBottom).LineStyle = xlNone
-    'Selection.Borders(xlEdgeRight).LineStyle = xlNone
-    'Selection.Borders(xlInsideVertical).LineStyle = xlNone
-    'Selection.Borders(xlInsideHorizontal).LineStyle = xlNone
     Selection.NumberFormat = "mm/dd/yyyy"
   
     X.Worksheets("Data").Cells(2, col).Value = DataEntryBox.Program.Value
@@ -51,7 +45,7 @@ Private Sub AddProgram_Click()
     Next col
     
     DataEntryBox.ProgramList = DataEntryBox.Program.Value
-    DataEntryBox.Program = ""
+    'DataEntryBox.Program = ""
     'DataEntryBox.AddProgram.Enabled = False
     DataEntryBox.Skill.SetFocus
     
@@ -118,7 +112,7 @@ Private Sub AddSkill_Click()
         X.Worksheets("Data").Cells(3, skillCol).End(xlToRight).Activate
     End If
     
-    DataEntryBox.Skill = ""
+    'DataEntryBox.Skill = ""
     DataEntryBox.SessionDate.SetFocus
     
 ErrorHandling:

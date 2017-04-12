@@ -109,8 +109,7 @@ End Sub
 
 Private Sub actionNewClient_Click()
 
-    Dim client As String
-    Dim FileName As String
+    Dim client, FileName As String
     
     'Get client initials and create file name
     client = InputBox("Please enter new client initials:", "New Client")
@@ -118,9 +117,9 @@ Private Sub actionNewClient_Click()
     
     'Create new workbook and add labeled sheets
     Workbooks.Add
-    ActiveSheet.Name = "Tutor Hr Data"
-    Worksheets.Add().Name = "Bx Data"
-    Worksheets.Add().Name = "Data"
+    ActiveSheet.Name = "Data"
+    Worksheets("Sheet2").Name = "Bx Data"
+    Worksheets("Sheet3").Name = "Tutor Hr Data"
     Worksheets("Data").Tab.Color = RGB(255, 255, 0)
     Worksheets("Bx Data").Tab.Color = RGB(0, 176, 80)
     Worksheets("Tutor Hr Data").Tab.Color = RGB(112, 48, 160)

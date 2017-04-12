@@ -1,5 +1,5 @@
 Attribute VB_Name = "BBICS_DMS"
-Public Const version As String = "v4.6.10"
+Public Const version As String = "v4.6.11"
 
 Public reportStart, reportEnd, current As Date
 Public ProgramName, ProgramDescription, ProgramSD, SkillName, mCm, guessText As String
@@ -364,7 +364,9 @@ Sub PopulatePrograms()
             For i = col + 1 To Cells(3, nextHeaderCol).End(xlToLeft).Column
                 If Cells(3, i).End(xlDown) = "" Then
                     deletedSkill = Cells(3, i).Value
-                    MsgBox ("'" & Cells(2, col).Value & ": " & deletedSkill & "' skill column(" & col & ") empty." & vbCrLf & vbCrLf & "Deleting...")
+                    DeleteBox.lblDeleting.Caption = "'" & Cells(2, col).Value & ": " & deletedSkill & "' skill column(" & col & ") empty." & vbCrLf & vbCrLf & "Deleting..."
+                    Application.OnTime Now + TimeSerial(0, 0, 1.5), "UnloadDeleteBox"
+                    DeleteBox.Show
                     Columns(i).Delete
                 End If
             Next i
@@ -374,7 +376,9 @@ Sub PopulatePrograms()
     'Delete extra empty columns
     For col = 3 To Cells(2, 10000).End(xlToLeft).Column
         If Cells(1, col).End(xlDown).Value = "" And Cells(1, col - 1).End(xlDown).Value = "" Then
-            MsgBox ("Extra empty column(" & col & ")" & vbCrLf & "...Deleting.")
+            DeleteBox.lblDeleting.Caption = "Deleting extra empty column(" & col & ")..."
+            Application.OnTime Now + TimeSerial(0, 0, 1.5), "UnloadDeleteBox"
+            DeleteBox.Show
             Columns(col).Delete
         End If
     Next col
@@ -1469,4 +1473,8 @@ Sub GetSaveAsFileName()
             
 End Sub
 
+Sub UnloadDeleteBox()
 
+    Unload DeleteBox
+    
+End Sub
