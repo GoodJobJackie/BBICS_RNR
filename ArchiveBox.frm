@@ -19,6 +19,7 @@ Private Sub btnAdd_Click()
 
     Dim i, row As Integer
     Dim found As Boolean
+    Dim strDataRange, keyRange As Range
     
     'Decide whether client exists already
     found = False
@@ -40,8 +41,21 @@ Private Sub btnAdd_Click()
     ArchiveBox.txtBox = ""
     ArchiveBox.btnAdd.Enabled = False
     
+    'Sort client list alphabetically
+    Set strDataRange = Range("A1:B" & Y.Worksheets("Client File Archive").Cells(1, 1).End(xlDown).row)
+    Set keyRange = Range("A1:B" & Y.Worksheets("Client File Archive").Cells(1, 1).End(xlDown).row)
+    strDataRange.Sort Key1:=keyRange, Order1:=xlAscending
+    
     'Save master list
     Y.Save
+    
+    'Reload client drop-down list
+    ArchiveBox.selectClient.Clear
+    For i = 2 To Y.Worksheets("Client File Archive").Cells(2, 4).End(xlDown).row
+        With ArchiveBox.selectClient
+            .AddItem Y.Worksheets("Client File Archive").Cells(i, 4).Value
+        End With
+    Next i
 
 End Sub
 
@@ -49,6 +63,7 @@ Private Sub btnDone_Click()
 
     Unload Me
     Y.Close
+    UserAction.version.Caption = version
     UserAction.Show
 
 End Sub

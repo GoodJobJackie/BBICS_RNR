@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserAction 
    Caption         =   "Please select an action."
-   ClientHeight    =   9345
+   ClientHeight    =   7425
    ClientLeft      =   120
    ClientTop       =   465
    ClientWidth     =   5040
@@ -98,8 +98,10 @@ End Sub
 Private Sub actionIPG_Click()
 
     Unload Me
+    Application.ScreenUpdating = False
     UserForm1.CommandButton1.Enabled = False
     ImportSkillsPrograms
+    Application.ScreenUpdating = True
     PopulatePrograms
     CreateProgramLists
     PopulateReport
@@ -111,7 +113,7 @@ Private Sub actionNewClient_Click()
 
     Dim client, FileName As String
     
-    'Get client initials and create file name
+    'Get client initials from user and create file name
     client = InputBox("Please enter new client initials:", "New Client")
     FileName = "C:\Users\jackie\Documents\Client Files\Data\Formatted\" & UCase(client) & " - 0000_00_00.xlsx"
     

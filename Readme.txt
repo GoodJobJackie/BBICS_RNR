@@ -1,11 +1,20 @@
 
-BBICS Client Data Management System v4.6.11
+BBICS Client Data Management System v4.6.13
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
 =========================================================================
 Changelog
 -------------------------------------------------------------------------
+
+2017_04_19	v4.6.13
+*reinstate start/end date report period suggestions
+*client archive list alphabetize and reload after adding 
+*deprecate import lists/format old-style workbook/single & full restructure functions
+
+2017_04_13	v4.6.12
+*fix occurrance where error was returned during userform initialization and during attempt to close a nonexisting instance of word
+*improved error tracking
 
 2017_04_12	v4.6.11
 *remove extra sheets on newly created workbooks
@@ -22,7 +31,7 @@ Changelog
 *fix multiple borders for repeated start/end dates
 *now exits existing Word application
 *add further scroll buttons to mcm dialog box
-*disable start/end date suggestions
+*remove start/end date suggestions
 *add button disable for no start & end date selected
 *save as confirmation now reflects entered file name
 

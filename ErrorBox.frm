@@ -36,7 +36,7 @@ Private Sub btnSubmit_Click()
     End If
     
     'Build the text output for the error report
-    errorText = Now & vbCrLf & "Error Number: " & err.number & vbCrLf & "Error Description: " & err.Description _
+    errorText = Now & vbCrLf & "Error Number: " & err.number & vbCrLf & "Error Description: " & err.Description & vbCrLf & "Proceedure: " & errorTracking _
         & vbCrLf & currentFile & vbCrLf & "   Program: " & DataEntryBox.ProgramList.Value & vbCrLf & "   Skill: " & DataEntryBox.SkillList.Value _
         & vbCrLf & "   SessionDate: " & DataEntryBox.SessionDate.Value & vbCrLf _
         & "   SessionScore: " & DataEntryBox.Score.Value & vbCrLf & "User Description: " & ErrorBox.txtUserDescription.Value

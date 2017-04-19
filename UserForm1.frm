@@ -36,11 +36,11 @@ Dim i, bottomDateRow As Integer
     sheetName = ActiveSheet.Name
     Worksheets(sheetName).Activate
     bottomDateRow = Cells(5, 1).End(xlDown).row
-    reportStart = Trim(ComboBox1.Value)
-    reportEnd = Trim(ComboBox2.Value)
+    reportStart = DateValue(ComboBox1.Value)
+    reportEnd = DateValue(ComboBox2.Value)
 
     For i = 4 To bottomDateRow
-        If Trim(ComboBox1.Value) = Trim(Cells(i, 1).Value) Then
+        If DateValue(ComboBox1.Value) = DateValue(Cells(i, 1).Value) Then
             Rows(i).Select
             With Selection.Borders(xlEdgeTop)
                 .Color = RGB(255, 0, 0)
@@ -52,7 +52,7 @@ Dim i, bottomDateRow As Integer
     Next i
     
     For i = bottomDateRow To 5 Step -1
-        If Trim(Cells(i, 1).Value) = Trim(ComboBox2.Value) Then
+        If DateValue(Cells(i, 1).Value) = DateValue(ComboBox2.Value) Then
             Rows(i).Select
             With Selection.Borders(xlEdgeBottom)
                 .LineStyle = xlContinuous

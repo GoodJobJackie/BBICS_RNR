@@ -18,6 +18,7 @@ Option Explicit
 Private Sub AddProgram_Click()
 
     On Error GoTo ErrorHandling
+    errorTracking = "AddProgram_Click"
     
     Dim col, i, programCol As Integer
     
@@ -70,6 +71,7 @@ End Sub
 Private Sub AddSkill_Click()
 
     On Error GoTo ErrorHandling
+    errorTracking = "AddSkill_Click"
     
     Dim i, j, col, programCol, skillCol As Integer
     
@@ -126,6 +128,7 @@ Private Sub btnDelete_Click()
     Dim row As Variant
     
     On Error GoTo ErrorHandling
+    errorTracking = "btnDelete_Click"
     
     'Find program/skill and store column values
     For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
@@ -183,6 +186,7 @@ Private Sub btnEdit_Click()
     Dim row As Variant
     
     On Error GoTo ErrorHandling
+    errorTracking = "btnEdit_Click"
     
     'Get listing for program and skill columns
     For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
@@ -250,6 +254,7 @@ Private Sub btnEditDown_Click()
     Dim i, j, programCol, skillCol As Integer
     
     On Error GoTo ErrorHandling
+    errorTracking = "btnEditDown_Click"
     
     'Find program/skill and store column values
     For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
@@ -293,6 +298,7 @@ Private Sub btnEditUp_Click()
     Dim txt As String
     
     On Error GoTo ErrorHandling
+    errorTracking = "btnEditUp_Click"
     
     'Find program/skill and store column values
     For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
@@ -344,7 +350,8 @@ Private Sub buttonNextData_Click()
     Dim newDate As String
     Dim row As Variant
     
-    'On Error GoTo ErrorHandling
+    On Error GoTo ErrorHandling
+    errorTracking = "buttonNextData_Click"
     
     newDate = DataEntryBox.SessionDate.Value
     Score = DataEntryBox.Score.Value
@@ -557,6 +564,7 @@ Private Sub SkillList_Change()
     Dim row As Variant
     
     On Error GoTo ErrorHandling
+    errorTracking = "SkillList_Change"
 
     DataEntryBox.Skill.Value = DataEntryBox.SkillList.Value
     

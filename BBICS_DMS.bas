@@ -1,8 +1,8 @@
 Attribute VB_Name = "BBICS_DMS"
-Public Const version As String = "v4.6.11"
+Public Const version As String = "v4.6.13"
 
 Public reportStart, reportEnd, current As Date
-Public ProgramName, ProgramDescription, ProgramSD, SkillName, mCm, guessText As String
+Public ProgramName, ProgramDescription, ProgramSD, SkillName, mCm, guessText, errorTracking As String
 Public startDateRow, endDateRow, programCount, prevProgramName, renameI, editRow, topEditRow, _
     bottomEditRow, rowsIndex, reportStartRow, reportEndRow, number, guess, lower, upper, guesses, bestGuesses As Integer
 Public skip, skipFlag As Boolean
@@ -21,6 +21,7 @@ Attribute ARestructureAndGenerateReport.VB_ProcData.VB_Invoke_Func = "r\n14"
     Dim bottomDateRow
     
     On Error Resume Next
+    errorTracking = "ARestructureAndGenerateReport"
     
     dataSheetName = ActiveSheet.Name
     bottomDateRow = Cells(5, 1).End(xlDown).row
@@ -55,6 +56,8 @@ Sub NewRestructuring()
     Dim headerCell As Range
     Dim startTime As Double
     Dim minutesElapsed As String
+    
+    errorTracking = "NewRestructuring"
     
     startTime = Timer
     headerCol = 2
@@ -93,6 +96,8 @@ End Sub
 
 Sub EmptyBCheck()
 
+    errorTracking = "EmptyBCheck"
+
         For i = 1 To 10000
             If Cells(i, 2).Value = "" Then
                 If Cells(i, 2).Value = "" Then
@@ -108,6 +113,8 @@ Sub EmptyBCheck()
 End Sub
 
 Sub CreateHeader()
+
+    errorTracking = "CreateHeader"
 
     Cells.Select
         Range("BQ21").Activate
@@ -143,6 +150,8 @@ End Sub
 
 Sub MasterListFormat()
 
+    errorTracking = "MasterListFormat"
+
     Columns("A").Select
     Selection.Borders(xlDiagonalUp).LineStyle = xlNone
         With Selection.Borders(xlEdgeLeft)
@@ -161,6 +170,8 @@ Sub MasterListFormat()
 End Sub
 
 Sub FormatProgramDates()
+
+    errorTracking = "FormatProgramDates"
 
     For i = 1 To 10000
         If Cells(2, i).Value = "" Then
@@ -199,6 +210,8 @@ Sub FormatProgramDates()
 End Sub
 Sub FindLastDate()
 
+    errorTracking = "FindLastDate"
+
     For i = 1 To 10000
         If Cells(2, i).Value = "" Then
         Else
@@ -222,6 +235,7 @@ End Sub
 Sub MoveData()
 
     On Error GoTo ErrorHandling
+    errorTracking = "MoveData"
     
     ' Find next program chunk
     For col = 2 To 10000
@@ -315,6 +329,7 @@ Sub PopulatePrograms()
     Dim programSheet, deletedSkill As String
     
     On Error Resume Next
+    errorTracking = "PopulatePrograms"
     
     Application.ScreenUpdating = False
     
@@ -326,6 +341,7 @@ Sub PopulatePrograms()
     bottomDateRow = Cells(5, 1).End(xlDown).row
                 
     UserForm_Initialize
+    errorTracking = "PopulatePrograms"
     UserForm1.Show
     
     ' Create and format program/skill sheet
@@ -409,6 +425,7 @@ Sub PopulatePrograms()
                 ActiveWindow.Zoom = 90
                 
                 UserForm_Initialize
+                errorTracking = "PopulatePrograms"
                 
                 ' Store skill start/end dates as variables
                 If Cells(4, i).Value = "" Then
@@ -509,6 +526,8 @@ Public Sub UserForm_Initialize()
     Dim placeHolder
     Dim reportDates As String
     
+    errorTracking = "UserForm_Initialize"
+    
     MCMbox.programNameBox.Value = Trim(ProgramName)
     MCMbox.skillNameBox.Value = Trim(SkillName)
     MCMbox.progMast.Value = True
@@ -589,24 +608,45 @@ Public Sub UserForm_Initialize()
             suggestEnd = "12/31/" & Worksheets("CI").Cells(2, 9).Value
     End Select
 
-    For i = 5 To Worksheets("Data").Cells(4, 1).End(xlDown).row
-        If (DateValue(Worksheets("Data").Cells(i, 1).Value) < DateValue(suggestStart)) And ((DateValue(Worksheets("Data").Cells(i + 1, 1).Value) > DateValue(suggestStart)) Or (DateValue(Worksheets("Data").Cells(i + 1, 1).Value) = DateValue(suggestStart))) Then
-            suggestStart = DateValue(Worksheets("Data").Cells(i + 1, 1).Value)
+    For i = 4 To X.Worksheets("Data").Cells(5, 1).End(xlDown).row
+        If DateValue(X.Worksheets("Data").Cells(i, 1).Value) = DateValue(suggestStart) Then
+            UserForm1.ComboBox1 = X.Worksheets("Data").Cells(i, 1).Value
+            Exit For
         End If
-        If (Trim(Worksheets("Data").Cells(i, 1).Value) < DateValue(suggestEnd)) And (Trim(Worksheets("Data").Cells(i + 1, 1).Value) > DateValue(suggestEnd)) Then
-            suggestEnd = Trim(Worksheets("Data").Cells(i, 1).Value)
+        If DateValue(X.Worksheets("Data").Cells(i, 1).Value) < DateValue(suggestStart) And DateValue(X.Worksheets("Data").Cells(i + 1, 1).Value) > DateValue(suggestStart) Then
+            UserForm1.ComboBox1 = X.Worksheets("Data").Cells(i + 1, 1).Value
+            Exit For
         End If
     Next i
-      
-    UserForm1.ComboBox1.Value = suggestStart
-    UserForm1.ComboBox2.Value = suggestEnd
-         
+    
+    For i = X.Worksheets("Data").Cells(4, 1).End(xlDown).row To 5 Step -1
+        'MsgBox ("i: " & i)
+        X.Worksheets("Data").Cells(i, 1).Activate
+        If DateValue(X.Worksheets("Data").Cells(i, 1).Value) = DateValue(suggestEnd) Then
+            UserForm1.ComboBox2 = X.Worksheets("Data").Cells(i, 1).Value
+            'MsgBox ("1!")
+            Exit For
+        End If
+        If DateValue(X.Worksheets("Data").Cells(i, 1).Value) < DateValue(suggestEnd) And Not IsDate(X.Worksheets("Data").Cells(i + 1, 1).Value) Then
+            UserForm1.ComboBox2 = X.Worksheets("Data").Cells(i, 1).Value
+            'MsgBox ("2!")
+            Exit For
+        End If
+        If DateValue(X.Worksheets("Data").Cells(i - 1, 1).Value) < DateValue(suggestEnd) And DateValue(X.Worksheets("Data").Cells(i, 1).Value) > DateValue(suggestEnd) Then
+            UserForm1.ComboBox2 = X.Worksheets("Data").Cells(i - 1, 1).Value
+            'MsgBox ("3!")
+            Exit For
+        End If
+    Next i
+              
 End Sub
 
 
 Sub CreateProgramLists()
 
     Dim bottomProgramRow, countMast, countCont, countMaint As Integer
+    
+    errorTracking = "CreateProgramLists"
     
     countMast = 1
     countCont = 1
@@ -672,6 +712,8 @@ Attribute SingleRestructure.VB_ProcData.VB_Invoke_Func = "e\n14"
 ' Keyboard Shortcut: Ctrl+r
 '
 Dim col As Integer
+
+    errorTracking = "SingleRestructure"
 
 col = ActiveCell.Column
 
@@ -740,6 +782,8 @@ Sub ImportSkillsPrograms()
     Dim k As Integer
     Dim sht As Worksheet
     
+    errorTracking = "ImportSkillsPrograms"
+    
     Application.DisplayAlerts = False
        
     'Check for existing worksheets, if so, delete them
@@ -792,6 +836,7 @@ Sub PopulateReport()
     Dim bx As Variant
     
     On Error Resume Next
+    errorTracking = "PopulateReport"
 
     'Create Word object and open PRT template.
     MsgBox "Please save and close any Microsoft Word documents at this time. Any unsaved changed will be lost.", vbExclamation
@@ -1026,6 +1071,7 @@ Final:
     
     ProgramDescriptionsList
     ProgramMatch
+    errorTracking = "PopulateReport"
     
     Worksheets("Current").Activate
     currentBottomRow = Worksheets("Current").Cells(1, 1).End(xlDown).row
@@ -1112,6 +1158,7 @@ Final:
     End With
     
     TutorHrs
+    errorTracking = "PopulateReport"
     
     'Cleanup
     Application.DisplayAlerts = False
@@ -1132,6 +1179,8 @@ ErrorHandling:
 End Sub
 
 Sub ProgramDescriptionsList()
+
+    errorTracking = "ProgramDescriptionsList"
 
     For Each Sheet In Worksheets
         If Sheet.Name = "Current" Then
@@ -1161,6 +1210,8 @@ Sub ProgramDescriptionsList()
 End Sub
 
 Sub ProgramMatch()
+
+    errorTracking = "ProgramMatch"
 
     Dim found As Boolean
 
@@ -1210,6 +1261,8 @@ Sub ProgramMatch()
 End Sub
 
 Sub BxData()
+
+    errorTracking = "BxData"
 
     Dim bxRow, bxColStart, bxColEnd As Integer
     
@@ -1277,6 +1330,8 @@ Sub BxData()
 End Sub
 
 Sub RenamePrograms()
+
+    errorTracking = "RenamePrograms"
    
    'Cycle through programs with option to rename
    
@@ -1315,6 +1370,8 @@ Sub RenamePrograms()
 End Sub
 
 Sub TutorHrs()
+
+    errorTracking = "TutorHrs"
 
     Dim tutorHrRow, monthCount As Integer
     Dim tutorHrDate As String
@@ -1384,6 +1441,8 @@ Sub TutorHrs()
 End Sub
 
 Sub DataEntryPrograms()
+
+    errorTracking = "DataEntryPrograms"
        
     DataEntryBox.SessionDate.SetFocus
     DataEntryBox.buttonNextData.Default = True
@@ -1415,7 +1474,7 @@ End Sub
 
 Sub ErrHandling()
 
-    If err.number <> 0 Then
+    If err.number <> 0 And err.number <> 429 Then
         Beep
         ErrorBox.Show
     End If
@@ -1423,6 +1482,8 @@ Sub ErrHandling()
 End Sub
 
 Sub InitGuessBox()
+
+    errorTracking = "InitGuessBox"
 
     Randomize
     number = Int((99 - 2 + 1) * Rnd() + 2)
@@ -1442,6 +1503,8 @@ Sub InitGuessBox()
 End Sub
 
 Sub GetSaveAsFileName()
+
+    errorTracking = "GetSaveAsFileName"
 
     Dim FileName As Variant
     Dim Filt As String, Title As String, Name As String
@@ -1474,6 +1537,8 @@ Sub GetSaveAsFileName()
 End Sub
 
 Sub UnloadDeleteBox()
+
+    errorTracking = "UnloadDeleteBox"
 
     Unload DeleteBox
     
