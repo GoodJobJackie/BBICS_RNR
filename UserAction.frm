@@ -180,6 +180,7 @@ Private Sub actionNewClient_Click()
     Cells(3, 2).Select
     ActiveWindow.FreezePanes = False
     ActiveWindow.FreezePanes = True
+    Cells(3, 1).Value = Format(Now, "MM/DD/YYYY")
     
     'Format Tutor Hr Data worksheet
     Worksheets("Tutor Hr Data").Activate

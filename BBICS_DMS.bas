@@ -1,5 +1,5 @@
 Attribute VB_Name = "BBICS_DMS"
-Public Const version As String = "v4.6.13"
+Public Const version As String = "v4.7"
 
 Public reportStart, reportEnd, current As Date
 Public ProgramName, ProgramDescription, ProgramSD, SkillName, mCm, guessText, errorTracking As String
@@ -1092,6 +1092,7 @@ Final:
             End If
         Next i
         
+    BxSetup
     'Sort bx data
     BxData
     'Write bx data to report
@@ -1174,7 +1175,7 @@ Final:
     objWord.Application.WindowState = wdWindowStateMaximize
 
 ErrorHandling:
-    ErrHandling
+    'ErrHandling
 
 End Sub
 
@@ -1541,5 +1542,71 @@ Sub UnloadDeleteBox()
     errorTracking = "UnloadDeleteBox"
 
     Unload DeleteBox
+    
+End Sub
+
+Sub BxSetup()
+
+    Dim dateFlag As Boolean
+    Dim bxRow, bxEnd, bxCount As Integer
+    
+    errorTracking = "BxSetup"
+    
+    X.Worksheets("Bx Data").Activate
+    For i = 3 To X.Worksheets("Bx Data").Cells(3, 1).End(xlDown).row
+        If DateValue(X.Worksheets("Bx Data").Cells(i, 1).Value) = DateValue(reportStart) Then
+            dateFlag = True
+            bxRow = i
+        End If
+    Next i
+    If dateFlag = False Then
+        For i = 3 To X.Worksheets("Bx Data").Cells(3, 1).End(xlDown).row
+            If DateValue(X.Worksheets("Bx Data").Cells(i, 1).Value) < DateValue(reportStart) And DateValue(X.Worksheets("Bx Data").Cells(i + 1, 1).Value) > DateValue(reportStart) Then
+                X.Worksheets("Bx Data").Rows(i + 1).EntireRow.Insert
+                bxRow = i + 1
+                X.Worksheets("Bx Data").Cells(bxRow, 1).Value = reportStart
+                Exit For
+            End If
+        Next i
+    End If
+   
+    X.Worksheets("Bx Data").Cells(X.Worksheets("Bx Data").Cells(3, 1).End(xlDown).row + 1, 1).Value = Format(Now, "MM/DD/YYYY")
+    dateFlag = False
+    For i = 3 To X.Worksheets("Bx Data").Cells(3, 1).End(xlDown).row
+        If DateValue(X.Worksheets("Bx Data").Cells(i, 1).Value) = DateValue(reportEnd) Then
+            dateFlag = True
+            bxEnd = i
+        End If
+    Next i
+    If dateFlag = False Then
+        For i = 3 To X.Worksheets("Bx Data").Cells(3, 1).End(xlDown).row
+            If DateValue(X.Worksheets("Bx Data").Cells(i, 1).Value) < DateValue(reportEnd) And DateValue(X.Worksheets("Bx Data").Cells(i + 1, 1).Value) > DateValue(reportEnd) Then
+                X.Worksheets("Bx Data").Rows(i + 1).EntireRow.Insert
+                bxEnd = i + 1
+                X.Worksheets("Bx Data").Cells(bxEnd, 1).Value = reportEnd
+                Exit For
+            End If
+        Next i
+    End If
+    
+    
+    For i = X.Worksheets("Bx Data").Cells(2, 2).End(xlToRight).Column + 2 To X.Worksheets("Bx Data").Cells(2, X.Worksheets("Bx Data").Cells(2, 2).End(xlToRight).Column + 2).End(xlToRight).Column
+        bxCount = 0
+        For j = bxRow To bxEnd
+            bxCount = bxCount + X.Worksheets("Bx Data").Cells(j, i - X.Worksheets("Bx Data").Cells(2, 2).End(xlToRight).Column).Value
+        Next j
+        X.Worksheets("Bx Data").Cells(bxRow, i).Value = bxCount
+    Next i
+    
+    X.Worksheets("Bx Data").Cells(3, 1).End(xlDown).Value = ""
+    
+    With X.Worksheets("Bx Data").Rows(bxRow - 1).Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With X.Worksheets("Bx Data").Rows(bxEnd).Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
     
 End Sub

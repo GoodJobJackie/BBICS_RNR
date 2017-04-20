@@ -1,11 +1,14 @@
 
-BBICS Client Data Management System v4.6.13
+BBICS Client Data Management System v4.7
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
 =========================================================================
 Changelog
 -------------------------------------------------------------------------
+
+2017_04_20	v4.7
+*automatize summation of behavior quantities over report period
 
 2017_04_19	v4.6.13
 *reinstate start/end date report period suggestions
