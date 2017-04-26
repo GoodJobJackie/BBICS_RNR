@@ -1,5 +1,5 @@
 Attribute VB_Name = "BBICS_DMS"
-Public Const version As String = "v4.7"
+Public Const version As String = "v4.7.1"
 
 Public reportStart, reportEnd, current As Date
 Public ProgramName, ProgramDescription, ProgramSD, SkillName, mCm, guessText, errorTracking As String
@@ -371,6 +371,7 @@ Sub PopulatePrograms()
     Worksheets("Programs").Cells(1, 5).Value = "Maintenance"
     Worksheets("Programs").Columns("A:B").ColumnWidth = 60
     Worksheets("Programs").Columns("C:E").ColumnWidth = 12
+    Worksheets("Programs").Columns("A:E").NumberFormat = "@"
     Worksheets(dataSheetName).Activate
     
     'Delete empty skill columns
@@ -492,7 +493,7 @@ Sub PopulatePrograms()
     
     ' Reset report period borders to black/white/transparent
      For i = 4 To bottomDateRow
-        If reportStart = Trim(Cells(i, 1).Value) Then
+        If DateValue(reportStart) = DateValue(Cells(i, 1).Value) Then
             Rows(i).Select
             With Selection.Borders(xlEdgeTop)
                 .Color = RGB(0, 0, 0)
@@ -500,7 +501,7 @@ Sub PopulatePrograms()
             End With
             startDateRow = i
         End If
-        If Trim(Cells(i, 1).Value) = reportEnd Then
+        If DateValue(Cells(i, 1).Value) = DateValue(reportEnd) Then
             Rows(i).Select
             With Selection.Borders(xlEdgeBottom)
                 .Color = RGB(0, 0, 0)
@@ -620,21 +621,17 @@ Public Sub UserForm_Initialize()
     Next i
     
     For i = X.Worksheets("Data").Cells(4, 1).End(xlDown).row To 5 Step -1
-        'MsgBox ("i: " & i)
         X.Worksheets("Data").Cells(i, 1).Activate
         If DateValue(X.Worksheets("Data").Cells(i, 1).Value) = DateValue(suggestEnd) Then
             UserForm1.ComboBox2 = X.Worksheets("Data").Cells(i, 1).Value
-            'MsgBox ("1!")
             Exit For
         End If
         If DateValue(X.Worksheets("Data").Cells(i, 1).Value) < DateValue(suggestEnd) And Not IsDate(X.Worksheets("Data").Cells(i + 1, 1).Value) Then
             UserForm1.ComboBox2 = X.Worksheets("Data").Cells(i, 1).Value
-            'MsgBox ("2!")
             Exit For
         End If
         If DateValue(X.Worksheets("Data").Cells(i - 1, 1).Value) < DateValue(suggestEnd) And DateValue(X.Worksheets("Data").Cells(i, 1).Value) > DateValue(suggestEnd) Then
             UserForm1.ComboBox2 = X.Worksheets("Data").Cells(i - 1, 1).Value
-            'MsgBox ("3!")
             Exit For
         End If
     Next i
@@ -844,7 +841,7 @@ Sub PopulateReport()
     Set objWord = CreateObject("Word.Application")
     Set objDoc = objWord.Documents.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\PRT.docx")
     objWord.Visible = True
-        
+           
     'Find/Replace sections with data.
     With objDoc
         For Each s In .Sections
@@ -1092,9 +1089,11 @@ Final:
             End If
         Next i
         
+    'Sum bx quantities over report period
     BxSetup
     'Sort bx data
     BxData
+    errorTracking = "PopulateReport"
     'Write bx data to report
     bxCount = BxDict.Count
     For Each bx In BxDict
@@ -1169,6 +1168,7 @@ Final:
     Worksheets("Programs").Delete
     Worksheets("Current").Delete
     Application.DisplayAlerts = True
+    Application.ScreenUpdating = True
     
     objWord.Visible = True
     objWord.Application.Activate
@@ -1588,8 +1588,7 @@ Sub BxSetup()
             End If
         Next i
     End If
-    
-    
+        
     For i = X.Worksheets("Bx Data").Cells(2, 2).End(xlToRight).Column + 2 To X.Worksheets("Bx Data").Cells(2, X.Worksheets("Bx Data").Cells(2, 2).End(xlToRight).Column + 2).End(xlToRight).Column
         bxCount = 0
         For j = bxRow To bxEnd

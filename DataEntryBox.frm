@@ -175,6 +175,11 @@ Private Sub btnDelete_Click()
     'Keep the index from dropping below 0
     If rowsIndex < 0 Then rowsIndex = 0
     
+    'Clear edit text fields
+    DataEntryBox.txtEditDate = ""
+    DataEntryBox.txtEditScore = ""
+    DataEntryBox.SessionDate.SetFocus
+    
 ErrorHandling:
     ErrHandling
 
@@ -240,9 +245,10 @@ Private Sub btnEdit_Click()
     'Keep the index from dropping below 0
     If rowsIndex < 0 Then rowsIndex = 0
     
-    'Empty edit text boxes
+    'Clear edit text fields
     DataEntryBox.txtEditDate = ""
     DataEntryBox.txtEditScore = ""
+    DataEntryBox.SessionDate.SetFocus
     
 ErrorHandling:
     ErrHandling

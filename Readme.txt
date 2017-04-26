@@ -1,11 +1,15 @@
 
-BBICS Client Data Management System v4.7
+BBICS Client Data Management System v4.7.1
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
 =========================================================================
 Changelog
 -------------------------------------------------------------------------
+
+2017_04_26	v4.7.1
+*clear fields after edit/delete score pairings
+*fix program sheet number formatting
 
 2017_04_20	v4.7
 *automatize summation of behavior quantities over report period
