@@ -46,8 +46,6 @@ Private Sub AddProgram_Click()
     Next col
     
     DataEntryBox.ProgramList = DataEntryBox.Program.Value
-    'DataEntryBox.Program = ""
-    'DataEntryBox.AddProgram.Enabled = False
     DataEntryBox.Skill.SetFocus
     
     'Assign program column to variable and highlight
@@ -73,7 +71,8 @@ Private Sub AddSkill_Click()
     On Error GoTo ErrorHandling
     errorTracking = "AddSkill_Click"
     
-    Dim i, j, col, programCol, skillCol As Integer
+    Dim i, j, col, programCol, skillCol, arraySize As Integer
+    Dim txt As String
     
     'Add and format new skill column
     DataEntryBox.SkillList.AddItem DataEntryBox.Skill.Value
@@ -114,8 +113,21 @@ Private Sub AddSkill_Click()
         X.Worksheets("Data").Cells(3, skillCol).End(xlToRight).Activate
     End If
     
-    'DataEntryBox.Skill = ""
     DataEntryBox.SessionDate.SetFocus
+    
+    arraySize = 0
+    
+    'Populate pairings list
+    If DataEntryBox.SkillList <> "<Please select program first>" And DataEntryBox.SkillList <> "Please select skill..." Then
+        DataEntryBox.pairings.Clear
+        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
+            txt = ""
+            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
+                txt = X.Worksheets("Data").Cells(i, programCol).Value & "     " & X.Worksheets("Data").Cells(i, skillCol).Value
+                DataEntryBox.pairings.AddItem txt
+            End If
+        Next i
+    End If
     
 ErrorHandling:
     ErrHandling
@@ -126,8 +138,11 @@ Private Sub btnDelete_Click()
 
     Dim i, j, programCol, skillCol, arraySize As Integer
     Dim row As Variant
+    Dim txt As String
+    Dim scoreDate As Date
+    Dim Score As Double
     
-    On Error GoTo ErrorHandling
+    On Error Resume Next
     errorTracking = "btnDelete_Click"
     
     'Find program/skill and store column values
@@ -141,56 +156,51 @@ Private Sub btnDelete_Click()
             Next j
         End If
     Next i
+    
+    'Set date/score for selected pairing
+    If DataEntryBox.SkillList <> "" Or DataEntryBox.pairings <> "" Then
+        scoreDate = Trim(Left(DataEntryBox.pairings.Value, 10))
+        Score = CDbl(Trim(Right(DataEntryBox.pairings.Value, 3)))
+    End If
  
-    'Empty current date/score
-    X.Worksheets("Data").Cells(editRow, programCol) = ""
-    X.Worksheets("Data").Cells(editRow, skillCol) = ""
-    
-    'Check for unselected program
-    If DataEntryBox.SkillList <> "<Please select program first>" Then
-        arraySize = 0
-        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
-            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then arraySize = arraySize + 1
-        Next i
-    End If
-              
-    'Redefine array size
-    If arraySize > 0 Then arraySize = arraySize - 1
-    ReDim dateRows(arraySize)
-    
-    j = 0
-    
-    'Fill array with date rows
-    If arraySize <> 0 Then
-        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
-            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
-                dateRows(j) = X.Worksheets("Data").Cells(i, skillCol).row
-                j = j + 1
-            End If
-        Next i
-    End If
-    
-    'Reposition the edit position
-    If rowsIndex > 0 Then rowsIndex = rowsIndex - 1
-    'Keep the index from dropping below 0
-    If rowsIndex < 0 Then rowsIndex = 0
+    'Find and delete corresponding pairing
+    For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
+        If X.Worksheets("Data").Cells(i, programCol).Value = scoreDate And X.Worksheets("Data").Cells(i, skillCol).Value = Score Then
+            X.Worksheets("Data").Cells(i, programCol).Value = ""
+            X.Worksheets("Data").Cells(i, skillCol).Value = ""
+            Exit For
+        End If
+    Next i
     
     'Clear edit text fields
     DataEntryBox.txtEditDate = ""
     DataEntryBox.txtEditScore = ""
     DataEntryBox.SessionDate.SetFocus
     
-ErrorHandling:
-    ErrHandling
-
+    'Populate pairings list
+    If DataEntryBox.SkillList <> "<Please select program first>" And DataEntryBox.SkillList <> "Please select skill..." Then
+        DataEntryBox.pairings.Clear
+        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
+            txt = ""
+            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
+                txt = X.Worksheets("Data").Cells(i, programCol).Value & "     " & X.Worksheets("Data").Cells(i, skillCol).Value
+                DataEntryBox.pairings.AddItem txt
+            End If
+        Next i
+    End If
+    DataEntryBox.pairings = ""
+    
 End Sub
 
 Private Sub btnEdit_Click()
 
     Dim i, j, programCol, skillCol, arraySize As Integer
     Dim row As Variant
+    Dim txt As String
+    Dim scoreDate As Date
+    Dim Score As Double
     
-    On Error GoTo ErrorHandling
+    On Error Resume Next
     errorTracking = "btnEdit_Click"
     
     'Get listing for program and skill columns
@@ -205,9 +215,20 @@ Private Sub btnEdit_Click()
         End If
     Next i
     
-    'Delete current entry
-    X.Worksheets("Data").Cells(editRow, programCol) = ""
-    X.Worksheets("Data").Cells(editRow, skillCol) = ""
+    'Set date/score for selected pairing
+    If DataEntryBox.SkillList <> "" Or DataEntryBox.pairings <> "" Then
+        scoreDate = Trim(Left(DataEntryBox.pairings.Value, 10))
+        Score = CDbl(Trim(Right(DataEntryBox.pairings.Value, 3)))
+    End If
+ 
+    'Find and delete corresponding pairing
+    For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
+        If X.Worksheets("Data").Cells(i, programCol).Value = scoreDate And X.Worksheets("Data").Cells(i, skillCol).Value = Score Then
+            X.Worksheets("Data").Cells(i, programCol).Value = ""
+            X.Worksheets("Data").Cells(i, skillCol).Value = ""
+            Exit For
+        End If
+    Next i
     
     'Copy from edit section to new data section
     DataEntryBox.SessionDate = DataEntryBox.txtEditDate
@@ -216,43 +237,24 @@ Private Sub btnEdit_Click()
     'Add the data as new
     buttonNextData_Click
     
-    'Set the array size
-    If DataEntryBox.SkillList <> "<Please select program first>" Then
-        arraySize = 0
-        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
-            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then arraySize = arraySize + 1
-        Next i
-    End If
-              
-    'Redefine the array
-    If arraySize > 0 Then arraySize = arraySize - 1
-    ReDim dateRows(arraySize)
-    
-    j = 0
-    
-    'Fill up the array with date rows
-    If arraySize <> 0 Then
-        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
-            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
-                dateRows(j) = X.Worksheets("Data").Cells(i, skillCol).row
-                j = j + 1
-            End If
-        Next i
-    End If
-    
-    'Reposition the current edit position
-    If rowsIndex > 0 Then rowsIndex = rowsIndex - 1
-    'Keep the index from dropping below 0
-    If rowsIndex < 0 Then rowsIndex = 0
-    
     'Clear edit text fields
     DataEntryBox.txtEditDate = ""
     DataEntryBox.txtEditScore = ""
     DataEntryBox.SessionDate.SetFocus
     
-ErrorHandling:
-    ErrHandling
-
+    'Populate pairings list
+    If DataEntryBox.SkillList <> "<Please select program first>" And DataEntryBox.SkillList <> "Please select skill..." Then
+        DataEntryBox.pairings.Clear
+        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
+            txt = ""
+            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
+                txt = X.Worksheets("Data").Cells(i, programCol).Value & "     " & X.Worksheets("Data").Cells(i, skillCol).Value
+                DataEntryBox.pairings.AddItem txt
+            End If
+        Next i
+    End If
+    DataEntryBox.pairings = ""
+                
 End Sub
 
 Private Sub btnEditDown_Click()
@@ -346,17 +348,18 @@ End Sub
 Private Sub buttonDoneData_Click()
 
     Unload Me
-    DataSelect.Show
+    UserAction.ActionDataEntry.Enabled = False
+    UserAction.Show
 
 End Sub
 
 Private Sub buttonNextData_Click()
 
     Dim i, j, programCol, skillCol, Score, arraySize As Integer
-    Dim newDate As String
+    Dim newDate, txt As String
     Dim row As Variant
     
-    On Error GoTo ErrorHandling
+    On Error Resume Next
     errorTracking = "buttonNextData_Click"
     
     newDate = DataEntryBox.SessionDate.Value
@@ -452,11 +455,62 @@ Private Sub buttonNextData_Click()
     DataEntryBox.txtEditScore = ""
     DataEntryBox.SessionDate.SetFocus
     
+    'Populate pairings list
+    If DataEntryBox.SkillList <> "<Please select program first>" And DataEntryBox.SkillList <> "Please select skill..." Then
+        DataEntryBox.pairings.Clear
+        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
+            txt = ""
+            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
+                txt = X.Worksheets("Data").Cells(i, programCol).Value & "     " & X.Worksheets("Data").Cells(i, skillCol).Value
+                DataEntryBox.pairings.AddItem txt
+            End If
+        Next i
+    End If
+    
 DateError:
        
-ErrorHandling:
-    ErrHandling
-                
+End Sub
+
+Private Sub pairings_Change()
+
+    Dim i, j, programCol, skillCol As Integer
+    Dim scoreDate As Date
+    Dim Score As Double
+    
+    On Error Resume Next
+        
+    'Find program and skill/store column values
+    For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
+        If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
+            programCol = i
+            For j = programCol To X.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
+                If X.Worksheets("Data").Cells(3, j).Value = DataEntryBox.SkillList.Value Then
+                    skillCol = j
+                End If
+            Next j
+        End If
+    Next i
+    
+    'Set date/score for selected pairing
+    If DataEntryBox.SkillList <> "" Or DataEntryBox.pairings <> "" Then
+        scoreDate = Trim(Left(DataEntryBox.pairings.Value, 10))
+        Score = CDbl(Trim(Right(DataEntryBox.pairings.Value, 3)))
+    End If
+
+    'Find and highlight selected pairing
+    If DataEntryBox.SkillList <> "" Or DataEntryBox.pairings <> "" Then
+        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
+            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
+                If DateValue(X.Worksheets("Data").Cells(i, programCol).Value) = DateValue(scoreDate) And X.Worksheets("Data").Cells(i, skillCol).Value = Score Then
+                    Union(X.Worksheets("Data").Cells(i, programCol), X.Worksheets("Data").Cells(i, skillCol)).Activate
+                    DataEntryBox.txtEditDate = X.Worksheets("Data").Cells(i, programCol).Value
+                    DataEntryBox.txtEditScore = X.Worksheets("Data").Cells(i, skillCol).Value
+                    Exit For
+                End If
+            End If
+        Next i
+    End If
+
 End Sub
 
 Private Sub Program_Change()
@@ -504,8 +558,6 @@ Private Sub ProgramList_Change()
     End If
     
     'Reset edit panel
-    DataEntryBox.btnEditUp.Enabled = False
-    DataEntryBox.btnEditDown.Enabled = False
     DataEntryBox.btnDelete.Enabled = False
     DataEntryBox.btnEdit.Enabled = False
     
@@ -568,6 +620,7 @@ Private Sub SkillList_Change()
 
     Dim i, j, arraySize, programCol, skillCol As Integer
     Dim row As Variant
+    Dim txt As String
     
     On Error GoTo ErrorHandling
     errorTracking = "SkillList_Change"
@@ -620,8 +673,6 @@ Private Sub SkillList_Change()
     'Reset edt panel
     If DataEntryBox.SkillList = "Please select skill..." Then
     Else
-        DataEntryBox.btnEditUp.Enabled = True
-        DataEntryBox.btnEditDown.Enabled = True
         DataEntryBox.btnDelete.Enabled = True
         DataEntryBox.btnEdit.Enabled = True
     End If
@@ -631,6 +682,18 @@ Private Sub SkillList_Change()
     DataEntryBox.txtEditScore = ""
     DataEntryBox.SessionDate.SetFocus
     Worksheets("Data").Cells(3, skillCol).Select
+    
+    'Populate pairings list
+    If DataEntryBox.SkillList <> "<Please select program first>" And DataEntryBox.SkillList <> "Please select skill..." Then
+        DataEntryBox.pairings.Clear
+        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
+            txt = ""
+            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
+                txt = X.Worksheets("Data").Cells(i, programCol).Value & "     " & X.Worksheets("Data").Cells(i, skillCol).Value
+                DataEntryBox.pairings.AddItem txt
+            End If
+        Next i
+    End If
         
 ErrorHandling:
     ErrHandling

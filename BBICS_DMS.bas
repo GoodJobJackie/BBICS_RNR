@@ -1,5 +1,5 @@
 Attribute VB_Name = "BBICS_DMS"
-Public Const version As String = "v4.7.1"
+Public Const version As String = "v4.8"
 
 Public reportStart, reportEnd, current As Date
 Public ProgramName, ProgramDescription, ProgramSD, SkillName, mCm, guessText, errorTracking As String
@@ -33,11 +33,15 @@ Attribute ARestructureAndGenerateReport.VB_ProcData.VB_Invoke_Func = "r\n14"
         UserAction.actionSaveWorkbook.Enabled = False
         UserAction.actionCloseWorkbook.Enabled = False
         UserAction.actionIPG.Enabled = False
+        UserAction.btnDataEntry.Enabled = False
+        UserAction.VerifyProgramNames.Enabled = False
     Else
         UserAction.ActionDataEntry.Enabled = False
         UserAction.actionSaveWorkbook.Enabled = True
         UserAction.actionCloseWorkbook.Enabled = True
         UserAction.actionIPG.Enabled = True
+        UserAction.btnDataEntry.Enabled = True
+        UserAction.VerifyProgramNames.Enabled = True
     End If
     
     ActiveWindow.WindowState = xlMinimized
@@ -219,14 +223,14 @@ Sub FindLastDate()
                 If Cells(j, i).Value > abValue Then
                     prevabValue = abValue
                     abValue = Cells(j, i).Value
-                    a = i
+                    A = i
                     b = j
                 End If
             Next j
         End If
     Next i
     
-    Range(Cells(4, a), Cells(b, a)).Copy
+    Range(Cells(4, A), Cells(b, A)).Copy
     Cells(4, 1).Select
     ActiveSheet.Paste
     
@@ -836,7 +840,7 @@ Sub PopulateReport()
     errorTracking = "PopulateReport"
 
     'Create Word object and open PRT template.
-    MsgBox "Please save and close any Microsoft Word documents at this time. Any unsaved changed will be lost.", vbExclamation
+    MsgBox "Please save and close any Microsoft Word documents at this time. All unsaved changed will be lost.", vbExclamation
     Word.Application.Quit
     Set objWord = CreateObject("Word.Application")
     Set objDoc = objWord.Documents.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\PRT.docx")
@@ -1198,7 +1202,7 @@ Sub ProgramDescriptionsList()
     dataSheetName = ActiveSheet.Name
     programCount = 1
     
-    For i = 2 To 1000
+    For i = 2 To 10000
         If Cells(2, i).Value = "" Then
             ' Do nothing
         Else
@@ -1453,8 +1457,6 @@ Sub DataEntryPrograms()
     DataEntryBox.AddProgram.Enabled = False
     DataEntryBox.AddSkill.Enabled = False
     DataEntryBox.buttonNextData.Enabled = False
-    DataEntryBox.btnEditUp.Enabled = False
-    DataEntryBox.btnEditDown.Enabled = False
     DataEntryBox.btnDelete.Enabled = False
     DataEntryBox.btnEdit.Enabled = False
     
@@ -1499,8 +1501,6 @@ Sub InitGuessBox()
     
     GuessBox.btnGuess.Caption = "Guess!"
     
-    'MsgBox (number)
-
 End Sub
 
 Sub GetSaveAsFileName()
@@ -1552,6 +1552,7 @@ Sub BxSetup()
     
     errorTracking = "BxSetup"
     
+    'Check for exact report period start date
     X.Worksheets("Bx Data").Activate
     For i = 3 To X.Worksheets("Bx Data").Cells(3, 1).End(xlDown).row
         If DateValue(X.Worksheets("Bx Data").Cells(i, 1).Value) = DateValue(reportStart) Then
@@ -1559,6 +1560,7 @@ Sub BxSetup()
             bxRow = i
         End If
     Next i
+    'If not there then add it in
     If dateFlag = False Then
         For i = 3 To X.Worksheets("Bx Data").Cells(3, 1).End(xlDown).row
             If DateValue(X.Worksheets("Bx Data").Cells(i, 1).Value) < DateValue(reportStart) And DateValue(X.Worksheets("Bx Data").Cells(i + 1, 1).Value) > DateValue(reportStart) Then
@@ -1570,6 +1572,7 @@ Sub BxSetup()
         Next i
     End If
    
+    'Check for exact report period end date
     X.Worksheets("Bx Data").Cells(X.Worksheets("Bx Data").Cells(3, 1).End(xlDown).row + 1, 1).Value = Format(Now, "MM/DD/YYYY")
     dateFlag = False
     For i = 3 To X.Worksheets("Bx Data").Cells(3, 1).End(xlDown).row
@@ -1578,6 +1581,7 @@ Sub BxSetup()
             bxEnd = i
         End If
     Next i
+    'If not there then add it in
     If dateFlag = False Then
         For i = 3 To X.Worksheets("Bx Data").Cells(3, 1).End(xlDown).row
             If DateValue(X.Worksheets("Bx Data").Cells(i, 1).Value) < DateValue(reportEnd) And DateValue(X.Worksheets("Bx Data").Cells(i + 1, 1).Value) > DateValue(reportEnd) Then
@@ -1589,6 +1593,7 @@ Sub BxSetup()
         Next i
     End If
         
+    'Cycle through behavior data and sum up report period quantities
     For i = X.Worksheets("Bx Data").Cells(2, 2).End(xlToRight).Column + 2 To X.Worksheets("Bx Data").Cells(2, X.Worksheets("Bx Data").Cells(2, 2).End(xlToRight).Column + 2).End(xlToRight).Column
         bxCount = 0
         For j = bxRow To bxEnd
@@ -1599,6 +1604,7 @@ Sub BxSetup()
     
     X.Worksheets("Bx Data").Cells(3, 1).End(xlDown).Value = ""
     
+    'Outline report period
     With X.Worksheets("Bx Data").Rows(bxRow - 1).Borders(xlEdgeBottom)
         .LineStyle = xlContinuous
         .Weight = xlThin

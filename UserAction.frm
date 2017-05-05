@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserAction 
    Caption         =   "Please select an action."
-   ClientHeight    =   7425
+   ClientHeight    =   8100
    ClientLeft      =   120
    ClientTop       =   465
    ClientWidth     =   5040
@@ -22,6 +22,8 @@ Private Sub actionCloseWorkbook_Click()
         UserAction.ActionDataEntry.Enabled = True
         UserAction.actionSaveWorkbook.Enabled = False
         UserAction.actionCloseWorkbook.Enabled = False
+        UserAction.btnDataEntry.Enabled = False
+        UserAction.VerifyProgramNames.Enabled = False
 
 End Sub
 
@@ -115,6 +117,7 @@ Private Sub actionNewClient_Click()
     
     'Get client initials from user and create file name
     client = InputBox("Please enter new client initials:", "New Client")
+    If client = "" Then Exit Sub
     FileName = "C:\Users\jackie\Documents\Client Files\Data\Formatted\" & UCase(client) & " - 0000_00_00.xlsx"
     
     'Create new workbook and add labeled sheets
@@ -324,9 +327,18 @@ Private Sub btnArchive_Click()
         End With
     Next i
     
-    Unload Me
+    'Unload Me
     ArchiveBox.btnAdd.Enabled = False
     ArchiveBox.Show
+
+End Sub
+
+Private Sub btnDataEntry_Click()
+
+    Unload Me
+    X.Activate
+    X.Worksheets("Data").Activate
+    DataEntryPrograms
 
 End Sub
 

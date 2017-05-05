@@ -48,15 +48,19 @@ Private Sub FileSelect_Click()
         UserAction.actionSaveWorkbook.Enabled = False
         UserAction.actionCloseWorkbook.Enabled = False
         UserAction.actionIPG.Enabled = False
+        UserAction.btnDataEntry.Enabled = False
+        UserAction.VerifyProgramNames.Enabled = False
     Else
         UserAction.ActionDataEntry.Enabled = False
         UserAction.actionSaveWorkbook.Enabled = True
         UserAction.actionCloseWorkbook.Enabled = True
         UserAction.actionIPG.Enabled = True
+        UserAction.btnDataEntry.Enabled = True
+        UserAction.VerifyProgramNames.Enabled = True
     End If
 
     'Open the data select dialog box
-    DataSelect.Show
+    UserAction.Show
 
 End Sub
 

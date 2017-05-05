@@ -61,10 +61,14 @@ End Sub
 
 Private Sub btnDone_Click()
 
+    On Error Resume Next
+    
     Unload Me
     Y.Close
+    X.Activate
+    ActiveWindow.WindowState = xlMaximized
     UserAction.version.Caption = version
-    UserAction.Show
+    'UserAction.Show
 
 End Sub
 

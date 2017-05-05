@@ -1,11 +1,17 @@
 
-BBICS Client Data Management System v4.7.1
+BBICS Client Data Management System v4.8
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
 =========================================================================
 Changelog
 -------------------------------------------------------------------------
+
+2017_05_05	v4.8
+*remove prog/bx/tutor hr dialog box
+*add program data entry access through main menu
+*remove up/down edit buttons
+*add drop-down list to select date/score pairing for editing
 
 2017_04_26	v4.7.1
 *clear fields after edit/delete score pairings
