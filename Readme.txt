@@ -1,11 +1,15 @@
 
-BBICS Client Data Management System v4.8
+BBICS Client Data Management System v4.8.1
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
 =========================================================================
 Changelog
 -------------------------------------------------------------------------
+
+2017_05_08	v4.8.1
+*fix bug that caused skills to be skipped during mcm
+*clean up deprecated code
 
 2017_05_05	v4.8
 *remove prog/bx/tutor hr dialog box

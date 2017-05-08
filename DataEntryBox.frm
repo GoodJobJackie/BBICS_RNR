@@ -257,94 +257,6 @@ Private Sub btnEdit_Click()
                 
 End Sub
 
-Private Sub btnEditDown_Click()
-
-    Dim i, j, programCol, skillCol As Integer
-    
-    On Error GoTo ErrorHandling
-    errorTracking = "btnEditDown_Click"
-    
-    'Find program/skill and store column values
-    For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
-        If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
-            programCol = i
-            For j = programCol To X.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
-                If X.Worksheets("Data").Cells(3, j).Value = DataEntryBox.SkillList.Value Then
-                    skillCol = j
-                End If
-            Next j
-        End If
-    Next i
-    
-    'Move down the array
-    If editRow = dateRows(UBound(dateRows)) Then
-        rowsIndex = 0
-        editRow = dateRows(rowsIndex)
-    Else
-        rowsIndex = rowsIndex + 1
-        editRow = dateRows(rowsIndex)
-    End If
-    
-    'Fill text boxes with data
-    DataEntryBox.txtEditDate = X.Worksheets("Data").Cells(editRow, programCol).Value
-    DataEntryBox.txtEditScore = X.Worksheets("Data").Cells(editRow, skillCol).Value
-    
-    'Highlight selected data
-    Union(X.Worksheets("Data").Cells(editRow, programCol), X.Worksheets("Data").Cells(editRow, skillCol)).Activate
-    
-    current = DataEntryBox.txtEditDate.Value
-
-ErrorHandling:
-    ErrHandling
-
-End Sub
-
-Private Sub btnEditUp_Click()
-
-    Dim i, j, programCol, skillCol As Integer
-    Dim row As Variant
-    Dim txt As String
-    
-    On Error GoTo ErrorHandling
-    errorTracking = "btnEditUp_Click"
-    
-    'Find program/skill and store column values
-    For i = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
-        If X.Worksheets("Data").Cells(2, i).Value = DataEntryBox.ProgramList.Value Then
-            programCol = i
-            For j = programCol To X.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
-                If X.Worksheets("Data").Cells(3, j).Value = DataEntryBox.SkillList.Value Then
-                    skillCol = j
-                End If
-            Next j
-        End If
-    Next i
-            
-    'Move up the array
-    If editRow = dateRows(0) Then
-        rowsIndex = UBound(dateRows)
-        If rowsIndex < 0 Then rowsIndex = 0
-        editRow = dateRows(rowsIndex)
-    Else
-        rowsIndex = rowsIndex - 1
-        If rowsIndex < 0 Then rowsIndex = 0
-        editRow = dateRows(rowsIndex)
-    End If
-    
-    'Fill text boxes with data
-    DataEntryBox.txtEditDate = X.Worksheets("Data").Cells(editRow, programCol).Value
-    DataEntryBox.txtEditScore = X.Worksheets("Data").Cells(editRow, skillCol).Value
-    
-    'Highlight selected data
-    Union(X.Worksheets("Data").Cells(editRow, programCol), X.Worksheets("Data").Cells(editRow, skillCol)).Activate
-    
-    current = DataEntryBox.txtEditDate.Value
-    
-ErrorHandling:
-    ErrHandling
-
-End Sub
-
 Private Sub buttonDoneData_Click()
 
     Unload Me
@@ -432,22 +344,6 @@ Private Sub buttonNextData_Click()
         Next i
     End If
               
-    'Redefine array size
-    If arraySize > 0 Then arraySize = arraySize - 1
-    ReDim dateRows(arraySize)
-    
-    j = 0
-    
-    'Fill array with date rows
-    If arraySize <> 0 Then
-        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
-            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
-                dateRows(j) = X.Worksheets("Data").Cells(i, skillCol).row
-                j = j + 1
-            End If
-        Next i
-    End If
-    
     'Empty text boxes
     DataEntryBox.SessionDate = ""
     DataEntryBox.Score = ""
@@ -642,33 +538,6 @@ Private Sub SkillList_Change()
         End If
         If skillCol = 0 Then skillCol = 3
     Next i
-    
-    'Set array size
-    If DataEntryBox.SkillList <> "<Please select program first>" Then
-        arraySize = 0
-        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
-            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then arraySize = arraySize + 1
-        Next i
-    End If
-              
-    If arraySize > 0 Then arraySize = arraySize - 1
-    ReDim dateRows(arraySize)
-    
-    j = 0
-    
-    'Fill array with date rows
-    If arraySize <> 0 Then
-        For i = 4 To X.Worksheets("Data").Cells(4, 1).End(xlDown).row
-            If X.Worksheets("Data").Cells(i, skillCol).Value <> "" Then
-                dateRows(j) = X.Worksheets("Data").Cells(i, skillCol).row
-                j = j + 1
-            End If
-        Next i
-    End If
-    
-    'Set edit panel to first entry
-    editRow = dateRows(0)
-    rowsIndex = 0
     
     'Reset edt panel
     If DataEntryBox.SkillList = "Please select skill..." Then

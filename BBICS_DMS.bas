@@ -1,15 +1,14 @@
 Attribute VB_Name = "BBICS_DMS"
-Public Const version As String = "v4.8"
+Public Const version As String = "v4.8.1"
 
 Public reportStart, reportEnd, current As Date
 Public ProgramName, ProgramDescription, ProgramSD, SkillName, mCm, guessText, errorTracking As String
-Public startDateRow, endDateRow, programCount, prevProgramName, renameI, editRow, topEditRow, _
-    bottomEditRow, rowsIndex, reportStartRow, reportEndRow, number, guess, lower, upper, guesses, bestGuesses As Integer
+Public startDateRow, endDateRow, programCount, prevProgramName, renameI, reportStartRow, reportEndRow, _
+    number, guess, lower, upper, guesses, bestGuesses As Integer
 Public skip, skipFlag As Boolean
 Public BxDict As New Scripting.Dictionary
 Public objFSO, objFolder, objFile As Object
 Public X, Y As Workbook
-Public dateRows() As Integer
 
 Dim dataSheetName As String
 Dim objWord
@@ -328,7 +327,7 @@ End Sub
 
 Sub PopulatePrograms()
 
-    Dim programRow, skillCount, skillStartRow, skillEndRow, lastSkillRow, bottomDateRow, prev1, prev2, prev3, prevRow As Integer
+    Dim programRow, skillCount, skillStartRow, skillEndRow, lastSkillRow, bottomDateRow, prevRow As Integer
     Dim skillStart, skillEnd, skillDate, lastSkillEnd As Date
     Dim programSheet, deletedSkill As String
     
@@ -405,7 +404,7 @@ Sub PopulatePrograms()
     Next col
 
     ' Look for next program
-    For col = 2 To 10000
+    For col = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
         If Cells(2, col) <> "" Then
             headerCell = Cells(2, col)
             headerCol = col
@@ -420,15 +419,14 @@ Sub PopulatePrograms()
                 nextHeaderCol = Selection.Column
                 nextHeaderCol = nextHeaderCol - 2
             End If
+            
             'Cycle through skills
             For i = (col + 1) To nextHeaderCol
-                                
                 ProgramName = Cells(2, col).Value
                 SkillName = Cells(3, i).Value
                 Range(Cells(3, i).End(xlDown), Cells(1000, i).End(xlUp)).Select
-                ActiveWindow.Zoom = True
-                ActiveWindow.Zoom = 90
-                
+                'ActiveWindow.Zoom = True
+                'ActiveWindow.Zoom = 90
                 UserForm_Initialize
                 errorTracking = "PopulatePrograms"
                 
@@ -441,36 +439,32 @@ Sub PopulatePrograms()
                 End If
                 
                 'Check and store most current skill ending date
-                Cells(1000, i).End(xlUp).Select
-                skillEnd = Selection.End(xlToLeft).Value
-                If Cells(4, nextHeaderCol).Value = "" Then
-                    lastSkillRow = Cells(1000, nextHeaderCol).End(xlUp).row
+                skillEndRow = Cells(10000, i).End(xlUp).row
+                skillEnd = X.Worksheets("Data").Cells(skillEndRow, col).Value
+                    lastSkillRow = Cells(10000, nextHeaderCol).End(xlUp).row
                     lastSkillEnd = Cells(lastSkillRow, col).Value
-                Else
-                    lastSkillEnd = Cells(4, col).Value
-                End If
                 
                 ' Check for skill within report dates
-                If DateValue(skillEnd) < DateValue(reportStart) And DateValue(reportStart) - DateValue(lastSkillEnd) < 182 Then
+                If DateValue(skillEnd) < DateValue(reportStart) Then 'And DateValue(reportStart) - DateValue(lastSkillEnd) < 182 Then
                 ' Do nothing
                 ElseIf DateValue(skillStart) > DateValue(reportEnd) Then
                 ' Also do nothing
-                ElseIf DateValue(reportStart) - DateValue(lastSkillEnd) > 182 Then
-                ' Check for new maintenance program and add to maintenance list if not already done
-                    If Cells(2, headerCol).Font.Color = RGB(166, 166, 166) Then
-                        'Do nothing
-                    Else
-                        Worksheets("Programs").Cells(programRow, 1).Value = ProgramName
-                        Worksheets("Programs").Cells(programRow, 5).Value = "X"
-                        programRow = programRow + 1
-                        Cells(2, col).Value = ProgramName
-                        Cells(2, headerCol).Font.Color = RGB(166, 166, 166)
-                    End If
+'                ElseIf DateValue(reportStart) - DateValue(lastSkillEnd) > 182 Then
+'                ' Check for new maintenance program and add to maintenance list if not already done
+'                    If Cells(2, headerCol).Font.Color = RGB(166, 166, 166) Then
+'                        'Do nothing
+'                    Else
+'                        Worksheets("Programs").Cells(programRow, 1).Value = ProgramName
+'                        Worksheets("Programs").Cells(programRow, 5).Value = "X"
+'                        programRow = programRow + 1
+'                        Cells(2, col).Value = ProgramName
+'                        Cells(2, headerCol).Font.Color = RGB(166, 166, 166)
+'                    End If
                 Else
                     ' Open MCM dialog box
                     Dim k As Integer
                     Dim l As Long
-                    k = Cells(1000, i).End(xlUp).row
+                    k = Cells(10000, i).End(xlUp).row
                     l = Cells(4, i).End(xlDown).row
                     Application.ScreenUpdating = True
                     Range(Cells(l, i), Cells(k, i)).Activate
@@ -1220,10 +1214,10 @@ Sub ProgramMatch()
 
     Dim found As Boolean
 
-    For i = 1 To Worksheets("Current").Cells(1, 1).End(xlDown).row
+    For i = 1 To Worksheets("Current").Cells(10000, 1).End(xlUp).row
         ProgramName = Trim(Worksheets("Current").Cells(i, 1).Value)
         found = False
-        For scan = 2 To Worksheets("PD").Cells(1000, 1).End(xlUp).row
+        For scan = 2 To Worksheets("PD").Cells(10000, 1).End(xlUp).row
             If ProgramName = Trim(Worksheets("PD").Cells(scan, 1).Value) Then
                 Worksheets("Current").Cells(i, 2).Value = Worksheets("PD").Cells(scan, 2).Value
                 Worksheets("Current").Cells(i, 3).Value = Worksheets("PD").Cells(scan, 3).Value
@@ -1558,6 +1552,7 @@ Sub BxSetup()
         If DateValue(X.Worksheets("Bx Data").Cells(i, 1).Value) = DateValue(reportStart) Then
             dateFlag = True
             bxRow = i
+            Exit For
         End If
     Next i
     'If not there then add it in

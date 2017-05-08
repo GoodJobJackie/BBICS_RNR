@@ -44,12 +44,6 @@ Private Sub DataSelectDone_Click()
 
     Unload Me
     
-    FileName = X.Worksheets("Data").Cells(1, 1).Value + " - " + Format(X.Worksheets("Data").Cells(1000, 1).End(xlUp).Value, "YYYY") _
-        + "_" + Format(X.Worksheets("Data").Cells(1000, 1).End(xlUp).Value, "MM") _
-        + "_" + Format(X.Worksheets("Data").Cells(1000, 1).End(xlUp).Value, "DD")
-    
-    'Application.GetSaveAsFilename ("C:\Users\jackie\Documents\Client Files\Data\Formatted\" + fileName)
-    
     UserAction.Show
 
 End Sub
