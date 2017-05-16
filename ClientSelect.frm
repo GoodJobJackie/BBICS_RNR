@@ -32,17 +32,15 @@ Private Sub FileSelect_Click()
        
     Set X = Workbooks.Open(filepath)
     
-    'Apparently do nothing in Excel 2016...
-    X.Activate
-    X.Worksheets("Data").Activate
-    ActiveWindow.WindowState = xlMaximized
+    X.Activate                              '
+    X.Worksheets("Data").Activate           ' Apparently, do nothing in Excel 2016...
+    ActiveWindow.WindowState = xlMaximized  '
     
     'Close dialog box and update version number
     Unload Me
-    
     UserAction.version.Caption = version
     
-    'Check if opened workbook exists and change save/close buttons accordingly
+    'Check if opened workbook exists and change main menu buttons accordingly
     If X Is Nothing Then
         UserAction.ActionDataEntry.Enabled = True
         UserAction.actionSaveWorkbook.Enabled = False

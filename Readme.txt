@@ -7,6 +7,11 @@ goodjobjacqueline@gmail.com
 Changelog
 -------------------------------------------------------------------------
 
+2017_05_16	v.4.8.2
+*add skill pairings view to mcm dialog box
+*correct date on report footer
+*minor fixes
+
 2017_05_08	v4.8.1
 *fix bug that caused skills to be skipped during mcm
 *clean up deprecated code

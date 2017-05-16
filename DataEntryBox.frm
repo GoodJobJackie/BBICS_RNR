@@ -215,7 +215,7 @@ Private Sub btnEdit_Click()
         End If
     Next i
     
-    'Set date/score for selected pairing
+    'Set date/score variables for selected pairing
     If DataEntryBox.SkillList <> "" Or DataEntryBox.pairings <> "" Then
         scoreDate = Trim(Left(DataEntryBox.pairings.Value, 10))
         Score = CDbl(Trim(Right(DataEntryBox.pairings.Value, 3)))
@@ -331,7 +331,7 @@ Private Sub buttonNextData_Click()
         If X.Worksheets("Data").Cells(i, 1).Value = DateValue(newDate) Then
             X.Worksheets("Data").Cells(i, programCol).Activate
             X.Worksheets("Data").Cells(i, programCol).Value = DataEntryBox.SessionDate.Value
-            X.Worksheets("Data").Cells(i, skillCol).Value = DataEntryBox.Score.Value
+            X.Worksheets("Data").Cells(i, skillCol).Value = CDbl(DataEntryBox.Score.Value)
             Exit For
         End If
     Next i
@@ -536,10 +536,11 @@ Private Sub SkillList_Change()
                 End If
             Next j
         End If
+        
         If skillCol = 0 Then skillCol = 3
     Next i
     
-    'Reset edt panel
+    'Reset edit panel
     If DataEntryBox.SkillList = "Please select skill..." Then
     Else
         DataEntryBox.btnDelete.Enabled = True

@@ -1,5 +1,5 @@
 Attribute VB_Name = "BBICS_DMS"
-Public Const version As String = "v4.8.1"
+Public Const version As String = "v4.8.2"
 
 Public reportStart, reportEnd, current As Date
 Public ProgramName, ProgramDescription, ProgramSD, SkillName, mCm, guessText, errorTracking As String
@@ -15,18 +15,17 @@ Dim objWord
 Dim objDoc
 
 Sub ARestructureAndGenerateReport()
-Attribute ARestructureAndGenerateReport.VB_ProcData.VB_Invoke_Func = "r\n14"
 
     Dim bottomDateRow
-    
+
     On Error Resume Next
     errorTracking = "ARestructureAndGenerateReport"
-    
+
     dataSheetName = ActiveSheet.Name
     bottomDateRow = Cells(5, 1).End(xlDown).row
-    
+
     UserAction.version.Caption = version
-    
+
     If X Is Nothing Then
         UserAction.ActionDataEntry.Enabled = True
         UserAction.actionSaveWorkbook.Enabled = False
@@ -42,11 +41,11 @@ Attribute ARestructureAndGenerateReport.VB_ProcData.VB_Invoke_Func = "r\n14"
         UserAction.btnDataEntry.Enabled = True
         UserAction.VerifyProgramNames.Enabled = True
     End If
-    
+
     ActiveWindow.WindowState = xlMinimized
-        
+
     UserAction.Show
-    
+
 End Sub
 
 Sub NewRestructuring()
@@ -59,13 +58,13 @@ Sub NewRestructuring()
     Dim headerCell As Range
     Dim startTime As Double
     Dim minutesElapsed As String
-    
+
     errorTracking = "NewRestructuring"
-    
+
     startTime = Timer
     headerCol = 2
     nextHeaderCol = 5
-    
+
     ActiveWindow.Zoom = 90
     ' Create Initials Header A1:A3
     CreateHeader
@@ -112,7 +111,7 @@ Sub EmptyBCheck()
             Else: Exit Sub
             End If
         Next i
-        
+
 End Sub
 
 Sub CreateHeader()
@@ -169,7 +168,7 @@ Sub MasterListFormat()
     Selection.Borders(xlInsideVertical).LineStyle = xlNone
     Selection.Borders(xlInsideHorizontal).LineStyle = xlNone
     Selection.NumberFormat = "mm/dd/yyyy"
-    
+
 End Sub
 
 Sub FormatProgramDates()
@@ -209,7 +208,7 @@ Sub FormatProgramDates()
     Selection.Borders(xlInsideVertical).LineStyle = xlNone
     Selection.Borders(xlInsideHorizontal).LineStyle = xlNone
     Selection.NumberFormat = "mm/dd/yyyy"
-    
+
 End Sub
 Sub FindLastDate()
 
@@ -228,18 +227,18 @@ Sub FindLastDate()
             Next j
         End If
     Next i
-    
+
     Range(Cells(4, A), Cells(b, A)).Copy
     Cells(4, 1).Select
     ActiveSheet.Paste
-    
+
 End Sub
 
 Sub MoveData()
 
     On Error GoTo ErrorHandling
     errorTracking = "MoveData"
-    
+
     ' Find next program chunk
     For col = 2 To 10000
         If Cells(2, col).Value = "" Then
@@ -286,7 +285,7 @@ Sub MoveData()
                     ' If < then insert new date in master list
                     ElseIf Cells(row, col).Value < Cells(row, 1) Then
                         ' Catch last row
-                        
+
                         ' Select all previous program chunks at date and below
                         Range(Cells(row, 1), Cells(Selection.End(xlDown), (headerCol - 1))).Select
                         ' Cut and paste down one row
@@ -305,10 +304,10 @@ Sub MoveData()
             Next row
         End If
     Next col
-    
+
 ErrorHandling:
     ErrHandling
-    
+
 End Sub
 
 Sub SelectChunk()
@@ -322,31 +321,31 @@ Sub SelectChunk()
     nextHeader = Cells(2, (chunkHeader.End(xlToRight) - 2))
     programChunk = Range(Selection, (Cells(Selection.End(xlDown), nextHeader)))
     programChunk.Select
-    
+
 End Sub
 
 Sub PopulatePrograms()
 
-    Dim programRow, skillCount, skillStartRow, skillEndRow, lastSkillRow, bottomDateRow, prevRow As Integer
+    Dim i, j, k, l, m, n, programRow, skillCount, skillStartRow, skillEndRow, lastSkillRow, bottomDateRow, prevRow, programCol, skillCol, cap As Integer
     Dim skillStart, skillEnd, skillDate, lastSkillEnd As Date
-    Dim programSheet, deletedSkill As String
-    
+    Dim programSheet, deletedSkill, txt As String
+
     On Error Resume Next
     errorTracking = "PopulatePrograms"
-    
+
     Application.ScreenUpdating = False
-    
+
     col = 2
     skillCount = 1
     programRow = 2
     dataSheetName = ActiveSheet.Name
     programSheet = "Programs"
     bottomDateRow = Cells(5, 1).End(xlDown).row
-                
+
     UserForm_Initialize
     errorTracking = "PopulatePrograms"
     UserForm1.Show
-    
+
     ' Create and format program/skill sheet
     Application.DisplayAlerts = False
     For Each Sheet In Worksheets
@@ -355,7 +354,7 @@ Sub PopulatePrograms()
         End If
     Next Sheet
     Application.DisplayAlerts = True
-    
+
     For Each Sheet In Worksheets
         If Sheet.Name = "Programs" Then
             Application.DisplayAlerts = False
@@ -364,9 +363,9 @@ Sub PopulatePrograms()
             Exit For
         End If
     Next Sheet
-    
+
     Worksheets.Add().Name = programSheet
-    
+
     Worksheets("Programs").Cells(1, 1).Value = "Program"
     Worksheets("Programs").Cells(1, 2).Value = "Skill"
     Worksheets("Programs").Cells(1, 3).Value = "Mastered"
@@ -376,7 +375,7 @@ Sub PopulatePrograms()
     Worksheets("Programs").Columns("C:E").ColumnWidth = 12
     Worksheets("Programs").Columns("A:E").NumberFormat = "@"
     Worksheets(dataSheetName).Activate
-    
+
     'Delete empty skill columns
     For col = 2 To Cells(2, 10000).End(xlToLeft).Column
         If Cells(2, col) <> "" Then
@@ -392,7 +391,7 @@ Sub PopulatePrograms()
             Next i
         End If
     Next col
-    
+
     'Delete extra empty columns
     For col = 3 To Cells(2, 10000).End(xlToLeft).Column
         If Cells(1, col).End(xlDown).Value = "" And Cells(1, col - 1).End(xlDown).Value = "" Then
@@ -419,17 +418,15 @@ Sub PopulatePrograms()
                 nextHeaderCol = Selection.Column
                 nextHeaderCol = nextHeaderCol - 2
             End If
-            
+
             'Cycle through skills
             For i = (col + 1) To nextHeaderCol
                 ProgramName = Cells(2, col).Value
                 SkillName = Cells(3, i).Value
                 Range(Cells(3, i).End(xlDown), Cells(1000, i).End(xlUp)).Select
-                'ActiveWindow.Zoom = True
-                'ActiveWindow.Zoom = 90
                 UserForm_Initialize
                 errorTracking = "PopulatePrograms"
-                
+
                 ' Store skill start/end dates as variables
                 If Cells(4, i).Value = "" Then
                     skillStartRow = Cells(4, i).End(xlDown).row
@@ -437,37 +434,63 @@ Sub PopulatePrograms()
                 Else
                     skillStart = Cells(4, col).Value
                 End If
-                
+
                 'Check and store most current skill ending date
                 skillEndRow = Cells(10000, i).End(xlUp).row
                 skillEnd = X.Worksheets("Data").Cells(skillEndRow, col).Value
                     lastSkillRow = Cells(10000, nextHeaderCol).End(xlUp).row
                     lastSkillEnd = Cells(lastSkillRow, col).Value
-                
+
                 ' Check for skill within report dates
-                If DateValue(skillEnd) < DateValue(reportStart) Then 'And DateValue(reportStart) - DateValue(lastSkillEnd) < 182 Then
-                ' Do nothing
+                If DateValue(skillEnd) < DateValue(reportStart) Then
+                    ' Do nothing
                 ElseIf DateValue(skillStart) > DateValue(reportEnd) Then
-                ' Also do nothing
-'                ElseIf DateValue(reportStart) - DateValue(lastSkillEnd) > 182 Then
-'                ' Check for new maintenance program and add to maintenance list if not already done
-'                    If Cells(2, headerCol).Font.Color = RGB(166, 166, 166) Then
-'                        'Do nothing
-'                    Else
-'                        Worksheets("Programs").Cells(programRow, 1).Value = ProgramName
-'                        Worksheets("Programs").Cells(programRow, 5).Value = "X"
-'                        programRow = programRow + 1
-'                        Cells(2, col).Value = ProgramName
-'                        Cells(2, headerCol).Font.Color = RGB(166, 166, 166)
-'                    End If
+                    ' Also do nothing
                 Else
                     ' Open MCM dialog box
-                    Dim k As Integer
-                    Dim l As Long
+                    'Dim k As Integer
+                    'Dim l As Long
                     k = Cells(10000, i).End(xlUp).row
                     l = Cells(4, i).End(xlDown).row
                     Application.ScreenUpdating = True
                     Range(Cells(l, i), Cells(k, i)).Activate
+                    
+                    'Locate and assign program/skill columns to variables
+                    For m = 2 To X.Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
+                        If X.Worksheets("Data").Cells(2, m).Value = MCMbox.programNameBox.Value Then
+                            programCol = m
+                            For n = programCol To X.Worksheets("Data").Cells(3, programCol + 1).End(xlToRight).Column
+                                If X.Worksheets("Data").Cells(3, n).Value = MCMbox.skillNameBox.Value Then
+                                    skillCol = n
+                                End If
+                            Next n
+                        End If
+                    If skillCol = 0 Then skillCol = 3
+                    Next m
+                    
+                    'Populate pairings list
+                    txt = ""
+                    cap = 0
+                    For m = X.Worksheets("Data").Cells(4, 1).End(xlDown).row To 4 Step -1
+                        If DateValue(X.Worksheets("Data").Cells(m, 1).Value) = DateValue(reportEnd) Then
+                            txt = "-----Report End-----" & vbCrLf & txt
+                            cap = cap + 1
+                            If cap > 9 Then Exit For
+                        End If
+                        If DateValue(X.Worksheets("Data").Cells(m, 1).Value) = DateValue(reportStart) Then
+                            txt = "----Report Start----" & vbCrLf & txt
+                            cap = cap + 1
+                            If cap > 9 Then Exit For
+                        End If
+                        If X.Worksheets("Data").Cells(m, skillCol).Value <> "" Then
+                            txt = X.Worksheets("Data").Cells(m, programCol).Value & "     " & X.Worksheets("Data").Cells(m, skillCol).Value & vbCrLf & txt
+                            cap = cap + 1
+                            If cap > 9 Then Exit For
+                        End If
+                    Next m
+                    MCMbox.lblPairings.Caption = txt
+                    
+                    'Show MCMbox and get mastered/continued selection
                     MCMbox.Show
                     Application.ScreenUpdating = False
                     Worksheets("Programs").Cells(programRow, 1).Value = Trim(ProgramName)
@@ -488,7 +511,7 @@ Sub PopulatePrograms()
             Next i
         End If
     Next col
-    
+
     ' Reset report period borders to black/white/transparent
      For i = 4 To bottomDateRow
         If DateValue(reportStart) = DateValue(Cells(i, 1).Value) Then
@@ -510,12 +533,12 @@ Sub PopulatePrograms()
     Next i
     Rows(startDateRow & ":" & endDateRow).Select
     Selection.Interior.Color = -4142
-    
+
     Application.ScreenUpdating = True
-           
+
 ErrorHandling:
     ErrHandling
-       
+
 End Sub
 
 Public Sub UserForm_Initialize()
@@ -524,9 +547,9 @@ Public Sub UserForm_Initialize()
     Dim suggestEnd
     Dim placeHolder
     Dim reportDates As String
-    
+
     errorTracking = "UserForm_Initialize"
-    
+
     MCMbox.programNameBox.Value = Trim(ProgramName)
     MCMbox.skillNameBox.Value = Trim(SkillName)
     MCMbox.progMast.Value = True
@@ -535,24 +558,24 @@ Public Sub UserForm_Initialize()
         MCMbox.progCont.Enabled = False
         MCMbox.Label4.Enabled = False
     End If
-    
-    
+
+
     reportDates = Worksheets("CI").Cells(2, 6).Value & " " & Worksheets("CI").Cells(2, 7).Value & _
         " - " & Worksheets("CI").Cells(2, 8).Value & " " & Worksheets("CI").Cells(2, 9).Value
     UserForm1.reportDates.Value = reportDates
-    
+
     With UserForm1.ComboBox1
         For i = 4 To Worksheets(dataSheetName).Cells(5, 1).End(xlDown).row
             .AddItem Worksheets(dataSheetName).Cells(i, 1).Value
         Next i
     End With
-    
+
     With UserForm1.ComboBox2
         For i = 4 To Worksheets(dataSheetName).Cells(5, 1).End(xlDown).row
             .AddItem Worksheets(dataSheetName).Cells(i, 1).Value
         Next i
     End With
-    
+
     Select Case Worksheets("CI").Cells(2, 6).Value
         Case Is = "January"
             suggestStart = "1/1/" & Worksheets("CI").Cells(2, 7).Value
@@ -579,7 +602,7 @@ Public Sub UserForm_Initialize()
         Case Is = "December"
             suggestStart = "12/1/" & Worksheets("CI").Cells(2, 7).Value
     End Select
-        
+
     Select Case Worksheets("CI").Cells(2, 8).Value
         Case Is = "January"
             suggestEnd = "1/31/" & Worksheets("CI").Cells(2, 9).Value
@@ -617,7 +640,7 @@ Public Sub UserForm_Initialize()
             Exit For
         End If
     Next i
-    
+
     For i = X.Worksheets("Data").Cells(4, 1).End(xlDown).row To 5 Step -1
         X.Worksheets("Data").Cells(i, 1).Activate
         If DateValue(X.Worksheets("Data").Cells(i, 1).Value) = DateValue(suggestEnd) Then
@@ -633,22 +656,22 @@ Public Sub UserForm_Initialize()
             Exit For
         End If
     Next i
-              
+
 End Sub
 
 
 Sub CreateProgramLists()
 
     Dim bottomProgramRow, countMast, countCont, countMaint As Integer
-    
+
     errorTracking = "CreateProgramLists"
-    
+
     countMast = 1
     countCont = 1
     countMaint = 1
-    
+
     Worksheets("Programs").Activate
-    
+
     bottomProgramRow = Cells(1, 1).End(xlDown).row
     For row = 2 To bottomProgramRow
         If Cells(row, 3).Value = "X" Then
@@ -679,13 +702,13 @@ Sub CreateProgramLists()
             End If
         End If
     Next row
-    
+
     If Cells(1, 6).Value = "" Then
         Cells(1, 6).Value = "N/A."
     Else
         Cells(1, 6).Value = Cells(1, 6).Value & "."
     End If
-    
+
     If Cells(1, 7).Value = "" Then
         Cells(1, 7).Value = "N/A."
     Else
@@ -700,7 +723,6 @@ Sub CreateProgramLists()
 End Sub
 
 Sub SingleRestructure()
-Attribute SingleRestructure.VB_ProcData.VB_Invoke_Func = "e\n14"
 '
 ' SingleRestructure Macro
 '
@@ -768,19 +790,19 @@ If Cells(2, col).Value = "" Then
             ' Continue until no more dates
         Next row
     End If
-    
+
 End Sub
 
 Sub ImportSkillsPrograms()
 
     Dim z, w, v, Y As Workbook
     Dim k As Integer
-    Dim sht As Worksheet
-    
+'    Dim sht As Worksheet
+
     errorTracking = "ImportSkillsPrograms"
-    
+
     Application.DisplayAlerts = False
-       
+
     'Check for existing worksheets, if so, delete them
     For Each Sheet In Worksheets
         If Sheet.Name = "CI" Then
@@ -791,31 +813,31 @@ Sub ImportSkillsPrograms()
             Worksheets("PD").Delete
         End If
     Next Sheet
-    
+
     Worksheets.Add().Name = "CI"
     Worksheets.Add().Name = "SDL"
     Worksheets.Add().Name = "PD"
-      
+
     'Import information as new worksheets
     Set z = ActiveWorkbook
     Set w = Workbooks.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\FMP_DataExport.xlsx")
     Set v = Workbooks.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\SkillDeficitList.xlsx")
     Set Y = Workbooks.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\ProgramDescriptions.xlsx")
-       
+
     w.Sheets("CI").Range("A1:M2").Copy
     z.Sheets("CI").Range("A1:M2").PasteSpecial
     w.Close
     z.Sheets("CI").Columns("A:M").AutoFit
-    
+
     v.Sheets("SDL").Range("A1:B112").Copy
     z.Sheets("SDL").Range("A1:B112").PasteSpecial
     v.Close
-    
+
     k = Worksheets("PD").Cells(1000, 1).End(xlUp).row
     Y.Sheets("PD").Range("A1:C" & k).Copy
     z.Sheets("PD").Range("A1:C" & k).PasteSpecial
     Y.Close
-    
+
     X.Worksheets("Data").Activate
 
     Application.DisplayAlerts = True
@@ -829,7 +851,7 @@ Sub PopulateReport()
     Dim objRange
     Dim s As Object
     Dim bx As Variant
-    
+
     On Error Resume Next
     errorTracking = "PopulateReport"
 
@@ -839,7 +861,7 @@ Sub PopulateReport()
     Set objWord = CreateObject("Word.Application")
     Set objDoc = objWord.Documents.Open("C:\Users\jackie\Documents\Client Files\Progress Reports\FMP_DataExport\PRT.docx")
     objWord.Visible = True
-           
+
     'Find/Replace sections with data.
     With objDoc
         For Each s In .Sections
@@ -852,7 +874,7 @@ Sub PopulateReport()
             End With
         Next
     End With
-    
+
     With objDoc.Content.Find
         .Forward = True
         .Text = "[clientName]"
@@ -983,9 +1005,9 @@ Sub PopulateReport()
         .Wrap = wdFindContinue
         .Execute Replace:=wdReplaceAll
     End With
-    
+
     If Worksheets("CI").Cells(2, 4).Value = "Final" Then GoTo Final
-    
+
     ' Divide up continued program list into copyable chunks
     With objDoc.Content.Find
         .ClearFormatting
@@ -1023,7 +1045,7 @@ Sub PopulateReport()
         .Wrap = wdFindContinue
         .Execute Replace:=wdReplaceAll
     End With
-    
+
     ' Divide up maintenance program list into copyable chunks
     With objDoc.Content.Find
         .ClearFormatting
@@ -1061,16 +1083,16 @@ Sub PopulateReport()
         .Wrap = wdFindContinue
         .Execute Replace:=wdReplaceAll
     End With
-    
+
 Final:
-    
+
     ProgramDescriptionsList
     ProgramMatch
     errorTracking = "PopulateReport"
-    
+
     Worksheets("Current").Activate
     currentBottomRow = Worksheets("Current").Cells(1, 1).End(xlDown).row
-    
+
     'Write program/descriptions to table
     Set objRange = objDoc.Range
     Set objTable = objDoc.Tables(1)
@@ -1086,7 +1108,7 @@ Final:
                 End If
             End If
         Next i
-        
+
     'Sum bx quantities over report period
     BxSetup
     'Sort bx data
@@ -1116,7 +1138,7 @@ Final:
         End If
         bxCount = bxCount - 1
     Next bx
-          
+
         With objDoc.Content.Find
         .ClearFormatting
         chunks = Round(Len(bxString) / 250, 0)
@@ -1146,7 +1168,7 @@ Final:
             Next i
         End If
     End With
-    
+
     With objDoc.Content.Find
         .Forward = True
         .Text = "[nx]"
@@ -1154,10 +1176,10 @@ Final:
         .Wrap = wdFindContinue
         .Execute Replace:=wdReplaceAll
     End With
-    
+
     TutorHrs
     errorTracking = "PopulateReport"
-    
+
     'Cleanup
     Application.DisplayAlerts = False
     Worksheets("PD").Delete
@@ -1167,7 +1189,7 @@ Final:
     Worksheets("Current").Delete
     Application.DisplayAlerts = True
     Application.ScreenUpdating = True
-    
+
     objWord.Visible = True
     objWord.Application.Activate
     objWord.Application.WindowState = wdWindowStateMaximize
@@ -1189,13 +1211,13 @@ Sub ProgramDescriptionsList()
             Exit For
         End If
     Next Sheet
-    
+
     'Create list of current programs
     Worksheets.Add().Name = "Current"
     Worksheets("Data").Activate
     dataSheetName = ActiveSheet.Name
     programCount = 1
-    
+
     For i = 2 To 10000
         If Cells(2, i).Value = "" Then
             ' Do nothing
@@ -1246,7 +1268,7 @@ Sub ProgramMatch()
                 End If
             Next j
             DescriptionBox.Show
-            
+
             If skip = True Then
                     Worksheets("Current").Cells(i, 4).Value = "skip"
                 Else
@@ -1264,12 +1286,12 @@ Sub BxData()
     errorTracking = "BxData"
 
     Dim bxRow, bxColStart, bxColEnd As Integer
-    
+
     Dim Arr() As Variant
     Dim Temp1, Temp2 As Variant
     Dim txt As String
     Dim i, j As Long
-    
+
     Worksheets("Bx Data").Activate
     For i = 3 To Cells(4, 1).End(xlDown).row
         If DateValue(Cells(i, 1).Value) = DateValue(reportStart) Then
@@ -1278,27 +1300,27 @@ Sub BxData()
     Next i
     bxColStart = (Cells(2, 2).End(xlToRight).Column) + 2
     bxColEnd = Cells(2, bxColStart).End(xlToRight).Column
-    
+
     'Store bx values in dictionary
     For i = bxColStart To bxColEnd
         If Cells(bxRow, i).Value <> 0 Then
             BxDict.Add Trim(Cells(2, i).Value), Cells(bxRow, i).Value
         End If
     Next i
-    
+
     If BxDict Is Nothing Then
         MsgBox ("Behavior volumes null set.")
         Exit Sub
     End If
-    
+
     ReDim Arr(0 To BxDict.Count - 1, 0 To 1)
-    
+
     'Store bx data in temporary array
     For i = 0 To BxDict.Count - 1
         Arr(i, 0) = BxDict.Keys(i)
         Arr(i, 1) = BxDict.Items(i)
     Next i
-    
+
     'Sort temp array
     For i = LBound(Arr, 1) To UBound(Arr, 1) - 1
         For j = i + 1 To UBound(Arr, 1)
@@ -1312,36 +1334,36 @@ Sub BxData()
             End If
         Next j
     Next i
-    
+
     'Remove the contents of the dictionary collection.
     BxDict.RemoveAll
-    
+
     'Add the items back into the dictionary collection.
     For i = LBound(Arr, 1) To UBound(Arr, 1)
         BxDict.Add Key:=Arr(i, 0), Item:=Arr(i, 1)
     Next i
-    
+
     'Build the text for behavior data.
     For i = 0 To BxDict.Count - 1
         txt = txt & BxDict.Keys(i) & vbTab & BxDict.Items(i) & vbCrLf
     Next i
-    
+
 End Sub
 
 Sub RenamePrograms()
 
     errorTracking = "RenamePrograms"
-   
+
    'Cycle through programs with option to rename
-   
+
    renameI = 2
-   
+
     With RenameBox.programAll
         For j = 2 To Worksheets("PD").Cells(1000, 1).End(xlUp).row
         .AddItem Worksheets("PD").Cells(j, 1).Value
         Next j
     End With
-    
+
     With RenameBox.programCurrent
         For j = 2 To Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
             If Worksheets("Data").Cells(2, j).Value = "" Then
@@ -1351,21 +1373,21 @@ Sub RenamePrograms()
             End If
         Next j
     End With
-   
+
     RenameBox.programChange = Worksheets("Data").Cells(2, renameI).Value
     RenameBox.programCurrent = Worksheets("Data").Cells(2, renameI).Value
     RenameBox.programExisting = Worksheets("Data").Cells(2, renameI).Value
-   
+
     RenameBox.programChange.SetFocus
         With RenameBox.programChange
             .SelStart = 0
             .SelLength = Len(.Text)
         End With
-              
+
     Worksheets("Data").Cells(2, renameI).Activate
     RenameBox.btnPrev.Enabled = False
     RenameBox.Show
-    
+
 End Sub
 
 Sub TutorHrs()
@@ -1374,7 +1396,7 @@ Sub TutorHrs()
 
     Dim tutorHrRow, monthCount As Integer
     Dim tutorHrDate As String
-    
+
     'Populate report with tutor hour data
     Worksheets("Tutor Hr Data").Activate
     reportStart = Format(reportStart, "MMM yyyy")
@@ -1442,7 +1464,7 @@ End Sub
 Sub DataEntryPrograms()
 
     errorTracking = "DataEntryPrograms"
-       
+
     DataEntryBox.SessionDate.SetFocus
     DataEntryBox.buttonNextData.Default = True
     DataEntryBox.ProgramList = "Select preexisting program..."
@@ -1453,10 +1475,10 @@ Sub DataEntryPrograms()
     DataEntryBox.buttonNextData.Enabled = False
     DataEntryBox.btnDelete.Enabled = False
     DataEntryBox.btnEdit.Enabled = False
-    
+
     X.Activate
     X.Worksheets("Data").Activate
-        
+
     DataEntryBox.ProgramList.Clear
     For col = 2 To Worksheets("Data").Cells(2, 10000).End(xlToLeft).Column
         If Worksheets("Data").Cells(2, col).Value = "" Then
@@ -1464,7 +1486,7 @@ Sub DataEntryPrograms()
             DataEntryBox.ProgramList.AddItem Cells(2, col).Value
         End If
     Next col
-    
+
     DataEntryBox.Show
 
 End Sub
@@ -1475,7 +1497,7 @@ Sub ErrHandling()
         Beep
         ErrorBox.Show
     End If
-    
+
 End Sub
 
 Sub InitGuessBox()
@@ -1492,9 +1514,9 @@ Sub InitGuessBox()
     upper = 100
     GuessBox.lower.Caption = lower
     GuessBox.upper.Caption = upper
-    
+
     GuessBox.btnGuess.Caption = "Guess!"
-    
+
 End Sub
 
 Sub GetSaveAsFileName()
@@ -1504,7 +1526,7 @@ Sub GetSaveAsFileName()
     Dim FileName As Variant
     Dim Filt As String, Title As String, Name As String
     Dim FilterIndex As Long, Response As Long
-    
+
     Name = X.Worksheets("Data").Cells(1, 1).Value & " - " & Format(X.Worksheets("Data").Cells(4, 1).End(xlDown).Value, "YYYY_MM_DD") & ".xlsx"
     '   Set to Specified Path\Folder
         ChDir "C:\Users\jackie\Documents\Client Files\Data\Formatted"
@@ -1528,7 +1550,7 @@ Sub GetSaveAsFileName()
         With ActiveWorkbook
             .SaveAs FileName
         End With
-            
+
 End Sub
 
 Sub UnloadDeleteBox()
@@ -1536,16 +1558,16 @@ Sub UnloadDeleteBox()
     errorTracking = "UnloadDeleteBox"
 
     Unload DeleteBox
-    
+
 End Sub
 
 Sub BxSetup()
 
     Dim dateFlag As Boolean
     Dim bxRow, bxEnd, bxCount As Integer
-    
+
     errorTracking = "BxSetup"
-    
+
     'Check for exact report period start date
     X.Worksheets("Bx Data").Activate
     For i = 3 To X.Worksheets("Bx Data").Cells(3, 1).End(xlDown).row
@@ -1566,7 +1588,7 @@ Sub BxSetup()
             End If
         Next i
     End If
-   
+
     'Check for exact report period end date
     X.Worksheets("Bx Data").Cells(X.Worksheets("Bx Data").Cells(3, 1).End(xlDown).row + 1, 1).Value = Format(Now, "MM/DD/YYYY")
     dateFlag = False
@@ -1587,7 +1609,7 @@ Sub BxSetup()
             End If
         Next i
     End If
-        
+
     'Cycle through behavior data and sum up report period quantities
     For i = X.Worksheets("Bx Data").Cells(2, 2).End(xlToRight).Column + 2 To X.Worksheets("Bx Data").Cells(2, X.Worksheets("Bx Data").Cells(2, 2).End(xlToRight).Column + 2).End(xlToRight).Column
         bxCount = 0
@@ -1596,9 +1618,9 @@ Sub BxSetup()
         Next j
         X.Worksheets("Bx Data").Cells(bxRow, i).Value = bxCount
     Next i
-    
+
     X.Worksheets("Bx Data").Cells(3, 1).End(xlDown).Value = ""
-    
+
     'Outline report period
     With X.Worksheets("Bx Data").Rows(bxRow - 1).Borders(xlEdgeBottom)
         .LineStyle = xlContinuous
@@ -1608,5 +1630,5 @@ Sub BxSetup()
         .LineStyle = xlContinuous
         .Weight = xlThin
     End With
-    
+
 End Sub

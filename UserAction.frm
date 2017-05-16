@@ -327,6 +327,14 @@ Private Sub btnArchive_Click()
         End With
     Next i
     
+    'Sort client list alphabetically
+    Set strDataRange = Range("A2:B" & Y.Worksheets("Client File Archive").Cells(2, 1).End(xlDown).row)
+    Set keyRange = Range("A2:B" & Y.Worksheets("Client File Archive").Cells(2, 1).End(xlDown).row)
+    strDataRange.Sort Key1:=keyRange, Order1:=xlAscending
+    Set strDataRange = Range("D2:D" & Y.Worksheets("Client File Archive").Cells(2, 4).End(xlDown).row)
+    Set keyRange = Range("D2:D" & Y.Worksheets("Client File Archive").Cells(2, 4).End(xlDown).row)
+    strDataRange.Sort Key1:=keyRange, Order1:=xlAscending
+    
     'Unload Me
     ArchiveBox.btnAdd.Enabled = False
     ArchiveBox.Show

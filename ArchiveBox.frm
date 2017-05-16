@@ -27,7 +27,7 @@ Private Sub btnAdd_Click()
         If Y.Worksheets("Client File Archive").Cells(i, 1).Value = UCase(ArchiveBox.txtInitials.Value) Then found = True
     Next i
     
-    'If new client, add to list
+    'If new client, add to individuals list
     row = Y.Worksheets("Client File Archive").Cells(2, 4).End(xlDown).row + 1
     If found = False Then Y.Worksheets("Client File Archive").Cells(row, 4) = UCase(ArchiveBox.txtInitials.Value)
     
@@ -36,14 +36,12 @@ Private Sub btnAdd_Click()
     Y.Worksheets("Client File Archive").Cells(row, 1) = UCase(ArchiveBox.txtInitials)
     Y.Worksheets("Client File Archive").Cells(row, 2) = CInt(ArchiveBox.txtBox)
     
-    'Reset text boxes
-    ArchiveBox.txtInitials = ""
-    ArchiveBox.txtBox = ""
-    ArchiveBox.btnAdd.Enabled = False
-    
     'Sort client list alphabetically
-    Set strDataRange = Range("A1:B" & Y.Worksheets("Client File Archive").Cells(1, 1).End(xlDown).row)
-    Set keyRange = Range("A1:B" & Y.Worksheets("Client File Archive").Cells(1, 1).End(xlDown).row)
+    Set strDataRange = Range("A2:B" & Y.Worksheets("Client File Archive").Cells(1, 1).End(xlDown).row)
+    Set keyRange = Range("A2:B" & Y.Worksheets("Client File Archive").Cells(1, 1).End(xlDown).row)
+    strDataRange.Sort Key1:=keyRange, Order1:=xlAscending
+    Set strDataRange = Range("D2:D" & Y.Worksheets("Client File Archive").Cells(2, 4).End(xlDown).row)
+    Set keyRange = Range("D2:D" & Y.Worksheets("Client File Archive").Cells(2, 4).End(xlDown).row)
     strDataRange.Sort Key1:=keyRange, Order1:=xlAscending
     
     'Save master list
@@ -56,6 +54,13 @@ Private Sub btnAdd_Click()
             .AddItem Y.Worksheets("Client File Archive").Cells(i, 4).Value
         End With
     Next i
+    
+    ArchiveBox.selectClient.Value = UCase(ArchiveBox.txtInitials.Value)
+    
+    'Reset text boxes
+    ArchiveBox.txtInitials = ""
+    ArchiveBox.txtBox = ""
+'    ArchiveBox.btnAdd.Enabled = False
 
 End Sub
 
@@ -97,6 +102,8 @@ Private Sub selectClient_Change()
     
     'Display boxes
     ArchiveBox.boxes = boxes
+    
+    If ArchiveBox.selectClient <> "" Then ArchiveBox.txtInitials.Value = ArchiveBox.selectClient.Value
 
 End Sub
 
