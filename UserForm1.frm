@@ -1,6 +1,6 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserForm1 
-   Caption         =   "Please select report dates"
+   Caption         =   "Please verify report dates"
    ClientHeight    =   2655
    ClientLeft      =   120
    ClientTop       =   465

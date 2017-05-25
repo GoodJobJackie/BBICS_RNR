@@ -447,9 +447,7 @@ Sub PopulatePrograms()
                 ElseIf DateValue(skillStart) > DateValue(reportEnd) Then
                     ' Also do nothing
                 Else
-                    ' Open MCM dialog box
-                    'Dim k As Integer
-                    'Dim l As Long
+                    ' Highlight active skill
                     k = Cells(10000, i).End(xlUp).row
                     l = Cells(4, i).End(xlDown).row
                     Application.ScreenUpdating = True
@@ -475,17 +473,17 @@ Sub PopulatePrograms()
                         If DateValue(X.Worksheets("Data").Cells(m, 1).Value) = DateValue(reportEnd) Then
                             txt = "-----Report End-----" & vbCrLf & txt
                             cap = cap + 1
-                            If cap > 9 Then Exit For
+                            If cap > 11 Then Exit For
                         End If
                         If DateValue(X.Worksheets("Data").Cells(m, 1).Value) = DateValue(reportStart) Then
                             txt = "----Report Start----" & vbCrLf & txt
                             cap = cap + 1
-                            If cap > 9 Then Exit For
+                            If cap > 11 Then Exit For
                         End If
                         If X.Worksheets("Data").Cells(m, skillCol).Value <> "" Then
                             txt = X.Worksheets("Data").Cells(m, programCol).Value & "     " & X.Worksheets("Data").Cells(m, skillCol).Value & vbCrLf & txt
                             cap = cap + 1
-                            If cap > 9 Then Exit For
+                            If cap > 11 Then Exit For
                         End If
                     Next m
                     MCMbox.lblPairings.Caption = txt
@@ -537,7 +535,7 @@ Sub PopulatePrograms()
     Application.ScreenUpdating = True
 
 ErrorHandling:
-    ErrHandling
+    'ErrHandling
 
 End Sub
 

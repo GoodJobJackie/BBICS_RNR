@@ -261,6 +261,7 @@ Private Sub buttonDoneData_Click()
 
     Unload Me
     UserAction.ActionDataEntry.Enabled = False
+    UserAction.version.Caption = version
     UserAction.Show
 
 End Sub
@@ -284,7 +285,7 @@ Private Sub buttonNextData_Click()
             .SelStart = 0
             .SelLength = Len(.Text)
         End With
-        GoTo DateError
+        Exit Sub
     End If
     
     If IsDate(DataEntryBox.SessionDate.Value) Then
@@ -295,7 +296,7 @@ Private Sub buttonNextData_Click()
                 .SelStart = 0
                 .SelLength = Len(.Text)
             End With
-            GoTo DateError
+            Exit Sub
         End If
     End If
     
@@ -362,9 +363,7 @@ Private Sub buttonNextData_Click()
             End If
         Next i
     End If
-    
-DateError:
-       
+          
 End Sub
 
 Private Sub pairings_Change()
@@ -509,7 +508,7 @@ Private Sub Skill_Change()
     Else
         DataEntryBox.AddSkill.Enabled = True
     End If
-    
+
 End Sub
 
 Private Sub SkillList_Change()

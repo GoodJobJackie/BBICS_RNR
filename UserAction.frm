@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserAction 
    Caption         =   "Please select an action."
-   ClientHeight    =   8100
+   ClientHeight    =   8535
    ClientLeft      =   120
    ClientTop       =   465
-   ClientWidth     =   5040
+   ClientWidth     =   5055
    OleObjectBlob   =   "UserAction.frx":0000
    StartUpPosition =   2  'CenterScreen
 End
@@ -24,6 +24,7 @@ Private Sub actionCloseWorkbook_Click()
         UserAction.actionCloseWorkbook.Enabled = False
         UserAction.btnDataEntry.Enabled = False
         UserAction.VerifyProgramNames.Enabled = False
+        UserAction.actionIPG.Enabled = False
 
 End Sub
 

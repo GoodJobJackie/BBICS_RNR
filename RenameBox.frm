@@ -52,6 +52,8 @@ End Sub
 Private Sub btnDone_Click()
 
     Unload Me
+    UserAction.version.Caption = version
+    UserAction.Show
 
 End Sub
 
