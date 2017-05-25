@@ -1,5 +1,5 @@
 
-BBICS Client Data Management System v4.8.1
+BBICS Client Data Management System v4.8.2
 Written by Jacqueline Flores
 goodjobjacqueline@gmail.com
 
